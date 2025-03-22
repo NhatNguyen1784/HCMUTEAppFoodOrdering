@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "vn.hcmute.appfoodorder"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "vn.hcmute.appfoodorder"
@@ -37,6 +37,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+    implementation(libs.fragment)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
