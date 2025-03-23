@@ -1,0 +1,8 @@
+-- Xóa toàn bộ database NN_AppFood
+DROP DATABASE IF EXISTS NN_AppFood;
+
+-- Xóa user 'appfood' khỏi MySQL
+DROP USER IF EXISTS 'appfood'@'%';
+
+-- Xác nhận cập nhật lại hệ thống quyền
+FLUSH PRIVILEGES;
