@@ -3,7 +3,7 @@ spring:
     name: FoodBackend
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/api?useSSL=true&requireSSL=true&serverTimezone=UTC&autoReconnect=true&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost:3306/nn_appfood?useSSL=true&requireSSL=true&serverTimezone=UTC&autoReconnect=true&useLegacyDatetimeCode=false
     username: appfood
     password: appfood123!
   jpa:
@@ -17,14 +17,20 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: User
+    password: Pass
     default-encoding: UTF-8
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
       mail.smtp.ssl.protocols: TLSv1.2
   mandatory-file-encoding: UTF-8
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    type: redis
 
 server:
   port: 8081

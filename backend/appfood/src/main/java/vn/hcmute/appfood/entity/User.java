@@ -1,0 +1,40 @@
+package vn.hcmute.appfood.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Email không được để trống!")
+    @Email(message = "Email không hợp lệ!")
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false, unique = true)
+    private String phone;
+
+    @Column(nullable = false)
+    private String address;
+
+    // Thêm @JsonIgnore để tránh vòng lặp khi serialize đối tượng User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore // Ngăn không cho vòng lặp vô hạn khi trả về JSON
+    private Role role;
+}
