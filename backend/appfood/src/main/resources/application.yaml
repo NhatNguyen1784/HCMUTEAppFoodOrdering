@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: FoodBackend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/nn_appfood?useSSL=true&requireSSL=true&serverTimezone=UTC&autoReconnect=true&useLegacyDatetimeCode=false
+    username: appfood
+    password: appfood123!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: User
+    password: Pass
+    default-encoding: UTF-8
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.ssl.protocols: TLSv1.2
+  mandatory-file-encoding: UTF-8
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    type: redis
+
+server:
+  port: 8081
+
+

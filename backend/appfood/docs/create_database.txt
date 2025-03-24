@@ -1,0 +1,11 @@
+-- Tạo database NN_AppFood với bộ mã hóa UTF-8 đầy đủ
+CREATE DATABASE NN_AppFood DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Tạo user 'appfood' có thể truy cập từ mọi IP (%)
+CREATE USER 'appfood'@'%' IDENTIFIED BY 'appfood123!';
+
+-- Cấp quyền toàn bộ trên NN_AppFood cho user 'appfood'
+GRANT ALL PRIVILEGES ON NN_AppFood.* TO 'appfood'@'%';
+
+-- Xác nhận cập nhật quyền
+FLUSH PRIVILEGES;
