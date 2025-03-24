@@ -13,6 +13,7 @@ gson = "2.12.1"
 fragment = "1.8.6"
 
 [libraries]
+pinview = { module = "io.github.chaosleung:pinview", version = "1.4.4" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
