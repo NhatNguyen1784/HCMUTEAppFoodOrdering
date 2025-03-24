@@ -6,13 +6,17 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @NotBlank(message = "Email không được để trống!")
@@ -34,7 +38,15 @@ public class User {
 
     // Thêm @JsonIgnore để tránh vòng lặp khi serialize đối tượng User
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
     @JsonIgnore // Ngăn không cho vòng lặp vô hạn khi trả về JSON
     private Role role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Cart cart;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Order> orders;
 }

@@ -1,6 +1,7 @@
 package vn.hcmute.appfood.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,20 +9,19 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Role {
+public class FoodImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String roleName;
+    private String imageUrl;
 
-    @OneToMany(mappedBy = "role") // Mối quan hệ One-to-Many
-    @JsonBackReference // Áp dụng cho bên "nhiều" trong mối quan hệ One-to-Many
-    private List<User> users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_id", referencedColumnName = "food_id", nullable = false)
+    @JsonIgnore // Ngăn không cho vòng lặp vô hạn khi trả về JSON
+    private Food food;
 }
