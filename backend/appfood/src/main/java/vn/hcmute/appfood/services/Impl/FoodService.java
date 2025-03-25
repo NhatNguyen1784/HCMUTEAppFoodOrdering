@@ -20,9 +20,6 @@ public class FoodService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private CloudinaryService cloudinaryService;
-
-    @Autowired
     private FoodImageService foodImageService;
 
     // lay ra tat ca mon an
@@ -41,7 +38,7 @@ public class FoodService {
     }
 
     // tim theo category
-    public Optional<Food> findByCategoryId(Long categoryId) {
+    public List<Food> findByCategoryId(Long categoryId) {
         return foodRepository.findByCategoryId(categoryId);
     }
 
@@ -56,7 +53,7 @@ public class FoodService {
         // Neu khong co anh thi se luu
         Food savedFood = foodRepository.save(food);
 
-        // neu co anh moi thi upload len cloud
+        // neu co anh thi upload len cloud
         if(foodDTO.getFoodImage() != null && !foodDTO.getFoodImage().isEmpty()) {
             foodImageService.uploadImagesFromDTO(food, foodDTO);
         }
@@ -73,7 +70,7 @@ public class FoodService {
         food.setFoodPrice(foodDTO.getFoodPrice());
         food.setCategory(new Category(foodDTO.getCategoryId()));
 
-        // neu co anh moi thi upload len cloud
+        // neu co anh thi upload len cloud
         if(foodDTO.getFoodImage() != null && !foodDTO.getFoodImage().isEmpty()) {
             foodImageService.uploadImagesFromDTO(food, foodDTO);
         }

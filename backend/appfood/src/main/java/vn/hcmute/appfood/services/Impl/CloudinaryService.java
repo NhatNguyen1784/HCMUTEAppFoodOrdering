@@ -52,6 +52,7 @@ public class CloudinaryService {
 
     }
 
+    // lay publicId cua anh tren cloud
     private String getPublicIdFromUrl(String url) {
         String[] parts = url.split("/");
         String publicIdExtend = parts[parts.length - 1]; // lay ra file name co ca .jpg

@@ -39,6 +39,7 @@ public class FoodImageService {
         foodImageRepository.save(foodImage);
     }
 
+    // xoa tat ca cac anh cua food
     public void deleteAllImagesByFood(Food food) {
         List<FoodImage> foodImages = foodImageRepository.findByFoodId(food.getId());
         for (FoodImage foodImage : foodImages) {
@@ -51,6 +52,7 @@ public class FoodImageService {
         }
     }
 
+    // xoa bang id cua anh trong db
     public void deleteImageById(Long id){
         FoodImage image = foodImageRepository.findById(id).orElse(null);
         if(image != null){
