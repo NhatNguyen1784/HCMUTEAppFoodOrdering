@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    Optional<Food> findByFoodId(Long foodId);
+    Optional<Food> findById(Long id);
     Optional<Food> findByFoodName(String foodName);
     Optional<Food> findByCategoryId(Long categoryId);
 }

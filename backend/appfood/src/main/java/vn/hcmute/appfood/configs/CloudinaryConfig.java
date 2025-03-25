@@ -10,7 +10,7 @@ public class CloudinaryConfig {
     @Bean
     public Cloudinary cloudinary() {
         return new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "AppFood",
+                "cloud_name", "dk8e9lwe2",
                 "api_key", "585447145779693",
                 "api_secret","rnN5GjxZLti0uCZv_gkHNXV3CPw"));
     }
