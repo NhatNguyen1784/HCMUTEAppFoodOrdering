@@ -77,7 +77,7 @@ public class UserController {
         try {
             String email = registerDTO.getEmail();
             String password = registerDTO.getPassword();
-            String otp = registerDTO.getOtp();
+            String otp = registerDTO.getOtpCode();
 
             if (!otpService.validateOtp(email, otp)) {
                 return ResponseEntity.badRequest().body(ApiResponse.error("OTP is incorrect", null));

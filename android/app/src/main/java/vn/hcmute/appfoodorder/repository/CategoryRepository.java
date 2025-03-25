@@ -36,7 +36,7 @@ public class CategoryRepository {
     }
 
 
-// Tang repo se lay data tu api
+    // Tang repo se lay data tu api
     public LiveData<ApiResponse<List<Category>>> getAllCategory(){
         MutableLiveData<ApiResponse<List<Category>>> data = new MutableLiveData<>();
 

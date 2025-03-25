@@ -1,5 +1,6 @@
 package vn.hcmute.appfoodorder.ui.activity.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -22,5 +23,12 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Chuyển sang scene login
+        changeLogin();
+    }
+
+    private void changeLogin() {
+        //startActivity(new Intent(this, LoginActivity.class));
     }
 }
