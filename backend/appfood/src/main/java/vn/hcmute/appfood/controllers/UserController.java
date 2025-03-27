@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.*;
-import vn.hcmute.appfood.entity.User;
 import vn.hcmute.appfood.services.Impl.OtpService;
 import vn.hcmute.appfood.services.Impl.UserService;
+
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -31,6 +32,9 @@ public class UserController {
             // Regex kiểm tra địa chỉ email hợp lệ
             String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
+            if (!Pattern.matches(emailRegex, emailRequest.getEmail())) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Invalid email format", null));
+            }
 
             otp = otpService.generateOtp(emailRequest.getEmail().trim());
             otpService.sendOTP(emailRequest.getEmail().trim(), otp);
