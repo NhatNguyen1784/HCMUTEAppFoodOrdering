@@ -1,9 +1,17 @@
 package vn.hcmute.appfoodorder.model.dto.response;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UserResponse {
+    @SerializedName("email")
     private String email;
+    @SerializedName("password")
+    private String password;
+    @SerializedName("fullName")
     private String fullName;
+    @SerializedName("address")
     private String address;
+    @SerializedName("phone")
     private String phone;
 
     public String getEmail() {
@@ -20,5 +28,9 @@ public class UserResponse {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

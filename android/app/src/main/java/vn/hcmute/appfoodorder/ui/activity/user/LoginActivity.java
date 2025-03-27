@@ -4,19 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityLoginBinding;
 import vn.hcmute.appfoodorder.ui.activity.MainActivity;
-import vn.hcmute.appfoodorder.viewmodel.AuthViewModel;
+import vn.hcmute.appfoodorder.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
-    private AuthViewModel authViewModel;
+    private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +23,8 @@ public class LoginActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         // Khởi tạo ViewModel
-        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        binding.setAuth(authViewModel) ;// Gán ViewModel vào layout
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        binding.setAuth(loginViewModel) ;// Gán ViewModel vào layout
         binding.setLifecycleOwner(this); //Cho phép binding tự động cập nhật
 
         // Quan sát LiveData để phản hồi kết quả đăng nhập
@@ -68,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Quan sát LiveData để phản hồi kết quả đăng nhập
     private void observeLoginResult() {
-        authViewModel.loginResponse.observe(this, response -> {
+        loginViewModel.loginResponse.observe(this, response -> {
             if (response != null) {
                 if (response.getCode() == 200) {
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();

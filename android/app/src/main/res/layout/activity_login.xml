@@ -7,7 +7,7 @@
     <data>
         <variable
             name="auth"
-            type="vn.hcmute.appfoodorder.viewmodel.AuthViewModel" />
+            type="vn.hcmute.appfoodorder.viewmodel.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
