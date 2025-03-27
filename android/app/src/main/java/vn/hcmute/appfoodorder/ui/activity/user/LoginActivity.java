@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     //Chuyển sang Register Activity
     private void changeRegister() {
         binding.tvRegister.setOnClickListener(new View.OnClickListener() {

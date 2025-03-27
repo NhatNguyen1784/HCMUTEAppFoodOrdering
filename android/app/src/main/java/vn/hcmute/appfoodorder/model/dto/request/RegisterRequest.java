@@ -1,57 +1,32 @@
 package vn.hcmute.appfoodorder.model.dto.request;
 
+import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+
 public class RegisterRequest {
-    private String email;
-    private String password;
-    private String fullname;
-    private String phone;
-    private String address;
+    private String otpCode;
+    private InformationRegisterAccount infUser;
 
-    public String getEmail() {
-        return email;
+    public RegisterRequest() {
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public RegisterRequest(String otpCode, InformationRegisterAccount inf) {
+        this.otpCode = otpCode;
+        this.infUser = inf;
     }
 
-    public String getPassword() {
-        return password;
+    public String getOtpCode() {
+        return otpCode;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
     }
 
-    public String getFullname() {
-        return fullname;
+    public InformationRegisterAccount getInfUser() {
+        return infUser;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public RegisterRequest(String email, String password, String fullname, String phone, String address) {
-        this.email = email;
-        this.password = password;
-        this.fullname = fullname;
-        this.phone = phone;
-        this.address = address;
+    public void setInfUser(InformationRegisterAccount infUser) {
+        this.infUser = infUser;
     }
 }

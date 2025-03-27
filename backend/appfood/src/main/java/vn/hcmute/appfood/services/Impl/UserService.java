@@ -67,4 +67,10 @@ public class UserService implements IUserService {
         user.setRole(role);
         userRepository.save(user);
     }
+
+    public boolean checkExistEmailOrPhone(String email, String phone) {
+        Boolean existEmail = userRepository.existsByEmail(email);
+        Boolean existPhone = userRepository.existsByPhone(phone);
+        return !existEmail && !existPhone;
+    }
 }

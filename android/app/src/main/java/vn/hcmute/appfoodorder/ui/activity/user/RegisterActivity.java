@@ -2,33 +2,62 @@ package vn.hcmute.appfoodorder.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.databinding.ActivityRegisterBinding;
+import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+import vn.hcmute.appfoodorder.viewmodel.RegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private RegisterViewModel registerViewModel;
+    private ActivityRegisterBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        // Chuyển sang scene login
+        //Khoi tao binding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
+
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        binding.setRegister(registerViewModel);
+        binding.setLifecycleOwner(this);
+
+        //on click register button
+        onClickRegister();
+
+        //Change login activity
         changeLogin();
     }
 
+    private void onClickRegister() {
+        registerViewModel.registerResponse.observe(this, response ->{
+            if(response.getCode() == 200){
+                Toast.makeText(RegisterActivity.this, "Send OTP", Toast.LENGTH_SHORT).show();
+                InformationRegisterAccount inf = registerViewModel.getInformation();
+                if(inf != null){
+                    Intent intent = new Intent(RegisterActivity.this, VerifyOtpActivity.class);
+                    intent.putExtra("Infor", inf);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+            else Toast.makeText(RegisterActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+        } );
+    }
+
     private void changeLogin() {
-        //startActivity(new Intent(this, LoginActivity.class));
+        binding.btnReLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
     }
 }

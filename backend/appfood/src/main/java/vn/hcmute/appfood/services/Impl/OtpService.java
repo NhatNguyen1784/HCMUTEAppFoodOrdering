@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.utils.Constant;
 import java.io.UnsupportedEncodingException;
@@ -43,6 +44,7 @@ public class OtpService {
         return false;
     }
 
+    @Async
     public void sendOTP(String toMail, String otp) throws MessagingException, UnsupportedEncodingException {
         try{
             MimeMessage message = mailSender.createMimeMessage();

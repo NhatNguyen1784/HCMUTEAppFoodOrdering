@@ -2,6 +2,12 @@ package vn.hcmute.appfoodorder.model.dto.request;
 
 public class EmailRequest {
     private String email;
+    private String phone;
+
+    public EmailRequest(String email, String phone) {
+        this.email = email;
+        this.phone = phone;
+    }
 
     public String getEmail() {
         return email;
@@ -11,7 +17,11 @@ public class EmailRequest {
         this.email = email;
     }
 
-    public EmailRequest(String email) {
-        this.email = email;
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

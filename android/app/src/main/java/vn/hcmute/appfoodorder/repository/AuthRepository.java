@@ -9,7 +9,9 @@ import retrofit2.Response;
 import vn.hcmute.appfoodorder.data.api.AuthApi;
 import vn.hcmute.appfoodorder.data.network.RetrofitClient;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
+import vn.hcmute.appfoodorder.model.dto.request.EmailRequest;
 import vn.hcmute.appfoodorder.model.dto.request.LoginRequest;
+import vn.hcmute.appfoodorder.model.dto.request.RegisterRequest;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 
 public class AuthRepository {
@@ -36,6 +38,50 @@ public class AuthRepository {
             @Override
             public void onFailure(Call<ApiResponse<UserResponse>> call, Throwable throwable) {
                 data.postValue(new ApiResponse<>(500, throwable.getMessage(), null));
+            }
+        });
+        return data;
+    }
+
+    //Register (Send code)
+    public LiveData<ApiResponse<String>> sendOtp(String email, String phone){
+        MutableLiveData<ApiResponse<String>> data = new MutableLiveData<>();
+        EmailRequest request = new EmailRequest(email, phone);
+        authApi.sendOtpRegister(request).enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    if(response.body().getCode()==200){
+                        data.postValue(response.body());
+                    }
+                    else data.postValue(new ApiResponse<>(500, "Send Otp fail", null));
+                }
+                else data.postValue(new ApiResponse<>(500, "Fail: " + response.body().getMessage(), null));
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable throwable) {
+                data.postValue(new ApiResponse<>(500, throwable.getMessage(), null));
+            }
+        });
+        return data;
+    }
+
+    //Verify OTP register
+    public LiveData<ApiResponse<String>> verifyOtp (RegisterRequest request){
+        MutableLiveData<ApiResponse<String>> data = new MutableLiveData<>();
+        authApi.verifyOtp(request).enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    data.postValue(response.body());
+                }
+                else data.setValue(new ApiResponse<>(500, response.message(), null));
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable throwable) {
+                data.setValue(new ApiResponse<>(400, "Error on failure: " + throwable.getMessage(), null));
             }
         });
         return data;
