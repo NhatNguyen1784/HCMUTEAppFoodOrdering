@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+import vn.hcmute.appfoodorder.model.dto.request.EmailRequest;
 import vn.hcmute.appfoodorder.model.dto.request.RegisterRequest;
 import vn.hcmute.appfoodorder.repository.AuthRepository;
 
@@ -15,6 +16,9 @@ public class VerifyOtpViewModel extends ViewModel {
     private InformationRegisterAccount inf;
     private final MutableLiveData<ApiResponse<String>> _verifyOtp = new MutableLiveData<>();
     public LiveData<ApiResponse<String>> verifyOtp = _verifyOtp;
+
+    private final MutableLiveData<ApiResponse<String>> _resendOtp = new MutableLiveData<>();
+    public LiveData<ApiResponse<String>> resendOtp = _resendOtp;
     public VerifyOtpViewModel() {
         authRepository = new AuthRepository();
     }
@@ -42,5 +46,19 @@ public class VerifyOtpViewModel extends ViewModel {
             }
         }
         else _verifyOtp.setValue(new ApiResponse<>(404, "Not found information", null));
+    }
+
+    //Resend otp
+    public void resendOtp(){
+        if(inf!=null){
+            String email = inf.getEmail();
+            String phone = inf.getPhone();
+            authRepository.sendOtp(email, phone).observeForever(response -> {
+                _resendOtp.postValue(response);
+            });
+        }
+        else {
+            _resendOtp.setValue(new ApiResponse<>(404, "Not found information", null));
+        }
     }
 }

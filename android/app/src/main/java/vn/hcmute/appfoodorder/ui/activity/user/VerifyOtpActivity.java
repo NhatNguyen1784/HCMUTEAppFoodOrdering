@@ -26,7 +26,9 @@ public class VerifyOtpActivity extends AppCompatActivity {
         binding.setVerify(viewModel);
         binding.setLifecycleOwner(this);
 
+        //Lay gia tri khi putExtra tu activity truoc
         InformationRegisterAccount in = (InformationRegisterAccount)getIntent().getSerializableExtra("Infor");
+
         if(in != null){
             viewModel.setInf(in);
             Toast.makeText(this, "Email: "+ viewModel.getInf().getEmail(), Toast.LENGTH_SHORT).show();
@@ -36,14 +38,32 @@ public class VerifyOtpActivity extends AppCompatActivity {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
         }
+
+        //Register notification
         verifyOtpRegister();
+
+        //Resend Otp notification
+        resendOtp();
+    }
+
+    private void resendOtp() {
+        viewModel.resendOtp.observe(this, response ->{
+            if(response.getCode() == 200){
+                Toast.makeText(this, "Resend code successfully", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this, "Resend code fail", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, RegisterActivity.class));
+                finish();
+            }
+        });
     }
 
     private void verifyOtpRegister() {
         viewModel.verifyOtp.observe(this, response -> {
             if(response.getCode() == 200){
                 Toast.makeText(this, "Register successfull", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(VerifyOtpActivity.this, LoginActivity.class));
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
             else Toast.makeText(this, "Error: " + response.getMessage(), Toast.LENGTH_SHORT).show();
