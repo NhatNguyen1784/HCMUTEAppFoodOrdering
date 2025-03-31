@@ -1,16 +1,13 @@
 package vn.hcmute.appfood.controllers;
 
-import com.cloudinary.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.ApiResponse;
 import vn.hcmute.appfood.dto.FoodDTO;
 import vn.hcmute.appfood.entity.Food;
-import vn.hcmute.appfood.services.Impl.FoodImageService;
 import vn.hcmute.appfood.services.Impl.FoodService;
 
 import java.util.Optional;
@@ -20,9 +17,6 @@ import java.util.Optional;
 public class FoodController {
     @Autowired
     private FoodService foodService;
-
-    @Autowired
-    private FoodImageService foodImageService;
 
     @GetMapping
     public ResponseEntity<?> getAllFoods() {
