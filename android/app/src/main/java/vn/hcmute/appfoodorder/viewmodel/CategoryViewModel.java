@@ -12,12 +12,15 @@ import vn.hcmute.appfoodorder.repository.CategoryRepository;
 
 public class CategoryViewModel extends ViewModel {
     private final CategoryRepository categoryRepository;
-    private final MutableLiveData<List<Category>> categoryList = new MutableLiveData<>();
-    private final MutableLiveData<String> messageError = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> getError = new MutableLiveData<>();
+    private final MutableLiveData<List<Category>> categoryList;
+    private final MutableLiveData<String> messageError;
+    private final MutableLiveData<Boolean> getError;
 
     public CategoryViewModel(){
         categoryRepository = CategoryRepository.getInstance();
+        categoryList = categoryRepository.getCategoryList();
+        messageError = categoryRepository.getMessageError();
+        getError = categoryRepository.getGetError();
     }
 
     public MutableLiveData<List<Category>> getCategoryList() {
@@ -31,19 +34,9 @@ public class CategoryViewModel extends ViewModel {
     public MutableLiveData<Boolean> getGetError() {
         return getError;
     }
-// tang nay se xu li logic của data lay' tu` repo va day ra view
+
     public void fetchCategories(){
-        categoryRepository.getAllCategory().observeForever(new Observer<ApiResponse<List<Category>>>() {
-            @Override
-            public void onChanged(ApiResponse<List<Category>> apiResponse) { // apiResponse se chua du lieu moi nhat' ma livedata gui ve
-                if(apiResponse == null || apiResponse.getCode() != 200){
-                    getError.setValue(true);
-                    messageError.setValue("ERROR: " + apiResponse.getMessage());
-                }
-                else {
-                    categoryList.setValue(apiResponse.getResult());
-                }
-            }
-        });
+        categoryRepository.getAllCategory();
     }
+
 }

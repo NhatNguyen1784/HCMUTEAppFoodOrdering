@@ -5,50 +5,40 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Category implements Serializable {
-    @SerializedName("categoryId")
-    private Integer id;
-    @SerializedName("categoryName")
-    private String name;
-    @SerializedName("icon")
-    private String image;
-    private String description;
+    private Long id;
+    private String categoryName;
+    private String imageUrl;
 
-    public Category(Integer id, String name, String image, String description) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.description = description;
+    public Category() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public Category(Long id, String categoryName, String imageUrl) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.imageUrl = imageUrl;
     }
 }

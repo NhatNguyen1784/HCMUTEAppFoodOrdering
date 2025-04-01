@@ -8,6 +8,6 @@ import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Category;
 
 public interface CategoryApi {
-    @GET("category")
+    @GET("categories")
     Call<ApiResponse<List<Category>>> getAllCategory();
 }
