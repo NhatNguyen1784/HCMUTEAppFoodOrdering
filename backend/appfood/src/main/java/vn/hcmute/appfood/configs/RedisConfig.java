@@ -8,6 +8,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configurable
 public class RedisConfig {
+
+    //Lưu kiểu String
+    @Bean
+    public StringRedisSerializer stringRedisSerializer() {
+        return new StringRedisSerializer();
+    }
+
+    //Xài cho kiểu phức tạp
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();

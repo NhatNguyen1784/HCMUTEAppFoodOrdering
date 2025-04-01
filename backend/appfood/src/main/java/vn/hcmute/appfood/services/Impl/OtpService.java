@@ -3,9 +3,10 @@ package vn.hcmute.appfood.services.Impl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.utils.Constant;
 import java.io.UnsupportedEncodingException;
@@ -15,34 +16,35 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class OtpService {
     private final JavaMailSender mailSender;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate sRedisTemplate;
 
     @Value("${spring.mail.username}")
     private String fromMail;
 
-    public OtpService(JavaMailSender mailSender, RedisTemplate<String, String> redisTemplate) {
+    public OtpService(JavaMailSender mailSender, StringRedisTemplate sRedisTemplate) {
         this.mailSender = mailSender;
-        this.redisTemplate = redisTemplate;
+        this.sRedisTemplate = sRedisTemplate;
     }
 
     public String generateOtp(String key) {
         //Xóa OTP cũ nếu có
-        redisTemplate.delete(key);
+        sRedisTemplate.delete(key);
         SecureRandom random = new SecureRandom();
         String otp = String.valueOf(random.nextInt(900000) + 100000); // 6 so OTP
-        redisTemplate.opsForValue().set(key, otp, Constant.OTP_EXPIRE_TIME, TimeUnit.MINUTES);
+        sRedisTemplate.opsForValue().set(key, otp, Constant.OTP_EXPIRE_TIME, TimeUnit.MINUTES);
         return otp;
     }
 
     public boolean validateOtp(String key, String otp) {
-        String storedOtp = redisTemplate.opsForValue().get(key);
+        String storedOtp = sRedisTemplate.opsForValue().get(key);
         if (storedOtp != null && storedOtp.equals(otp)) {
-            redisTemplate.delete(key); // Xoa OTP khi xac thuc thanh cong
+            sRedisTemplate.delete(key); // Xoa OTP khi xac thuc thanh cong
             return true;
         }
         return false;
     }
 
+    @Async
     public void sendOTP(String toMail, String otp) throws MessagingException, UnsupportedEncodingException {
         try{
             MimeMessage message = mailSender.createMimeMessage();

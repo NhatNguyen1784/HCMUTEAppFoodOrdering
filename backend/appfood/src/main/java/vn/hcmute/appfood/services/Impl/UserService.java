@@ -45,7 +45,6 @@ public class UserService implements IUserService {
             userDTO.setAddress(user.get().getAddress());
             userDTO.setFullName(user.get().getFullName());
             userDTO.setPhone(user.get().getPhone());
-            userDTO.setRoleId(user.get().getRole().getId());
             return userDTO;
         }
         return null;
@@ -67,5 +66,11 @@ public class UserService implements IUserService {
         user.setPhone(userDTO.getPhone());
         user.setRole(role);
         userRepository.save(user);
+    }
+
+    public boolean checkExistEmailOrPhone(String email, String phone) {
+        Boolean existEmail = userRepository.existsByEmail(email);
+        Boolean existPhone = userRepository.existsByPhone(phone);
+        return !existEmail && !existPhone;
     }
 }

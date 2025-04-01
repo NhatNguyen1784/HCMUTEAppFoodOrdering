@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterDTO {
-    private String otp;
+    private String otpCode;
     private String email;
     private String password;
     private String fullName;

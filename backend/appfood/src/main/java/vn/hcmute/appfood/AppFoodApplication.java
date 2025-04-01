@@ -4,10 +4,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import vn.hcmute.appfood.entity.Role;
 import vn.hcmute.appfood.repository.RoleRepository;
 
 @SpringBootApplication
+@EnableAsync // Bật bất đồng bộ async
 public class AppFoodApplication {
 
 	public static void main(String[] args) {

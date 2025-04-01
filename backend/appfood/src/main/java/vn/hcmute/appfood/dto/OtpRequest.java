@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OtpRequest {
-    private String email;
     private String otpCode;
+    private UserDTO infUser;
 }
 
