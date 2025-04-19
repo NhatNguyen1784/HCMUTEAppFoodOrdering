@@ -8,6 +8,7 @@ public class InformationRegisterAccount implements Serializable {
     private String phone;
     private String fullName;
     private String address;
+    private String urlImage;
 
     public InformationRegisterAccount(String email, String password, String phone, String fullName, String address) {
         this.email = email;
@@ -55,5 +56,13 @@ public class InformationRegisterAccount implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
     }
 }

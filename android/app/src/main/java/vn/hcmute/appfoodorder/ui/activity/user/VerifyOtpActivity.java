@@ -66,7 +66,11 @@ public class VerifyOtpActivity extends AppCompatActivity {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
-            else Toast.makeText(this, "Error: " + response.getMessage(), Toast.LENGTH_SHORT).show();
+            else{
+                Toast.makeText(this, "Error: " + response.getMessage(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, RegisterActivity.class));
+                finish();
+            }
         });
     }
 }

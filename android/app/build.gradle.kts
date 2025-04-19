@@ -36,6 +36,9 @@ android {
 
 dependencies {
     implementation("com.github.bumptech.glide:glide:4.14.2")
+    implementation(libs.legacy.support.v4)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation(libs.pinview)
     implementation(libs.appcompat)
@@ -50,4 +53,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

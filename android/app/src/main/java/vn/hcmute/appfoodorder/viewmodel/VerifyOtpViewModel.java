@@ -31,7 +31,7 @@ public class VerifyOtpViewModel extends ViewModel {
     public void setInf(InformationRegisterAccount inf) {
         this.inf = inf;
     }
-
+    private boolean isOtpSending = false;
     //Register
     public void VerifyOtp(){
         if(inf != null){
@@ -51,9 +51,16 @@ public class VerifyOtpViewModel extends ViewModel {
     //Resend otp
     public void resendOtp(){
         if(inf!=null){
+            if (isOtpSending) {
+                // Đang gửi OTP, không cho gửi lại
+                _resendOtp.setValue(new ApiResponse<>(400, "OTP is being sent. Please wait.", null));
+                return;
+            }
+            isOtpSending = true;  // Đánh dấu đang gửi OTP
             String email = inf.getEmail();
             String phone = inf.getPhone();
             authRepository.sendOtp(email, phone).observeForever(response -> {
+                isOtpSending = false;
                 _resendOtp.postValue(response);
             });
         }

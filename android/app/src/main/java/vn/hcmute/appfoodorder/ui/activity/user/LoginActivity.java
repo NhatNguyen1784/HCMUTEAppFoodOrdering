@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityLoginBinding;
 import vn.hcmute.appfoodorder.ui.activity.MainActivity;
+import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Khởi tạo ViewModel
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        binding.setAuth(loginViewModel) ;// Gán ViewModel vào layout
+        binding.setAuth(loginViewModel); // Gán ViewModel vào layout
         binding.setLifecycleOwner(this); //Cho phép binding tự động cập nhật
 
         // Quan sát LiveData để phản hồi kết quả đăng nhập
@@ -67,6 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.loginResponse.observe(this, response -> {
             if (response != null) {
                 if (response.getCode() == 200) {
+                    SessionManager session = new SessionManager(LoginActivity.this);
+                    String email = loginViewModel.email.getValue();
+                    session.saveLoginSession(email);
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);

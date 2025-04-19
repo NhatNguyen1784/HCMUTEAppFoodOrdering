@@ -31,9 +31,9 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="48dp"
-                    app:srcCompat="@drawable/logo" />
+                    android:layout_height="120dp"
+                    android:layout_marginTop="20dp"
+                    app:srcCompat="@drawable/logon" />
 
                 <LinearLayout
                     android:layout_marginTop="8dp"
@@ -46,10 +46,10 @@
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="45sp"
-                        android:textStyle="bold"
+                        android:text="FOOD APP"
                         android:textColor="@color/blue_gray"
-                        android:text="FOOD APP" />
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -57,16 +57,18 @@
                     android:id="@+id/edtRegisterEmail"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:background="@drawable/editext_background"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginStart="32dp"
-                    android:padding="8dp"
-                    android:textColorHint="@color/blue_gray"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/editext_background"
+                    android:drawableLeft="@android:drawable/sym_action_email"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
                     android:hint="Email"
-                    android:text="@={register.email}"/>
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:text="@={register.email}"
+                    android:textColorHint="@color/blue_gray" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -76,20 +78,23 @@
                     android:layout_marginStart="32dp"
                     android:text="@{register.emailError}"
                     android:visibility="@{register.emailError.isEmpty() ? View.GONE : View.VISIBLE}"/>
+
                 <EditText
                     android:id="@+id/edtRegisterPassword"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:background="@drawable/editext_background"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginStart="32dp"
-                    android:padding="8dp"
-                    android:textColorHint="@color/blue_gray"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/editext_background"
+                    android:drawableLeft="@android:drawable/ic_lock_lock"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
                     android:hint="Password"
-                    android:text="@={register.password}"/>
+                    android:inputType="textPassword"
+                    android:padding="8dp"
+                    android:text="@={register.password}"
+                    android:textColorHint="@color/blue_gray" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,20 +104,23 @@
                     android:layout_marginStart="32dp"
                     android:text="@{register.passwordError}"
                     android:visibility="@{register.passwordError.isEmpty() ? View.GONE : View.VISIBLE}"/>
+
                 <EditText
                     android:id="@+id/edtRepeatPass"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:background="@drawable/editext_background"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginStart="32dp"
-                    android:padding="8dp"
-                    android:textColorHint="@color/blue_gray"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/editext_background"
+                    android:drawableLeft="@android:drawable/ic_lock_lock"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
                     android:hint="Confirm Password"
-                    android:text="@={register.confirmPass}"/>
+                    android:inputType="textPassword"
+                    android:padding="8dp"
+                    android:text="@={register.confirmPass}"
+                    android:textColorHint="@color/blue_gray" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,16 +135,18 @@
                     android:id="@+id/edtRegisterFullName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:background="@drawable/editext_background"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginStart="32dp"
-                    android:padding="8dp"
-                    android:textColorHint="@color/blue_gray"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/editext_background"
+                    android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
                     android:hint="Full Name"
-                    android:text="@={register.fullName}"/>
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:text="@={register.fullName}"
+                    android:textColorHint="@color/blue_gray" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,16 +161,18 @@
                     android:id="@+id/edtRegisterPhone"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:background="@drawable/editext_background"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginStart="32dp"
-                    android:padding="8dp"
-                    android:textColorHint="@color/blue_gray"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/editext_background"
+                    android:drawableLeft="@android:drawable/stat_sys_phone_call_forward"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
                     android:hint="Phone"
-                    android:text="@={register.phone}"/>
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:text="@={register.phone}"
+                    android:textColorHint="@color/blue_gray" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -176,16 +188,18 @@
                     android:id="@+id/edtRegisterAddress"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:background="@drawable/editext_background"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginStart="32dp"
-                    android:padding="8dp"
-                    android:textColorHint="@color/blue_gray"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/editext_background"
+                    android:drawableLeft="@android:drawable/ic_menu_compass"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
                     android:hint="Address"
-                    android:text="@={register.address}"/>
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:text="@={register.address}"
+                    android:textColorHint="@color/blue_gray" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -199,16 +213,16 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnRegister"
+                    style="@android:style/Widget.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
                     android:background="@drawable/red_button_background"
-                    android:layout_margin="32dp"
-                    android:textColor="@color/white"
-                    style="@android:style/Widget.Button"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                    android:onClick="@{()->register.onRegisterButtonClick()}"
                     android:text="Register"
-                    android:onClick="@{()->register.onRegisterButtonClick()}"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_marginTop="12dp"

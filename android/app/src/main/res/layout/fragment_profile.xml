@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/fragment_profile.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Avatar + Tên -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/btnEditProfile">
+
+            <ImageView
+                android:id="@+id/imgAvatarUser"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/icon_default_avatar"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_circle"
+                android:padding="4dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:id="@+id/txtUsernameUserProfile"
+                    android:text="fullname"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    />
+
+                <TextView
+                    android:id="@+id/txtEmailUserProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="email"
+                    android:textColor="#666"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Danh sách mục -->
+        <View android:layout_height="1dp" android:layout_width="match_parent" android:background="#eee"/>
+
+        <TextView
+            android:text="Tiện ích"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="#444" />
+
+        <!-- Mục chọn -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/ProfileItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đơn mua" />
+
+            <TextView
+                style="@style/ProfileItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shopee Xu" />
+
+            <TextView
+                style="@style/ProfileItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cài đặt" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

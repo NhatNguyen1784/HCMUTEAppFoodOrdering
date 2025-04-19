@@ -56,7 +56,16 @@ public class AuthRepository {
                     }
                     else data.postValue(new ApiResponse<>(500, "Send Otp fail", null));
                 }
-                else data.postValue(new ApiResponse<>(500, "Fail: " + response.body().getMessage(), null));
+                else {
+                    String errorMsg = "Không xác định";
+                    if (response.body() != null) {
+                        errorMsg = response.body().getMessage();
+                    } else {
+                        // Bạn có thể log response.errorBody() để debug thêm nếu muốn
+                        errorMsg = "Lỗi không có nội dung phản hồi từ server hoặc chưa bật redis server";
+                    }
+                    data.postValue(new ApiResponse<>(500, "Fail: " + errorMsg, null));
+                }
             }
 
             @Override

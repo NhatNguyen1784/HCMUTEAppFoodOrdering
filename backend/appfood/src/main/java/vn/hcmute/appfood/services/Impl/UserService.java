@@ -65,6 +65,7 @@ public class UserService implements IUserService {
         user.setFullName(userDTO.getFullName());
         user.setPhone(userDTO.getPhone());
         user.setRole(role);
+        user.setUrlImage(userDTO.getUrlImage());
         userRepository.save(user);
     }
 

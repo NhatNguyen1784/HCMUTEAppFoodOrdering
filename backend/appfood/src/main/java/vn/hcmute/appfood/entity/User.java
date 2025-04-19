@@ -36,6 +36,9 @@ public class User {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = true)
+    private String urlImage;
+
     // Thêm @JsonIgnore để tránh vòng lặp khi serialize đối tượng User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)

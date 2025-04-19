@@ -88,7 +88,7 @@ public class UserController {
             String phone = otpRequest.getInfUser().getPhone();
             String address = otpRequest.getInfUser().getAddress();
             String fullName = otpRequest.getInfUser().getFullName();
-            UserDTO userDTO = new UserDTO(email, password, fullName, phone, address);
+            UserDTO userDTO = new UserDTO(email, password, fullName, phone, address, "https://res.cloudinary.com/demec8nev/image/upload/v1745039879/default_avatar_r7xkiv.png");
             userService.saveUser(userDTO);
             return ResponseEntity.ok(ApiResponse.success("OTP verified", null));
         }

@@ -30,9 +30,9 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="48dp"
-                    app:srcCompat="@drawable/logo" />
+                    android:layout_height="149dp"
+                    android:layout_marginTop="30dp"
+                    app:srcCompat="@drawable/logon" />
 
                 <LinearLayout
                     android:layout_marginTop="8dp"
@@ -45,22 +45,22 @@
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="45sp"
-                        android:textStyle="bold"
+                        android:text="FOOD APP"
                         android:textColor="@color/blue_gray"
-                        android:text="FOOD APP" />
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <TextView
-                    android:layout_gravity="center_horizontal"
                     android:id="@+id/txtTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Code has been send to your email"
                     android:textColor="@color/blue_gray"
-                    android:text="Code has been send to your email" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <com.chaos.view.PinView
                     android:layout_gravity="center_horizontal"

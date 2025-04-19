@@ -12,9 +12,14 @@ public class ApiResponse <T>{
     String message; //Message
     T result; //Dữ liệu trả về .
 
-    //Method
+    //Success with data
     public static <T> ApiResponse<T> success(String message, T result) {
         return new ApiResponse<>(200, message, result); // Mã trạng thái 200 cho thành công
+    }
+
+    //Success but no data
+    public static <T> ApiResponse<T> success(String message) {
+        return new ApiResponse<T>(200, message, null);
     }
 
     public static <T> ApiResponse<T> error(String message, T result) {
@@ -23,5 +28,9 @@ public class ApiResponse <T>{
 
     public static <T> ApiResponse<T> notFound(String message) {
         return new ApiResponse<>(404, message, null); // Mã trạng thái 404 cho không tìm thấy
+    }
+
+    public static <T> ApiResponse<T> error(int code, String message) {
+        return new ApiResponse<>(code, message, null);
     }
 }

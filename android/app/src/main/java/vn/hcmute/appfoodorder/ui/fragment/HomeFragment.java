@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),  LinearLayoutManager.HORIZONTAL, false);
+        //  RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),  LinearLayoutManager.HORIZONTAL, false);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
         rcvCategory.setLayoutManager(layoutManager);
         rcvCategory.setAdapter(categoryAdapter);

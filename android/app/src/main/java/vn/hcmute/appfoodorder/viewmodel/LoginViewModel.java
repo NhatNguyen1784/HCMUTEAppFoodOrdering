@@ -10,7 +10,7 @@ import vn.hcmute.appfoodorder.repository.AuthRepository;
 
 public class LoginViewModel extends ViewModel {
     public MutableLiveData<String> email = new MutableLiveData<>("");
-        public MutableLiveData<String> password = new MutableLiveData<>("");
+    public MutableLiveData<String> password = new MutableLiveData<>("");
     private final MutableLiveData<ApiResponse<UserResponse>> _loginResponse = new MutableLiveData<>();
     public LiveData<ApiResponse<UserResponse>> loginResponse = _loginResponse;
 
