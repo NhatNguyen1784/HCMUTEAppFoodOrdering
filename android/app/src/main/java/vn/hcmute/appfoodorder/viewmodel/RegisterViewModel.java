@@ -3,9 +3,8 @@ package vn.hcmute.appfoodorder.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
-import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
 import vn.hcmute.appfoodorder.repository.AuthRepository;
 public class RegisterViewModel extends ViewModel {
     public MutableLiveData<String> email = new MutableLiveData<>("");
@@ -17,7 +16,7 @@ public class RegisterViewModel extends ViewModel {
     private final AuthRepository authRepository;
     private final MutableLiveData<ApiResponse<String>> _registerResponse = new MutableLiveData<>();
     public LiveData<ApiResponse<String>> registerResponse = _registerResponse;
-    private MutableLiveData<InformationRegisterAccount> information = new MutableLiveData<>();
+    private MutableLiveData<InforRegisAccount> information = new MutableLiveData<>();
 
     //Xư lý lỗi
     public MutableLiveData<String> emailError = new MutableLiveData<>("");
@@ -113,9 +112,7 @@ public class RegisterViewModel extends ViewModel {
                     _registerResponse.setValue(new ApiResponse<>(400, "Passwords do not match", null));
                     return;
                 }
-                InformationRegisterAccount info = new InformationRegisterAccount(
-                        emailValue, passwordValue, fullNameValue, phoneValue, addressValue
-                );
+                InforRegisAccount info = new InforRegisAccount(emailValue, passwordValue, phoneValue, fullNameValue, addressValue);
                 setInformation(info);
                 //Gui otp
                 authRepository.sendOtp(emailValue, phoneValue).observeForever(response -> {
@@ -126,11 +123,11 @@ public class RegisterViewModel extends ViewModel {
         }
     }
 
-    public InformationRegisterAccount getInformation(){
+    public InforRegisAccount getInformation(){
         return information.getValue();
     }
 
-    public void setInformation(InformationRegisterAccount info) {
+    public void setInformation(InforRegisAccount info) {
         information.setValue(info);
     }
 

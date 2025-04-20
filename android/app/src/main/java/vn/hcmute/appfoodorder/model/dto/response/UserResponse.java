@@ -14,6 +14,9 @@ public class UserResponse {
     @SerializedName("phone")
     private String phone;
 
+    @SerializedName("urlImage")
+    private String urlImage;
+
     public String getEmail() {
         return email;
     }
@@ -32,5 +35,9 @@ public class UserResponse {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
     }
 }

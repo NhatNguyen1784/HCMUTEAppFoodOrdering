@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityVerifyOtpBinding;
-import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
 import vn.hcmute.appfoodorder.viewmodel.VerifyOtpViewModel;
 
 public class VerifyOtpActivity extends AppCompatActivity {
@@ -27,7 +27,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
 
         //Lay gia tri khi putExtra tu activity truoc
-        InformationRegisterAccount in = (InformationRegisterAccount)getIntent().getSerializableExtra("Infor");
+        InforRegisAccount in = (InforRegisAccount)getIntent().getSerializableExtra("Infor");
 
         if(in != null){
             viewModel.setInf(in);

@@ -3,7 +3,6 @@ package vn.hcmute.appfoodorder.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.repository.AuthRepository;

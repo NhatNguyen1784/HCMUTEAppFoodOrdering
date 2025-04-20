@@ -1,15 +1,15 @@
 package vn.hcmute.appfoodorder.model.dto.request;
 
-import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
 
 public class RegisterRequest {
     private String otpCode;
-    private InformationRegisterAccount infUser;
+    private InforRegisAccount infUser;
 
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String otpCode, InformationRegisterAccount inf) {
+    public RegisterRequest(String otpCode, InforRegisAccount inf) {
         this.otpCode = otpCode;
         this.infUser = inf;
     }
@@ -22,11 +22,11 @@ public class RegisterRequest {
         this.otpCode = otpCode;
     }
 
-    public InformationRegisterAccount getInfUser() {
+    public InforRegisAccount getInfUser() {
         return infUser;
     }
 
-    public void setInfUser(InformationRegisterAccount infUser) {
+    public void setInfUser(InforRegisAccount infUser) {
         this.infUser = infUser;
     }
 }

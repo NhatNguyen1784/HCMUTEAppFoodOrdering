@@ -2,7 +2,7 @@ package vn.hcmute.appfoodorder.model.dto;
 
 import java.io.Serializable;
 
-public class InformationRegisterAccount implements Serializable {
+public class InforRegisAccount implements Serializable {
     private String email;
     private String password;
     private String phone;
@@ -10,7 +10,7 @@ public class InformationRegisterAccount implements Serializable {
     private String address;
     private String urlImage;
 
-    public InformationRegisterAccount(String email, String password, String phone, String fullName, String address) {
+    public InforRegisAccount(String email, String password, String phone, String fullName, String address) {
         this.email = email;
         this.password = password;
         this.phone = phone;

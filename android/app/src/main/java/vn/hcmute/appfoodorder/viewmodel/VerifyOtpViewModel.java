@@ -3,20 +3,17 @@ package vn.hcmute.appfoodorder.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
-import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
-import vn.hcmute.appfoodorder.model.dto.request.EmailRequest;
+import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
 import vn.hcmute.appfoodorder.model.dto.request.RegisterRequest;
 import vn.hcmute.appfoodorder.repository.AuthRepository;
 
 public class VerifyOtpViewModel extends ViewModel {
     private final AuthRepository authRepository;
     public MutableLiveData<String> otpCode = new MutableLiveData<>("");
-    private InformationRegisterAccount inf;
+    private InforRegisAccount inf;
     private final MutableLiveData<ApiResponse<String>> _verifyOtp = new MutableLiveData<>();
     public LiveData<ApiResponse<String>> verifyOtp = _verifyOtp;
-
     private final MutableLiveData<ApiResponse<String>> _resendOtp = new MutableLiveData<>();
     public LiveData<ApiResponse<String>> resendOtp = _resendOtp;
     public VerifyOtpViewModel() {
@@ -24,11 +21,10 @@ public class VerifyOtpViewModel extends ViewModel {
     }
 
     //Set dữ liệu đã truyền từ Register Activity Sang VerifyOtpActivity
-    public InformationRegisterAccount getInf() {
+    public InforRegisAccount getInf() {
         return inf;
     }
-
-    public void setInf(InformationRegisterAccount inf) {
+    public void setInf(InforRegisAccount inf) {
         this.inf = inf;
     }
     private boolean isOtpSending = false;

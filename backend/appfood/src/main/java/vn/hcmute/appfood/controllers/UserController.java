@@ -30,6 +30,7 @@ public class UserController {
             boolean isLoginSuccessful = userService.login(email, password);
             if (isLoginSuccessful) {
                 UserDTO userDTO = userService.findByEmail(email);
+                userDTO.setPassword("");//Tranh bi lo mat khau
                 return ResponseEntity.ok(ApiResponse.success("Login Successful", userDTO));
             } else {
                 return ResponseEntity.badRequest().body(ApiResponse.error("Login failed", null));

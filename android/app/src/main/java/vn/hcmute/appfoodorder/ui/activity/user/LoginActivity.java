@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityLoginBinding;
+import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
+import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.ui.activity.MainActivity;
 import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.LoginViewModel;
@@ -45,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
                 /*Intent intent = new Intent(LoginActivity.this, )
                 startActivity(intent);
                 finish();
-
                  */
             }
         });
@@ -70,7 +71,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.getCode() == 200) {
                     SessionManager session = new SessionManager(LoginActivity.this);
                     String email = loginViewModel.email.getValue();
+                    UserResponse user = response.getResult();
                     session.saveLoginSession(email);
+                    session.saveUserInfor(user);
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);

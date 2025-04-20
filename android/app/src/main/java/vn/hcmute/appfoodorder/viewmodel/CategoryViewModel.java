@@ -1,12 +1,8 @@
 package vn.hcmute.appfoodorder.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-
 import java.util.List;
-
-import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Category;
 import vn.hcmute.appfoodorder.repository.CategoryRepository;
 

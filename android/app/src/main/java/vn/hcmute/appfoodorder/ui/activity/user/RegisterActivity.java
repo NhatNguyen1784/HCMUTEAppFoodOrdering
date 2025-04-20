@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityRegisterBinding;
-import vn.hcmute.appfoodorder.model.dto.InformationRegisterAccount;
+import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
 import vn.hcmute.appfoodorder.viewmodel.RegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerViewModel.registerResponse.observe(this, response ->{
             if(response.getCode() == 200){
                 Toast.makeText(RegisterActivity.this, "Send OTP", Toast.LENGTH_SHORT).show();
-                InformationRegisterAccount inf = registerViewModel.getInformation();
+                InforRegisAccount inf = registerViewModel.getInformation();
                 if(inf != null){
                     Intent intent = new Intent(RegisterActivity.this, VerifyOtpActivity.class);
                     intent.putExtra("Infor", inf);
