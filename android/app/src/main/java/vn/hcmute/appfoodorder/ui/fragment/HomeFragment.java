@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -34,8 +33,8 @@ public class HomeFragment extends Fragment {
         // inflate layout for fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // get data
-        categoryViewModel = new CategoryViewModel();
+        anhxa(view);
+        setupRecycleView();
 
         // lay danh sach category
         getAllCategory(view);
@@ -43,9 +42,19 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void getAllCategory(View view) {
-        rcvCategory = view.findViewById(R.id.rcvCategory);
+    private void setupRecycleView() {
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
+        rcvCategory.setLayoutManager(layoutManager);
         categoryAdapter = new CategoryAdapter(getContext());
+        rcvCategory.setAdapter(categoryAdapter);
+    }
+
+    private void anhxa(View view) {
+        rcvCategory = view.findViewById(R.id.rcvCategory);
+    }
+
+    private void getAllCategory(View view) {
+        categoryViewModel = new CategoryViewModel();
 
         //get data from viewmodel
         categoryViewModel.fetchCategories();
@@ -60,24 +69,13 @@ public class HomeFragment extends Fragment {
 
         categoryViewModel.getMessageError().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(String s) {
-                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-                Log.d("Error load category: ", s);
+            public void onChanged(String errorMessage) {
+                if (errorMessage != null && !errorMessage.isEmpty()) {
+                    Toast.makeText(view.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    Log.d("Error load List category: ", errorMessage);
+                }
             }
         });
 
-        categoryViewModel.getGetError().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                Toast.makeText(getContext(), "Error: ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),  LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
-        rcvCategory.setLayoutManager(layoutManager);
-        rcvCategory.setAdapter(categoryAdapter);
     }
-
-
 }

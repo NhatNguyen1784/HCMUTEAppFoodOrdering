@@ -1,9 +1,11 @@
 package vn.hcmute.appfoodorder.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,11 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 
 import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.entity.Category;
+import vn.hcmute.appfoodorder.ui.activity.ListFoodActivity;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
@@ -43,11 +48,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         // gan data
         Category category = categoryList.get(position);
+
         if(category == null){
             return;
         }
+
         holder.tvCategoryName.setText(category.getCategoryName());
-        Glide.with(context).load(category.getImageUrl()).into(holder.imgCategory);
+        Glide.with(context)
+                .load(category.getImageUrl())
+                .transform(new CenterCrop(), new RoundedCorners(30))
+                .into(holder.imgCategory);
+
+        // set su kien click item
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ListFoodActivity.class);
+            intent.putExtra("cate_id", category.getId());
+            intent.putExtra("cate_name", category.getCategoryName());
+            context.startActivity(intent);
+        });
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package vn.hcmute.appfood.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,6 @@ public class Food {
     @OneToMany(mappedBy = "food")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JsonBackReference // Áp dụng cho bên "nhiều" trong mối quan hệ One-to-Many
+    @JsonManagedReference // Áp dụng cho bên "nhiều" trong mối quan hệ One-to-Many
     private List<FoodImage> foodImages;
 }

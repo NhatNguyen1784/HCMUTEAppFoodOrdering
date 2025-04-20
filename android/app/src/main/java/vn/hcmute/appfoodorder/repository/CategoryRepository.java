@@ -15,6 +15,8 @@ import vn.hcmute.appfoodorder.data.network.RetrofitClient;
 import vn.hcmute.appfoodorder.model.dto.ApiErrorResponse;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Category;
+import vn.hcmute.appfoodorder.utils.Resource;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,12 +24,6 @@ public class CategoryRepository {
     private static CategoryRepository instance;
 
     private final CategoryApi categoryApi;
-
-    private MutableLiveData<List<Category>> categoryList = new MutableLiveData<>();
-
-    private MutableLiveData<String> messageError = new MutableLiveData<>();
-
-    private MutableLiveData<Boolean> getError = new MutableLiveData<>();
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -42,7 +38,10 @@ public class CategoryRepository {
         return instance;
     }
 
-    public void getAllCategory(){
+    public LiveData<Resource<List<Category>>> getAllCategory(){
+
+        MutableLiveData<Resource<List<Category>>> resultLiveData = new MutableLiveData<>();
+
         categoryApi.getAllCategory().enqueue(new Callback<ApiResponse<List<Category>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<Category>>> call, Response<ApiResponse<List<Category>>> response) {
@@ -50,42 +49,32 @@ public class CategoryRepository {
                 if (response.isSuccessful() && response.body() != null){
                     ApiResponse<List<Category>> apiResult = response.body();
                     if( apiResult.getCode() == 200){
-                        categoryList.setValue(apiResult.getResult());
+                        resultLiveData.setValue(Resource.success(apiResult.getResult()));
                     }
                     else {
-                        getError.setValue(true);
+                        resultLiveData.setValue(Resource.error("Error code: " + apiResult.getCode(), null));
                     }
                 }
                 else { // kiem tra loi trong body
+                    String errorMessage = "Unknown error occurred";
                     if(response.errorBody() != null){
                         ApiErrorResponse errorResponse = gson.
                                 fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
-                        messageError.setValue(errorResponse.getMessage());
+                        errorMessage = errorResponse.getMessage();
                     }
-                    else {
-                        getError.setValue(true);
-                    }
+                    resultLiveData.setValue(Resource.error(errorMessage, null));
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<Category>>> call, Throwable throwable) {
-                Log.d("Error get all category", throwable.getMessage());
-                getError.setValue(true);
+                Log.e("ListCategoryRepository", "Error fetching category", throwable);
+                resultLiveData.setValue(Resource.error("Network error: " + throwable.getMessage(), null));
             }
         });
+
+        return resultLiveData;
     }
 
-    public MutableLiveData<List<Category>> getCategoryList(){
-        return categoryList;
-    }
-
-    public MutableLiveData<String> getMessageError() {
-        return messageError;
-    }
-
-    public MutableLiveData<Boolean> getGetError() {
-        return getError;
-    }
 
 }

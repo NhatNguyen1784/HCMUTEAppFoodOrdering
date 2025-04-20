@@ -18,16 +18,19 @@ public class FoodController {
     @Autowired
     private FoodService foodService;
 
+    // lay danh sach tat ca food
     @GetMapping
     public ResponseEntity<?> getAllFoods() {
         return new ResponseEntity<>(new ApiResponse(200, "List All Foods", foodService.findAll()), HttpStatus.OK);
     }
 
+    // lay danh sach food theo category
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getFood(@PathVariable Long categoryId) {
         return new ResponseEntity<>(new ApiResponse(200, "List Foods", foodService.findByCategoryId(categoryId)), HttpStatus.OK);
     }
 
+    // add new food
     @PostMapping("/add")
     public ResponseEntity<?> addFood(@ModelAttribute FoodDTO foodDTO){
         Optional<Food> food = foodService.findByName(foodDTO.getFoodName());
@@ -39,6 +42,7 @@ public class FoodController {
         }
     }
 
+    // update food
     @PutMapping("/update/{foodId}")
     public ResponseEntity<?> updateFood(@Validated @ModelAttribute FoodDTO foodDTO, @Validated @PathVariable Long foodId){
         Optional<Food> food = foodService.findById(foodId);

@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.ListFoodActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.user.VerifyOtpActivity"
             android:exported="false" />
         <activity
