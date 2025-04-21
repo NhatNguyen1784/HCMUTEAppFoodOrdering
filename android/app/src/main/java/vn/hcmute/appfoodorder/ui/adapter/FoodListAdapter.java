@@ -1,6 +1,7 @@
 package vn.hcmute.appfoodorder.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,15 @@ import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.entity.Food;
+import vn.hcmute.appfoodorder.ui.activity.FoodDetailActivity;
+import vn.hcmute.appfoodorder.ui.activity.FoodListActivity;
 
-public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
+public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodViewHolder> {
 
     private List<Food> foods;
     private Context context;
 
-    public FoodAdapter(Context context) {
+    public FoodListAdapter(Context context) {
         this.context = context;
     }
     public void setData(List<Food> foods){
@@ -34,13 +37,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @NonNull
     @Override
-    public FoodAdapter.FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FoodListAdapter.FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food, parent, false);
         return new FoodViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FoodAdapter.FoodViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FoodListAdapter.FoodViewHolder holder, int position) {
         // gan data cho view
         Food food = foods.get(position);
         Glide.with(context)
@@ -51,6 +54,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.tvPrice.setText(food.getFoodPrice().toString());
         holder.tvRate.setText(5 + ""); // fix set rate
         holder.tvSl.setText("Đã bán: " + 100); // fix só luong da ban
+
+        // set su kien click item
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, FoodDetailActivity.class);
+            intent.putExtra("foodId", food.getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override

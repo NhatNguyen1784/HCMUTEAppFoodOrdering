@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +19,7 @@ import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.entity.Category;
-import vn.hcmute.appfoodorder.ui.activity.ListFoodActivity;
+import vn.hcmute.appfoodorder.ui.activity.FoodListActivity;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
@@ -61,7 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         // set su kien click item
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ListFoodActivity.class);
+            Intent intent = new Intent(context, FoodListActivity.class);
             intent.putExtra("cate_id", category.getId());
             intent.putExtra("cate_name", category.getCategoryName());
             context.startActivity(intent);

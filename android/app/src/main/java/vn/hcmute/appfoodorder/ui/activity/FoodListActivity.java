@@ -22,14 +22,14 @@ import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.entity.Food;
-import vn.hcmute.appfoodorder.ui.adapter.FoodAdapter;
-import vn.hcmute.appfoodorder.viewmodel.FoodViewModel;
+import vn.hcmute.appfoodorder.ui.adapter.FoodListAdapter;
+import vn.hcmute.appfoodorder.viewmodel.FoodListViewModel;
 
-public class ListFoodActivity extends AppCompatActivity {
-    private FoodViewModel foodViewModel;
+public class FoodListActivity extends AppCompatActivity {
+    private FoodListViewModel foodViewModel;
     private RecyclerView rcvListFood;
     private TextView tvCateName;
-    private FoodAdapter foodAdapter;
+    private FoodListAdapter foodAdapter;
     private ProgressBar progressBar;
     private ImageView btnBack;
 
@@ -70,7 +70,7 @@ public class ListFoodActivity extends AppCompatActivity {
             tvCateName.setText(cate_name.trim());
 
         // khoi tao viewmodel
-        foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
+        foodViewModel = new ViewModelProvider(this).get(FoodListViewModel.class);
 
         // goi API
         getFoodByCategory(cate_id);
@@ -78,8 +78,8 @@ public class ListFoodActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         // set layout rcv
-        rcvListFood.setLayoutManager(new GridLayoutManager(ListFoodActivity.this, 2));
-        foodAdapter = new FoodAdapter(this);
+        rcvListFood.setLayoutManager(new GridLayoutManager(FoodListActivity.this, 2));
+        foodAdapter = new FoodListAdapter(this);
         rcvListFood.setAdapter(foodAdapter);
     }
 

@@ -16,7 +16,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.ListFoodActivity"
+            android:name=".ui.activity.FoodDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppFoodOrder" />
+        <activity
+            android:name=".ui.activity.FoodListActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.user.VerifyOtpActivity"

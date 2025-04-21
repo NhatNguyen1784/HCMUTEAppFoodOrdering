@@ -30,12 +30,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures{
-        dataBinding = true;
+        dataBinding = true
+        viewBinding = true;
     }
 }
 
 dependencies {
+    implementation ("com.tbuonomo:dotsindicator:4.3")
     implementation("com.github.bumptech.glide:glide:4.14.2")
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation(libs.pinview)
     implementation(libs.appcompat)

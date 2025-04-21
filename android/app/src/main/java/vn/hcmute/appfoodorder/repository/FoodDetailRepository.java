@@ -8,8 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,47 +18,42 @@ import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.utils.Resource;
 
-public class FoodRepository {
-    private static FoodRepository instance;
+public class FoodDetailRepository {
+    private static FoodDetailRepository instance;
     private final FoodApi foodApi;
-
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public FoodRepository() {
+    public FoodDetailRepository() {
         this.foodApi = RetrofitClient.getRetrofit().create(FoodApi.class);
     }
 
-    public static FoodRepository getInstance(){
-        if(instance == null){
-            instance = new FoodRepository();
+    public static FoodDetailRepository getInstance(){
+        if (instance == null){
+            instance = new FoodDetailRepository();
         }
         return instance;
     }
 
-    public LiveData<Resource<List<Food>>> getFoodByCategory(Long categoryId){
+    public LiveData<Resource<Food>> getFoodById(Long foodId){
+        MutableLiveData<Resource<Food>> resultLiveData = new MutableLiveData<>();
 
-        MutableLiveData<Resource<List<Food>>> resultLiveData = new MutableLiveData<>();
-
-        // đánh dấu đang load dữ liệu
-        resultLiveData.setValue(Resource.loading(null));
-
-        foodApi.getFoodByCategory(categoryId).enqueue(new Callback<ApiResponse<List<Food>>>() {
+        foodApi.getFoodById(foodId).enqueue(new Callback<ApiResponse<Food>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<Food>>> call, Response<ApiResponse<List<Food>>> response) {
+            public void onResponse(Call<ApiResponse<Food>> call, Response<ApiResponse<Food>> response) {
+                // kiem tra response
                 if (response.isSuccessful() && response.body() != null){
-                    ApiResponse<List<Food>> apiResult = response.body();
-                    if(apiResult.getCode() == 200){
+                    ApiResponse<Food> apiResult = response.body();
+                    if (apiResult.getCode() == 200){
                         // tra ve du lieu thanh cong
                         resultLiveData.setValue(Resource.success(apiResult.getResult()));
-                    } else {
-                        // tra ve loi tu API
+                    }
+                    else {
                         resultLiveData.setValue(Resource.error("Error code: " + apiResult.getCode(), null));
                     }
                 }
                 else {
-                    // xu li loi tu response
-                    String errorMessage =  "Unknown error occurred";
-                    if(response.body() != null){
+                    String errorMessage = "Unknown error occurred";
+                    if (response.body() != null){
                         ApiErrorResponse errorResponse = gson.fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
                         errorMessage = errorResponse.getMessage();
                     }
@@ -69,8 +62,8 @@ public class FoodRepository {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<Food>>> call, Throwable throwable) {
-                Log.e("ListFoodRepository", "Error fetching food by category", throwable);
+            public void onFailure(Call<ApiResponse<Food>> call, Throwable throwable) {
+                Log.e("FoodDetailRepository", "Error fetching food by Food Id", throwable);
                 resultLiveData.setValue(Resource.error("Network error: " + throwable.getMessage(), null));
             }
         });

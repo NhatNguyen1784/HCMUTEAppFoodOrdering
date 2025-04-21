@@ -24,9 +24,15 @@ public class FoodController {
         return new ResponseEntity<>(new ApiResponse(200, "List All Foods", foodService.findAll()), HttpStatus.OK);
     }
 
+    //lay food theo food_id
+    @GetMapping("/{foodId}")
+    public ResponseEntity<?> getFoodById(@PathVariable Long foodId) {
+        return new ResponseEntity<>(new ApiResponse(200, "Food item", foodService.findById(foodId)), HttpStatus.OK);
+    }
+
     // lay danh sach food theo category
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<?> getFood(@PathVariable Long categoryId) {
+    public ResponseEntity<?> getFoodByCategory(@PathVariable Long categoryId) {
         return new ResponseEntity<>(new ApiResponse(200, "List Foods", foodService.findByCategoryId(categoryId)), HttpStatus.OK);
     }
 

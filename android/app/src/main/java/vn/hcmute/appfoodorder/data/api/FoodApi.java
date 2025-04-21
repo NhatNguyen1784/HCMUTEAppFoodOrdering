@@ -12,4 +12,7 @@ import vn.hcmute.appfoodorder.model.entity.Food;
 public interface FoodApi {
     @GET("foods/category/{categoryId}")
     Call<ApiResponse<List<Food>>> getFoodByCategory(@Path("categoryId") Long categoryId);
+
+    @GET("foods/{foodId}")
+    Call<ApiResponse<Food>> getFoodById(@Path("foodId") Long foodId);
 }
