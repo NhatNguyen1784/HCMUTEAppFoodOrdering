@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.ui.fragment.CartFragment;
 import vn.hcmute.appfoodorder.ui.fragment.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
     private HomeFragment homeFragment = new HomeFragment();
+    private CartFragment cartFragment = new CartFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.itemHome){
                 setCurrentFragment(homeFragment);
+            }
+            if (itemId == R.id.itemCart){
+                setCurrentFragment(cartFragment);
             }
             return true;
         });
