@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/btnBackCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,6 +50,7 @@
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvCartItem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false" />
@@ -133,7 +134,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/tvSubTotalCart"
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,24 +144,24 @@
                     app:layout_constraintTop_toTopOf="@+id/textView6" />
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/tvDeliveryCart"
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="$3"
-                    app:layout_constraintEnd_toEndOf="@+id/textView11"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                    app:layout_constraintEnd_toEndOf="@+id/tvSubTotalCart"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSubTotalCart" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/tvFeeTax"
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="$1"
-                    app:layout_constraintEnd_toEndOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                    app:layout_constraintEnd_toEndOf="@+id/tvDeliveryCart"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDeliveryCart" />
 
                 <View
                     android:id="@+id/view"
@@ -187,20 +188,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/view" />
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/tvTotalCart"
                     style="@style/textStyleBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="$104"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/textView14"
+                    app:layout_constraintEnd_toEndOf="@+id/tvFeeTax"
                     app:layout_constraintTop_toTopOf="@+id/textView15" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button2"
+                android:id="@+id/btnOrder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/red_button_background"
