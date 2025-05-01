@@ -23,5 +23,6 @@ public class FoodImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id", referencedColumnName = "food_id", nullable = false)
     @JsonIgnore // Ngăn không cho vòng lặp vô hạn khi trả về JSON
+    @JsonBackReference
     private Food food;
 }

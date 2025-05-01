@@ -31,12 +31,16 @@ android {
     }
     buildFeatures{
         dataBinding = true;
+        viewBinding = true;
     }
 }
 
 dependencies {
+    implementation ("com.tbuonomo:dotsindicator:4.3")
     implementation("com.github.bumptech.glide:glide:4.14.2")
-    implementation(libs.legacy.support.v4)
+    //implementation(libs.legacy.support.v4)
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
