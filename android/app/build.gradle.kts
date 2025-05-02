@@ -43,6 +43,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.legacy.support.v4)
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation(libs.pinview)
     implementation(libs.appcompat)

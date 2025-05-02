@@ -20,7 +20,6 @@ import java.util.List;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.ui.activity.FoodDetailActivity;
-import vn.hcmute.appfoodorder.ui.activity.FoodListActivity;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodViewHolder> {
 
@@ -73,7 +72,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
         private TextView tvFoodName, tvSl, tvPrice, tvRate;
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgFood = itemView.findViewById(R.id.imgFood);
+            imgFood = itemView.findViewById(R.id.imgFoodSearch);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvRate = itemView.findViewById(R.id.tvRate);

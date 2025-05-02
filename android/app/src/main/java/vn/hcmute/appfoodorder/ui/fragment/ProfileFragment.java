@@ -8,7 +8,6 @@
     import androidx.annotation.NonNull;
     import androidx.annotation.Nullable;
     import androidx.fragment.app.Fragment;
-
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.ViewGroup;
@@ -16,9 +15,7 @@
     import android.widget.LinearLayout;
     import android.widget.TextView;
     import android.widget.Toast;
-
     import com.bumptech.glide.Glide;
-
     import vn.hcmute.appfoodorder.R;
     import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
     import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
@@ -64,7 +61,7 @@
                     Glide.with(requireContext())
                             .load(urlImage)  // URL của ảnh trên Cloudinary
                             .placeholder(R.drawable.icon_default_avatar)  // Hình ảnh placeholder khi ảnh chưa tải xong
-                            .into(imgAUser);  // ImageView bạn muốn hiển thị ảnh
+                            .into(imgAUser);  // ImageView muốn hiển thị ảnh
                 }
             });
         }

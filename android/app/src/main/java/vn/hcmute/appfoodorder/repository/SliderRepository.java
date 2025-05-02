@@ -2,6 +2,7 @@ package vn.hcmute.appfoodorder.repository;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class SliderRepository {
         sliderApi = RetrofitClient.getRetrofit().create(SliderApi.class);
     }
 
-    public MutableLiveData<ApiResponse<List<SliderItem>>> getAllSliderItem(){
+    public LiveData<ApiResponse<List<SliderItem>>> getAllSliderItem(){
         MutableLiveData<ApiResponse<List<SliderItem>>> sliderItems = new MutableLiveData<>();
         sliderApi.getAllSlider().enqueue(new Callback<ApiResponse<List<SliderItem>>>() {
             @Override

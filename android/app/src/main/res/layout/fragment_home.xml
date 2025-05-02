@@ -12,7 +12,7 @@
         tools:context=".ui.fragment.HomeFragment">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvSearchHomeFrg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -26,7 +26,6 @@
             android:id="@+id/viewPagerSlider"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:overScrollMode="never"
@@ -34,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSearchHomeFrg" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvCategory"

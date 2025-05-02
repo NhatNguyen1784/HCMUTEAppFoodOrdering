@@ -12,4 +12,5 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     Optional<Food> findById(Long id);
     Optional<Food> findByFoodName(String foodName);
     List<Food> findByCategoryId(Long categoryId);
+    List<Food> findByFoodNameContainingIgnoreCase(String foodName);
 }

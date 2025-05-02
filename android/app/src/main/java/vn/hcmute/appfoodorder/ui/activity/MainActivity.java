@@ -19,6 +19,7 @@ import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
 import vn.hcmute.appfoodorder.ui.fragment.HomeFragment;
 import vn.hcmute.appfoodorder.ui.fragment.ProfileFragment;
+import vn.hcmute.appfoodorder.ui.fragment.SearchFragment;
 import vn.hcmute.appfoodorder.utils.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeFragment homeFragment = new HomeFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
+    private SearchFragment searchFragment = new SearchFragment();
     private SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.itemHome){
                 setCurrentFragment(homeFragment);
+            }
+            else if(itemId == R.id.itemSearch){
+                setCurrentFragment(searchFragment);
             }
             else if(itemId == R.id.itemProfile){
                 if(session.isLogin()){

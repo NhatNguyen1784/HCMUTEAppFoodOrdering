@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,6 @@ public class HomeFragment extends Fragment {
     private SliderViewModel sliderViewModel;
     private List<SliderItem> sliderItems;
     private SliderAdapter sliderAdapter;
-
     private Handler sliderHandler = new Handler();
 
     private Runnable sliderRunnable = new Runnable() {
@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
         setupRecyclerView();
         fetchAllCategories();
         setupSlider();
+
         return view;
     }
 
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment {
         //Mapping
         rcvCategory = view.findViewById(R.id.rcvCategory);
         viewPager2 = view.findViewById(R.id.viewPagerSlider);
+
         //Init
         categoryViewModel = new CategoryViewModel();
         sliderViewModel = new ViewModelProvider(this).get(SliderViewModel.class); // Khởi tạo SliderViewModel

@@ -90,5 +90,10 @@ public class FoodService {
         }
     }
 
+    //Search by name
+    public List<Food> searchFoodsByName(String keyword) {
+        return foodRepository.findByFoodNameContainingIgnoreCase(keyword);
+    }
+
 
 }

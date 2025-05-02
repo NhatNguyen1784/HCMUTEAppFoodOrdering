@@ -10,6 +10,7 @@ import vn.hcmute.appfood.dto.FoodDTO;
 import vn.hcmute.appfood.entity.Food;
 import vn.hcmute.appfood.services.Impl.FoodService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -59,5 +60,15 @@ public class FoodController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("foodId not found");
         }
     }
-    
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchFoodsByName(@RequestParam String keyword) {
+        try{
+            List<Food> foods = foodService.searchFoodsByName(keyword);
+            return ResponseEntity.ok(ApiResponse.success("Search food by name", foods));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
