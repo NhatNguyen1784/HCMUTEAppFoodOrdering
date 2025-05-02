@@ -1,4 +1,80 @@
 package vn.hcmute.appfoodorder.model.entity;
 
-public class CartItem {
+import java.io.Serializable;
+import java.util.List;
+
+public class CartItem implements Serializable {
+    private Long foodId;
+    private String foodName;
+    private int quantity;
+    private double unitPrice;
+    private double price;
+    private List<FoodImage> foodImage;
+
+    public String getFirstImageUrl(){
+        if(foodImage != null && !foodImage.isEmpty()){
+            return foodImage.get(0).getImageUrl();
+        }
+        return null;
+    }
+
+    public List<FoodImage> getFoodImages() {
+        return foodImage;
+    }
+
+    public void setFoodImages(List<FoodImage> foodImages) {
+        this.foodImage = foodImages;
+    }
+
+    public Long getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(Long foodId) {
+        this.foodId = foodId;
+    }
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public CartItem() {
+    }
+
+    public CartItem(Long foodId, String foodName, int quantity, double unitPrice, double price, List<FoodImage> foodImages) {
+        this.foodId = foodId;
+        this.foodName = foodName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.price = price;
+        this.foodImage = foodImages;
+    }
 }

@@ -23,14 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.request.CartRequest;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.model.entity.FoodImage;
 import vn.hcmute.appfoodorder.ui.adapter.ImageFoodSliderAdapter;
+import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.FoodDetailViewModel;
 
 public class FoodDetailActivity extends AppCompatActivity {
-
     private FoodDetailViewModel foodDetailViewModel;
+    private CartViewModel cartViewModel;
     private ImageFoodSliderAdapter foodSliderAdapter;
     private ViewPager2 viewpager2;
     private DotsIndicator dotsIndicator;
@@ -59,6 +61,50 @@ public class FoodDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // lay thong tin mon an
+                Food food = foodDetailViewModel.getFood().getValue();
+                if (food != null){
+                    CartRequest request = new CartRequest();
+                    // JWT thi fix
+                    request.setEmail("nguyennhatnguyen1782004@gmail.com");
+                    request.setFoodId(food.getId());
+                    int quantity = Integer.parseInt(tvQuantity.getText().toString());
+                    request.setQuantity(quantity);
+
+                    cartViewModel.addItemToCart(request);
+                    Toast.makeText(getApplicationContext(), "Add item to cart successfull", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(tvQuantity.getText().toString());
+                if(quantity > 0){
+                    quantity--;
+                    tvQuantity.setText(String.valueOf(quantity));
+                }
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(tvQuantity.getText().toString());
+                if(quantity >= 0 && quantity < 100){
+                    quantity++;
+                    tvQuantity.setText(String.valueOf(quantity));
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Your quantity is so much", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void setUpAdapter() {
@@ -71,16 +117,17 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         // khoi tao viewmodel
         foodDetailViewModel = new ViewModelProvider(this).get(FoodDetailViewModel.class);
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         // lay ID tu intent
         Long foodId = getIntent().getLongExtra("foodId", -1);
-        if(foodId != -1)
+        if (foodId != -1)
             foodDetailViewModel.fetchFood(foodId);
 
         foodDetailViewModel.getFood().observe(this, new Observer<Food>() {
             @Override
             public void onChanged(Food food) {
-                if(food != null){
+                if (food != null) {
                     // gan du lieu len view
                     List<FoodImage> foodImages = food.getFoodImages();
                     foodSliderAdapter.setData(foodImages);
@@ -102,7 +149,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void anhxa(){
+    private void anhxa() {
         viewpager2 = findViewById(R.id.viewPagerFoodDetailImages);
         dotsIndicator = findViewById(R.id.dotsIndicator);
         btnBack = findViewById(R.id.btnBackFoodDetail);

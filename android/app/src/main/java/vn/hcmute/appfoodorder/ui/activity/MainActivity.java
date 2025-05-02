@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.ui.fragment.CartFragment;
 import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
 import vn.hcmute.appfoodorder.ui.fragment.HomeFragment;
 import vn.hcmute.appfoodorder.ui.fragment.ProfileFragment;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
     private HomeFragment homeFragment = new HomeFragment();
+	private CartFragment cartFragment = new CartFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
     private SearchFragment searchFragment = new SearchFragment();
     private SessionManager session;
@@ -65,9 +67,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.itemHome){
                 setCurrentFragment(homeFragment);
             }
-            else if(itemId == R.id.itemSearch){
-                setCurrentFragment(searchFragment);
-            }
+
             else if(itemId == R.id.itemProfile){
                 if(session.isLogin()){
                     setCurrentFragment(profileFragment);
@@ -79,14 +79,13 @@ public class MainActivity extends AppCompatActivity {
             }
             else if(itemId == R.id.itemCart){
                 if(session.isLogin()){
-
+					setCurrentFragment(cartFragment);
                 }
                 else{
                     // Show dialog required login account
                     showLoginDialog();
                 }
-            }
-            return true;
+            }            return true;
         });
     }
 
