@@ -85,9 +85,12 @@ public class FoodDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int quantity = Integer.parseInt(tvQuantity.getText().toString());
-                if(quantity > 0){
+                if(quantity > 1){
                     quantity--;
+                    double unitPrice = Double.valueOf(tvPrice.getText().toString());
+                    double totalPrice = totalPrice(quantity, unitPrice);
                     tvQuantity.setText(String.valueOf(quantity));
+                    tvTotalPrice.setText(String.valueOf(totalPrice));
                 }
             }
         });
@@ -96,15 +99,24 @@ public class FoodDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int quantity = Integer.parseInt(tvQuantity.getText().toString());
+
                 if(quantity >= 0 && quantity < 100){
                     quantity++;
+                    double unitPrice = Double.valueOf(tvPrice.getText().toString());
+                    double totalPrice = totalPrice(quantity, unitPrice);
                     tvQuantity.setText(String.valueOf(quantity));
+                    tvTotalPrice.setText(String.valueOf(totalPrice));
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Your quantity is so much", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private double totalPrice(int quantity, double unitPrice){
+        double totalPrice = quantity * unitPrice;
+        return totalPrice;
     }
 
     private void setUpAdapter() {

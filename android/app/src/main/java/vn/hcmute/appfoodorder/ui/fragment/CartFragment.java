@@ -14,17 +14,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.request.CartRequest;
+import vn.hcmute.appfoodorder.model.dto.request.DeleteCartRequest;
+import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Cart;
 import vn.hcmute.appfoodorder.model.entity.CartItem;
 import vn.hcmute.appfoodorder.ui.adapter.CartAdapter;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
+import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
 public class CartFragment extends Fragment {
     private ImageView btnBack;
@@ -57,12 +62,69 @@ public class CartFragment extends Fragment {
             }
         });
 
+        cartAdapter.setCartItemListener(new CartAdapter.CartItemListener() {
+            @Override
+            public void onIncreaseQuantity(CartItem item) {
+                item.setQuantity(item.getQuantity() + 1);
+                updateCartItem(item);
+            }
+
+            @Override
+            public void onDecreaseQuantity(CartItem item) {
+                if(item.getQuantity() > 1){
+                    item.setQuantity(item.getQuantity() - 1);
+                    updateCartItem(item);
+                }
+            }
+
+            @Override
+            public void removeCartItem(CartItem item) {
+                deleteCartItem(item);
+            }
+        });
+
+    }
+
+    private void getCurrentUser(Consumer<UserResponse> callback) {
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.init(requireContext());
+        profileViewModel.getUserInfor().observe(getViewLifecycleOwner(), userResponse -> {
+            if (userResponse != null) {
+                callback.accept(userResponse); // gọi lại khi có dữ liệu
+            }
+        });
+    }
+
+    private void deleteCartItem(CartItem item){
+        DeleteCartRequest request = new DeleteCartRequest();
+        getCurrentUser(user -> {
+            String email = user.getEmail();
+            request.setEmail(email);
+            request.setFoodId(item.getFoodId());
+        });
+        cartViewModel.deleteCartItem(request);
+    }
+
+    private void updateCartItem(CartItem item){
+        CartRequest request = new CartRequest();
+        getCurrentUser(user -> {
+            String email = user.getEmail();
+            request.setEmail(email);
+            request.setFoodId(item.getFoodId());
+            request.setQuantity(item.getQuantity());
+        });
+        cartViewModel.updateCartItem(request);
+
     }
 
     private void getMyCart() {
-        cartViewModel = new CartViewModel();
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
-        cartViewModel.getMyCart("nguyennhatnguyen1782004@gmail.com");
+        getCurrentUser(user -> {
+            String email = user.getEmail();
+            cartViewModel.getMyCart(email);
+        });
+
         cartViewModel.getCartLiveData().observe(getViewLifecycleOwner(), new Observer<Cart>() {
             @Override
             public void onChanged(Cart cart) {
@@ -106,7 +168,7 @@ public class CartFragment extends Fragment {
     }
 
     private void setupRecycleView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), GridLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rcvCart.setLayoutManager(layoutManager);
         cartAdapter = new CartAdapter(getContext());
         rcvCart.setAdapter(cartAdapter);

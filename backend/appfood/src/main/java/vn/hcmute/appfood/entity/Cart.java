@@ -30,7 +30,7 @@ public class Cart {
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
     private Double totalPrice;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference // Áp dụng cho bên "nhiều" trong mối quan hệ One-to-Many
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

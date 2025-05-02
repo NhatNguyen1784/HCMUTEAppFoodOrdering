@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.itemHome){
                 setCurrentFragment(homeFragment);
             }
-
             else if(itemId == R.id.itemProfile){
                 if(session.isLogin()){
                     setCurrentFragment(profileFragment);
@@ -85,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
                     // Show dialog required login account
                     showLoginDialog();
                 }
-            }            return true;
+            }
+            return true;
         });
     }
 

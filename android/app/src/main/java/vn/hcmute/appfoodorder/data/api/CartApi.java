@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -22,6 +23,6 @@ public interface CartApi {
     @PUT("cart/update")
     Call<ApiResponse<Cart>> updateCartItem(@Body CartRequest request);
 
-    @DELETE("cart/delete")
+    @HTTP(method = "DELETE", path = "cart/delete", hasBody = true)
     Call<ApiResponse<Cart>> deleteCartItem(@Body DeleteCartRequest request);
 }
