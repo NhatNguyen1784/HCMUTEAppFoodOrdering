@@ -30,13 +30,15 @@ public class FoodImageService {
         if(foodDTO.getFoodImage() == null || foodDTO.getFoodImage().isEmpty()) {
             return;
         }
-        FoodImage foodImage = new FoodImage();
+
         for (MultipartFile file : foodDTO.getFoodImage()) {
             String imgUrl = cloudinaryService.uploadImage(file);
+            FoodImage foodImage = new FoodImage();
             foodImage.setImageUrl(imgUrl);
             foodImage.setFood(food);
+            foodImageRepository.save(foodImage);
         }
-        foodImageRepository.save(foodImage);
+
     }
 
     // xoa tat ca cac anh cua food

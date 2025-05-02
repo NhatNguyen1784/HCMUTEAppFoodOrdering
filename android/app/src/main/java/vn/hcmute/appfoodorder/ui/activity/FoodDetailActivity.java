@@ -96,7 +96,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int quantity = Integer.parseInt(tvQuantity.getText().toString());
-                if(quantity > 0 && quantity < 100){
+                if(quantity >= 0 && quantity < 100){
                     quantity++;
                     tvQuantity.setText(String.valueOf(quantity));
                 }
