@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Category;
 import vn.hcmute.appfoodorder.model.entity.SliderItem;
 import vn.hcmute.appfoodorder.ui.adapter.CategoryAdapter;
@@ -57,8 +58,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);// Inflate layout for fragment
         mappingAndInit(view);
         setupRecyclerView();
-        setupSlider();
         fetchAllCategories();
+        setupSlider();
         return view;
     }
 
@@ -72,10 +73,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
-        rcvCategory.setLayoutManager(layoutManager);
         categoryAdapter = new CategoryAdapter(getContext());
         rcvCategory.setAdapter(categoryAdapter);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
+        rcvCategory.setLayoutManager(layoutManager);
     }
 
     private void fetchAllCategories() {
@@ -101,41 +102,48 @@ public class HomeFragment extends Fragment {
 
     private void setupSlider() {
         if (sliderViewModel != null) {
-            sliderViewModel.getSliderItems().observe(getViewLifecycleOwner(), items -> {
-                if (items != null && !items.isEmpty()) {
-                    sliderItems = items; // Gán để runnable dùng được
-                    sliderAdapter = new SliderAdapter(items, getContext());
-                    viewPager2.setAdapter(sliderAdapter);
-
-                    // Chỉ cần gọi một lần duy nhất
-                    sliderHandler.postDelayed(sliderRunnable, 3000);
-
-                    //Tăng trải nghiệm scroll mượt
-                    viewPager2.setOffscreenPageLimit(3);
-                    viewPager2.setClipToPadding(false);
-                    viewPager2.setClipChildren(false);
-
-                    viewPager2.setPageTransformer((page, position) -> {
-                        page.setAlpha(0.5f + (1 - Math.abs(position)) * 0.5f);
-                        page.setScaleX(0.85f + (1 - Math.abs(position)) * 0.15f);
-                        page.setScaleY(0.85f + (1 - Math.abs(position)) * 0.15f);
-                    });
-
-                    viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                        @Override
-                        public void onPageSelected(int position) {
-                            super.onPageSelected(position);
-                            // Mỗi lần người dùng lướt, reset thời gian chờ auto-slide
-                            sliderHandler.removeCallbacks(sliderRunnable);
-                            sliderHandler.postDelayed(sliderRunnable, 4000); // Reset lại 4s
+            sliderViewModel.getSliders().observe(getViewLifecycleOwner(), new Observer<ApiResponse<List<SliderItem>>>() {
+                @Override
+                public void onChanged(ApiResponse<List<SliderItem>> response) {
+                    if (response != null && response.getResult() != null && !response.getResult().isEmpty()) {
+                        sliderItems = response.getResult();
+                        if (sliderAdapter == null) {
+                            // Nếu sliderAdapter chưa được khởi tạo, tạo mới
+                            sliderAdapter = new SliderAdapter(sliderItems, getContext());
+                            viewPager2.setAdapter(sliderAdapter);
+                        } else {
+                            // Nếu đã khởi tạo rồi, chỉ cần cập nhật dữ liệu
+                            sliderAdapter.notifyDataSetChanged();
                         }
-                    });
 
+                        // Chỉ cần gọi một lần duy nhất
+                        sliderHandler.postDelayed(sliderRunnable, 3000);
+
+                        //Tăng trải nghiệm scroll mượt
+                        viewPager2.setOffscreenPageLimit(3);
+                        viewPager2.setClipToPadding(false);
+                        viewPager2.setClipChildren(false);
+
+                        viewPager2.setPageTransformer((page, position) -> {
+                            page.setAlpha(0.5f + (1 - Math.abs(position)) * 0.5f);
+                            page.setScaleX(0.85f + (1 - Math.abs(position)) * 0.15f);
+                            page.setScaleY(0.85f + (1 - Math.abs(position)) * 0.15f);
+                        });
+
+                        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                            @Override
+                            public void onPageSelected(int position) {
+                                super.onPageSelected(position);
+                                // Mỗi lần người dùng lướt, reset thời gian chờ auto-slide
+                                sliderHandler.removeCallbacks(sliderRunnable);
+                                sliderHandler.postDelayed(sliderRunnable, 4000); // Reset lại 4s
+                            }
+                        });
+                    }
                 }
             });
         }
     }
-
 
     @Override
     public void onDestroyView() {
