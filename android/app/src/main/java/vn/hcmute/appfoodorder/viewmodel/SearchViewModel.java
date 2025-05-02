@@ -3,10 +3,8 @@ package vn.hcmute.appfoodorder.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.repository.SearchFoodRepository;
 
@@ -27,7 +25,8 @@ public class SearchViewModel extends ViewModel {
             if (apiResponse.getResult() != null) {
                 searchResults.setValue(apiResponse.getResult());
             } else {
-                searchResults.setValue(new ArrayList<>()); // hoặc giữ nguyên danh sách cũ
+                //searchResults.setValue(new ArrayList<>()); //Giữ nguyên danh sách cũ
+                searchResults.setValue(null); //Reset lại ban đầu
             }
         });
     }

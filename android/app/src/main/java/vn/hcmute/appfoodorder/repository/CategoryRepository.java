@@ -4,9 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -16,7 +14,6 @@ import vn.hcmute.appfoodorder.model.dto.ApiErrorResponse;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Category;
 import vn.hcmute.appfoodorder.utils.Resource;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

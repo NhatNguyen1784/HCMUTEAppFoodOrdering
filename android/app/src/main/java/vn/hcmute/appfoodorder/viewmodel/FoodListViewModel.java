@@ -4,11 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
-
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.repository.FoodListRepository;
 import vn.hcmute.appfoodorder.utils.Resource;

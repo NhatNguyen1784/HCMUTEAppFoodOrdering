@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityLoginBinding;
-import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.ui.activity.MainActivity;
 import vn.hcmute.appfoodorder.utils.SessionManager;
