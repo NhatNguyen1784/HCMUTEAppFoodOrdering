@@ -19,4 +19,7 @@ public class SliderViewModel extends ViewModel {
     public LiveData<ApiResponse<List<SliderItem>>> getSliders() {
         return sliders;
     }
+
+    public void fetchSliders() {
+    }
 }

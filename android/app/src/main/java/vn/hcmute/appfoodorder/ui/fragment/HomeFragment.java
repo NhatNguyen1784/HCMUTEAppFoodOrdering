@@ -59,8 +59,7 @@ public class HomeFragment extends Fragment {
         mappingAndInit(view);
         setupRecyclerView();
         fetchAllCategories();
-        setupSlider();
-
+        fetchSliderItems();
         return view;
     }
 
@@ -102,55 +101,61 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void setupSlider() {
-        if (sliderViewModel != null) {
-            sliderViewModel.getSliders().observe(getViewLifecycleOwner(), new Observer<ApiResponse<List<SliderItem>>>() {
-                @Override
-                public void onChanged(ApiResponse<List<SliderItem>> response) {
-                    if (response != null && response.getResult() != null && !response.getResult().isEmpty()) {
-                        sliderItems = response.getResult();
-                        if (sliderAdapter == null) {
-                            // Nếu sliderAdapter chưa được khởi tạo, tạo mới
-                            sliderAdapter = new SliderAdapter(sliderItems, getContext());
-                            viewPager2.setAdapter(sliderAdapter);
-                        } else {
-                            // Nếu đã khởi tạo rồi, chỉ cần cập nhật dữ liệu
-                            sliderAdapter.notifyDataSetChanged();
-                        }
-
-                        // Chỉ cần gọi một lần duy nhất
-                        sliderHandler.postDelayed(sliderRunnable, 3000);
-
-                        //Tăng trải nghiệm scroll mượt
-                        viewPager2.setOffscreenPageLimit(3);
-                        viewPager2.setClipToPadding(false);
-                        viewPager2.setClipChildren(false);
-
-                        viewPager2.setPageTransformer((page, position) -> {
-                            page.setAlpha(0.5f + (1 - Math.abs(position)) * 0.5f);
-                            page.setScaleX(0.85f + (1 - Math.abs(position)) * 0.15f);
-                            page.setScaleY(0.85f + (1 - Math.abs(position)) * 0.15f);
-                        });
-
-                        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                            @Override
-                            public void onPageSelected(int position) {
-                                super.onPageSelected(position);
-                                // Mỗi lần người dùng lướt, reset thời gian chờ auto-slide
-                                sliderHandler.removeCallbacks(sliderRunnable);
-                                sliderHandler.postDelayed(sliderRunnable, 4000); // Reset lại 4s
-                            }
-                        });
-                    }
+    private void fetchSliderItems() {
+        sliderViewModel.getSliders().observe(getViewLifecycleOwner(), new Observer<ApiResponse<List<SliderItem>>>() {
+            @Override
+            public void onChanged(ApiResponse<List<SliderItem>> response) {
+                if (response != null && response.getResult() != null && !response.getResult().isEmpty()) {
+                    sliderItems = response.getResult();
+                    setupSlider(sliderItems);
                 }
-            });
-        }
+            }
+        });
     }
+
+    private void setupSlider(List<SliderItem> items) {
+        sliderAdapter = new SliderAdapter(items, getContext());
+        viewPager2.setAdapter(sliderAdapter);
+
+        viewPager2.setOffscreenPageLimit(3);
+        viewPager2.setClipToPadding(false);
+        viewPager2.setClipChildren(false);
+        viewPager2.setPageTransformer((page, position) -> {
+            page.setAlpha(0.5f + (1 - Math.abs(position)) * 0.5f);
+            page.setScaleX(0.85f + (1 - Math.abs(position)) * 0.15f);
+            page.setScaleY(0.85f + (1 - Math.abs(position)) * 0.15f);
+        });
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                sliderHandler.removeCallbacks(sliderRunnable);
+                sliderHandler.postDelayed(sliderRunnable, 4000);
+            }
+        });
+
+        sliderHandler.postDelayed(sliderRunnable, 4000);
+    }
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        sliderHandler.removeCallbacks(sliderRunnable); // dừng khi view bị hủy
+        //sliderHandler.removeCallbacks(sliderRunnable); // dừng khi view bị hủy
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Khi quay lại fragment, nếu sliderItems không rỗng thì slide tiếp
+        if (sliderItems != null && !sliderItems.isEmpty()) {
+            sliderHandler.postDelayed(sliderRunnable, 4000);
+        }
+        else {
+            fetchSliderItems(); // reload nếu dữ liệu null
+        }
+    }
+
 }
 
