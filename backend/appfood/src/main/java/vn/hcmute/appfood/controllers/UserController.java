@@ -5,9 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import vn.hcmute.appfood.dto.*;
+import vn.hcmute.appfood.entity.Address;
+import vn.hcmute.appfood.services.Impl.AddressService;
 import vn.hcmute.appfood.services.Impl.OtpService;
 import vn.hcmute.appfood.services.Impl.UserService;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -19,6 +22,9 @@ public class UserController {
 
     @Autowired
     private OtpService otpService;
+
+    @Autowired
+    private AddressService addressService;
 
     //API đăng nhập
     @PostMapping("/login")
@@ -96,37 +102,35 @@ public class UserController {
         return ResponseEntity.badRequest().body(ApiResponse.error("OTP is incorrect",null));
     }
 
-/*
-    //API đăng kí
-    @PostMapping("/register")
-    public ResponseEntity<?> registerAccount(@RequestBody RegisterDTO registerDTO) {
+    //Api get all Address shipping
+    @GetMapping("/user/shipping_address")
+    public ResponseEntity<?> getAllShippingAddresses(@RequestParam String email) {
         try {
-            String email = registerDTO.getEmail();
-            String password = registerDTO.getPassword();
-            String otp = registerDTO.getOtpCode();
-
-            if (!otpService.validateOtp(email, otp)) {
-                return ResponseEntity.badRequest().body(ApiResponse.error("OTP is incorrect", null));
+            List<String> addresses = addressService.findAllByUserId(email);
+            if (addresses.isEmpty()) {
+                return ResponseEntity.ok(ApiResponse.success("No addresses found", null));
             }
-
-                String fullName = registerDTO.getFullName();
-                String address = registerDTO.getAddress();
-                String phone = registerDTO.getPhone();
-
-                UserDTO userDTO = new UserDTO();
-                userDTO.setEmail(email);
-                userDTO.setPassword(password);
-                userDTO.setFullName(fullName);
-                userDTO.setAddress(address);
-                userDTO.setPhone(phone);
-
-                userService.saveUser(userDTO);
-                return ResponseEntity.ok(ApiResponse.success("User registered", userDTO));
-        }
-        catch(Exception e){
+            return ResponseEntity.ok(ApiResponse.success("Addresses found", addresses));
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body(ApiResponse.error("OTP is incorrect", null));
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to fetch addresses", e.getMessage()));
         }
     }
- */
+
+    //Api add new address
+    @PostMapping("/user/add_address")
+    public ResponseEntity<?> addNewAddress(@RequestBody AddressDTO addAddressDTO) {
+        try {
+            String fullAddress = addAddressDTO.getFullAddress().trim();
+            String email = addAddressDTO.getEmail().trim();
+            if(email == null || email.isEmpty()) return ResponseEntity.badRequest().body(ApiResponse.error("Email is required", null));
+            if(fullAddress == null || fullAddress.isEmpty()) return ResponseEntity.badRequest().body(ApiResponse.error("Full address is required", null));
+            addressService.addAddress(email, fullAddress);
+            return ResponseEntity.ok(ApiResponse.success("Address added successfully"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to add address", e.getMessage()));
+        }
+    }
+
 }

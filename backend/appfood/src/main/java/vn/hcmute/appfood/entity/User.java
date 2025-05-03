@@ -35,7 +35,7 @@ public class User {
     private String phone;
 
     @Column(nullable = false)
-    private String address;
+    private String address; //Address profile
 
     @Column(nullable = true)
     private String urlImage;
@@ -56,4 +56,9 @@ public class User {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Address> addresses;//Address shippping
 }

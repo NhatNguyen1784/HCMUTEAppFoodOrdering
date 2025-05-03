@@ -95,10 +95,10 @@
                 android:background="@drawable/grey_background">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/subtotal_tv"
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="19dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:text="Subtotal"
@@ -112,8 +112,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="Delivery"
-                    app:layout_constraintStart_toStartOf="@+id/textView6"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    app:layout_constraintStart_toStartOf="@+id/subtotal_tv"
+                    app:layout_constraintTop_toBottomOf="@+id/subtotal_tv" />
 
                 <TextView
                     android:id="@+id/textView10"
@@ -131,9 +131,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:text="$100"
+                    android:text="$0"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView6" />
+                    app:layout_constraintTop_toTopOf="@+id/subtotal_tv" />
 
                 <TextView
                     android:id="@+id/tvDeliveryCart"

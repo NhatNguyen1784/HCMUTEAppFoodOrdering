@@ -21,6 +21,10 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
+    @Column(nullable = false)
+    @NotNull(message = "Shipping address cannot be null")
+    private String fullAddress;
+
     @Column(name = "total_price", nullable = false)
     @NotNull(message = "Total price cannot be null")
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
@@ -35,7 +39,7 @@ public class Order {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false) // Khóa ngoại đến User
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)//Khi delete order thì all orderdetail related sẽ xóa theo
     @JsonBackReference // Áp dụng cho bên "nhiều" trong mối quan hệ One-to-Many
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

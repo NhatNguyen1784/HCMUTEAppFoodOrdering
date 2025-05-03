@@ -1,12 +1,12 @@
 package vn.hcmute.appfoodorder.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -27,6 +28,7 @@ import vn.hcmute.appfoodorder.model.dto.request.DeleteCartRequest;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Cart;
 import vn.hcmute.appfoodorder.model.entity.CartItem;
+import vn.hcmute.appfoodorder.ui.activity.OrderActivity;
 import vn.hcmute.appfoodorder.ui.adapter.CartAdapter;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
@@ -50,6 +52,7 @@ public class CartFragment extends Fragment {
         return view;
     }
 
+
     private void setupListener() {
         cartAdapter.setCartItemListener(new CartAdapter.CartItemListener() {
             @Override
@@ -71,7 +74,6 @@ public class CartFragment extends Fragment {
                 deleteCartItem(item);
             }
         });
-
     }
 
     private void getCurrentUser(Consumer<UserResponse> callback) {
@@ -103,7 +105,6 @@ public class CartFragment extends Fragment {
             request.setQuantity(item.getQuantity());
         });
         cartViewModel.updateCartItem(request);
-
     }
 
     private void getMyCart() {
@@ -117,31 +118,48 @@ public class CartFragment extends Fragment {
         cartViewModel.getCartLiveData().observe(getViewLifecycleOwner(), new Observer<Cart>() {
             @Override
             public void onChanged(Cart cart) {
-                if (cart != null && cart.getCartDetails() != null) { //Tránh trường hợp lỗi do cart chưa có gì
+                if (cart != null && cart.getCartDetails() != null && !cart.getCartDetails().isEmpty()) { // Kiểm tra giỏ hàng không rỗng
                     List<CartItem> cartItems = cart.getCartDetails();
                     cartAdapter.setData(cartItems);
 
-                    // tinh tong gia (subtotal)
+                    // tính tổng giá (subtotal)
                     double subtotal = cartItems.stream().mapToDouble(CartItem::getPrice).sum();
 
-                    // gia su tien ship va thue la co dinh
+                    // giả sử phí giao hàng và thuế cố định
                     double deliveryFee = 3;
-                    double taxFee = subtotal * 0.1; // thue 10%
+                    double taxFee = subtotal * 0.1; // thuế 10%
 
-                    // gia cuoi cung
+                    // tổng cộng
                     double total = subtotal + deliveryFee + taxFee;
 
-                    // hien thi len UI
+                    // hiển thị lên UI
                     tvSubTotal.setText(String.format("%,.0f đ", subtotal));
                     tvDelivery.setText(String.format("%,.0f đ", deliveryFee));
                     tvFeeTax.setText(String.format("%,.0f đ", taxFee));
                     tvTotal.setText(String.format("%,.0f đ", total));
-                }
-                else{
-                    Log.w("CartFragment", "Cart hoặc cartDetails null");
+
+                    // Khi giỏ hàng có ít nhất 1 mặt hàng, cho phép đặt hàng
+                    btnOrder.setEnabled(true); // Kích hoạt nút "Order"
+                    btnOrder.setOnClickListener(v -> {
+                        Intent intent = new Intent(getActivity(), OrderActivity.class);
+                        Bundle bundle = new Bundle(); // Xài Bundle thay putExtra vì các kiểu dữ liệu phức tạp
+                        bundle.putDouble("subtotal", subtotal);
+                        bundle.putDouble("taxFee", taxFee);
+                        bundle.putDouble("total", total);
+                        // Truyền danh sách cart
+                        bundle.putSerializable("cartList", new ArrayList<>(cartItems));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    });
+
+                } else {
+                    // Nếu giỏ hàng trống, không cho phép nhấn nút "Order"
+                    btnOrder.setEnabled(false); // Vô hiệu hóa nút "Order"
+                    Toast.makeText(getContext(), "You must add food to cart", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         cartViewModel.getMessageError().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String errorMessage) {
@@ -150,6 +168,7 @@ public class CartFragment extends Fragment {
             }
         });
     }
+
 
     private void anhxa(View view) {
         rcvCart = view.findViewById(R.id.rcvCartItem);

@@ -21,9 +21,13 @@ public class OrderDetail {
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
     private Integer quantity;
 
+    private String foodName;
+    private Double unitPrice;
+    private String foodImage;
+
     @NotNull(message = "Price cannot be null")
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
-    private Double price;
+    private Double price; //= Quantity * unitPrice
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
