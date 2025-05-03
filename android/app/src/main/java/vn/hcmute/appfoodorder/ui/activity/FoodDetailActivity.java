@@ -1,5 +1,6 @@
 package vn.hcmute.appfoodorder.ui.activity;
 
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,25 +11,24 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.request.CartRequest;
+import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.model.entity.FoodImage;
 import vn.hcmute.appfoodorder.ui.adapter.ImageFoodSliderAdapter;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.FoodDetailViewModel;
+import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
 public class FoodDetailActivity extends AppCompatActivity {
     private FoodDetailViewModel foodDetailViewModel;
@@ -67,10 +67,14 @@ public class FoodDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // lay thong tin mon an
                 Food food = foodDetailViewModel.getFood().getValue();
+
                 if (food != null){
                     CartRequest request = new CartRequest();
+                    getCurrentUser(user -> {
+                        String email = user.getEmail();
+                        request.setEmail(email);
+                    });
                     // JWT thi fix
-                    request.setEmail("nguyennhatnguyen1782004@gmail.com");
                     request.setFoodId(food.getId());
                     int quantity = Integer.parseInt(tvQuantity.getText().toString());
                     request.setQuantity(quantity);
@@ -123,6 +127,16 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodSliderAdapter = new ImageFoodSliderAdapter(this);
         viewpager2.setAdapter(foodSliderAdapter);
         dotsIndicator.setViewPager2(viewpager2);
+    }
+
+    private void getCurrentUser(Consumer<UserResponse> callback) {
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.init(getApplicationContext());
+        profileViewModel.getUserInfor().observe(this, userResponse -> {
+            if (userResponse != null) {
+                callback.accept(userResponse); // gọi lại khi có dữ liệu
+            }
+        });
     }
 
     private void setupViewModel() {
