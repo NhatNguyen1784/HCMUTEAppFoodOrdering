@@ -24,8 +24,8 @@
         android:background="@drawable/search_background"
         android:completionThreshold="1"
         android:drawableStart="@android:drawable/ic_menu_search"
-        android:hint="Tìm món ăn..."
         android:drawablePadding="8dp"
+        android:hint="Search for food..."
         android:padding="12dp" />
 
     <com.google.android.material.chip.ChipGroup
@@ -46,7 +46,7 @@
         android:id="@+id/txtEmptyResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Không tìm thấy món ăn nào"
+        android:text="No results found."
         android:textAlignment="center"
         android:visibility="gone"
         android:padding="12dp"

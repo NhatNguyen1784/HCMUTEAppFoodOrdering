@@ -5,7 +5,8 @@
     <color name="orange">#FF730A</color>
     <color name="red">#F75564</color>
     <color name="blue_gray">#2E4058</color>
-    <color name="gray">#BDBDBD</color>
+    <color name="gray1">#BDBDBD</color>
+    <color name="gray">#F5F5F5</color>
     <color name="card_background">#FAFAFA</color>
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#666666</color>

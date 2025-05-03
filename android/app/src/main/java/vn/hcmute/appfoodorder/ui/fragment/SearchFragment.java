@@ -109,7 +109,11 @@ public class SearchFragment extends Fragment {
         // Suggestion keyword list
         List<String> suggestionList = Arrays.asList("Cơm", "Bún", "Phở", "Trà sữa", "Pizza", "Hamburger", "Bánh mì", "Hủ tiếu", "Cơm tấm", "Cơm chiên",
                 "Xôi", "Bánh ngọt", "Kem", "Trà trái cây", "Sinh tố", "Sinh tố dâu", "Sinh tố bơ", "Sinh tố dừa", "Bánh mì que", "Cơm bò xào", "Cơm bắp cải",
-                "Canh chua", "Canh khổ qua", "Canh chua cá Pasa", "Canh chua cá lóc");
+                "Canh chua", "Canh khổ qua", "Canh chua cá Pasa", "Canh chua cá lóc",
+                //Tên món tiếng anh
+                "Rice", "Rice noodles", "Pho", "Milk tea", "Pizza", "Hamburger", "Vietnamese baguette", "Hu Tieu", "Broken rice", "Fried rice",
+                "Sticky rice", "Pastry", "Ice cream", "Fruit tea", "Smoothie", "Strawberry smoothie", "Avocado smoothie", "Coconut smoothie",
+                "Breadstick", "Stir-fried beef with rice", "Cabbage rice", "Sour soup", "Bitter melon soup", "Sour soup with basa fish", "Sour soup with snakehead fish");
 
         // Tạo Adapter gợi ý cho AutoComplete
         ArrayAdapter<String> suggestAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, suggestionList);
@@ -149,6 +153,7 @@ public class SearchFragment extends Fragment {
 
         // Tạo Chip cho các lựa chọn sắp xếp
         String[] options = {"Giá ↑", "Giá ↓", "Yêu thích", "Bán chạy"};
+        //String[] options = {"Price ↑", "Price ↓", "Favorites", "Best Seller"};//Dài quá bị tràn màn hình nhưng có thể dùng HorizontalScrollView
         for (String text : options) {
             Chip chip = new Chip(requireContext());
             chip.setText(text);

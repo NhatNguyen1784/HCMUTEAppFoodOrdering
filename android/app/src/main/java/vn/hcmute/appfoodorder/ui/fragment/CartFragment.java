@@ -1,0 +1,169 @@
+package vn.hcmute.appfoodorder.ui.fragment;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.request.CartRequest;
+import vn.hcmute.appfoodorder.model.dto.request.DeleteCartRequest;
+import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
+import vn.hcmute.appfoodorder.model.entity.Cart;
+import vn.hcmute.appfoodorder.model.entity.CartItem;
+import vn.hcmute.appfoodorder.ui.adapter.CartAdapter;
+import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
+import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
+
+public class CartFragment extends Fragment {
+    private RecyclerView rcvCart;
+    private TextView tvSubTotal, tvDelivery, tvFeeTax, tvTotal;
+    private Button btnOrder;
+    private CartAdapter cartAdapter;
+    private CartViewModel cartViewModel;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // inflate layout for fragment
+        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        anhxa(view);
+        setupRecycleView();
+        getMyCart();
+        setupListener();
+        return view;
+    }
+
+    private void setupListener() {
+        cartAdapter.setCartItemListener(new CartAdapter.CartItemListener() {
+            @Override
+            public void onIncreaseQuantity(CartItem item) {
+                item.setQuantity(item.getQuantity() + 1);
+                updateCartItem(item);
+            }
+
+            @Override
+            public void onDecreaseQuantity(CartItem item) {
+                if(item.getQuantity() > 1){
+                    item.setQuantity(item.getQuantity() - 1);
+                    updateCartItem(item);
+                }
+            }
+
+            @Override
+            public void removeCartItem(CartItem item) {
+                deleteCartItem(item);
+            }
+        });
+
+    }
+
+    private void getCurrentUser(Consumer<UserResponse> callback) {
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.init(requireContext());
+        profileViewModel.getUserInfor().observe(getViewLifecycleOwner(), userResponse -> {
+            if (userResponse != null) {
+                callback.accept(userResponse); // gọi lại khi có dữ liệu
+            }
+        });
+    }
+
+    private void deleteCartItem(CartItem item){
+        DeleteCartRequest request = new DeleteCartRequest();
+        getCurrentUser(user -> {
+            String email = user.getEmail();
+            request.setEmail(email);
+            request.setFoodId(item.getFoodId());
+        });
+        cartViewModel.deleteCartItem(request);
+    }
+
+    private void updateCartItem(CartItem item){
+        CartRequest request = new CartRequest();
+        getCurrentUser(user -> {
+            String email = user.getEmail();
+            request.setEmail(email);
+            request.setFoodId(item.getFoodId());
+            request.setQuantity(item.getQuantity());
+        });
+        cartViewModel.updateCartItem(request);
+
+    }
+
+    private void getMyCart() {
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
+
+        getCurrentUser(user -> {
+            String email = user.getEmail();
+            cartViewModel.getMyCart(email);
+        });
+
+        cartViewModel.getCartLiveData().observe(getViewLifecycleOwner(), new Observer<Cart>() {
+            @Override
+            public void onChanged(Cart cart) {
+                if (cart != null && cart.getCartDetails() != null) { //Tránh trường hợp lỗi do cart chưa có gì
+                    List<CartItem> cartItems = cart.getCartDetails();
+                    cartAdapter.setData(cartItems);
+
+                    // tinh tong gia (subtotal)
+                    double subtotal = cartItems.stream().mapToDouble(CartItem::getPrice).sum();
+
+                    // gia su tien ship va thue la co dinh
+                    double deliveryFee = 3;
+                    double taxFee = subtotal * 0.1; // thue 10%
+
+                    // gia cuoi cung
+                    double total = subtotal + deliveryFee + taxFee;
+
+                    // hien thi len UI
+                    tvSubTotal.setText(String.format("%,.0f đ", subtotal));
+                    tvDelivery.setText(String.format("%,.0f đ", deliveryFee));
+                    tvFeeTax.setText(String.format("%,.0f đ", taxFee));
+                    tvTotal.setText(String.format("%,.0f đ", total));
+                }
+                else{
+                    Log.w("CartFragment", "Cart hoặc cartDetails null");
+                }
+            }
+        });
+        cartViewModel.getMessageError().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String errorMessage) {
+                Toast.makeText(getView().getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                Log.d("Error load cart: ", errorMessage);
+            }
+        });
+    }
+
+    private void anhxa(View view) {
+        rcvCart = view.findViewById(R.id.rcvCartItem);
+        tvSubTotal = view.findViewById(R.id.tvSubTotalCart);
+        tvDelivery = view.findViewById(R.id.tvDeliveryCart);
+        tvFeeTax = view.findViewById(R.id.tvFeeTax);
+        tvTotal = view.findViewById(R.id.tvTotalCart);
+        btnOrder = view.findViewById(R.id.btnOrder);
+    }
+
+    private void setupRecycleView() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rcvCart.setLayoutManager(layoutManager);
+        cartAdapter = new CartAdapter(getContext());
+        rcvCart.setAdapter(cartAdapter);
+    }
+}

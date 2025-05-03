@@ -1,5 +1,6 @@
 package vn.hcmute.appfoodorder.ui.activity;
 
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,17 +14,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
+
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
+
 import java.util.List;
+import java.util.function.Consumer;
+
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.request.CartRequest;
+import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.model.entity.FoodImage;
 import vn.hcmute.appfoodorder.ui.adapter.ImageFoodSliderAdapter;
+import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.FoodDetailViewModel;
+import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
 public class FoodDetailActivity extends AppCompatActivity {
-
     private FoodDetailViewModel foodDetailViewModel;
+    private CartViewModel cartViewModel;
     private ImageFoodSliderAdapter foodSliderAdapter;
     private ViewPager2 viewpager2;
     private DotsIndicator dotsIndicator;
@@ -52,6 +61,66 @@ public class FoodDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // lay thong tin mon an
+                Food food = foodDetailViewModel.getFood().getValue();
+
+                if (food != null){
+                    CartRequest request = new CartRequest();
+                    getCurrentUser(user -> {
+                        String email = user.getEmail();
+                        request.setEmail(email);
+                    });
+                    // JWT thi fix
+                    request.setFoodId(food.getId());
+                    int quantity = Integer.parseInt(tvQuantity.getText().toString());
+                    request.setQuantity(quantity);
+
+                    cartViewModel.addItemToCart(request);
+                    Toast.makeText(getApplicationContext(), "Add item to cart successfull", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(tvQuantity.getText().toString());
+                if(quantity > 1){
+                    quantity--;
+                    double unitPrice = Double.valueOf(tvPrice.getText().toString());
+                    double totalPrice = totalPrice(quantity, unitPrice);
+                    tvQuantity.setText(String.valueOf(quantity));
+                    tvTotalPrice.setText(String.valueOf(totalPrice));
+                }
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(tvQuantity.getText().toString());
+
+                if(quantity >= 0 && quantity < 100){
+                    quantity++;
+                    double unitPrice = Double.valueOf(tvPrice.getText().toString());
+                    double totalPrice = totalPrice(quantity, unitPrice);
+                    tvQuantity.setText(String.valueOf(quantity));
+                    tvTotalPrice.setText(String.valueOf(totalPrice));
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Your quantity is so much", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private double totalPrice(int quantity, double unitPrice){
+        double totalPrice = quantity * unitPrice;
+        return totalPrice;
     }
 
     private void setUpAdapter() {
@@ -60,10 +129,21 @@ public class FoodDetailActivity extends AppCompatActivity {
         dotsIndicator.setViewPager2(viewpager2);
     }
 
+    private void getCurrentUser(Consumer<UserResponse> callback) {
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.init(getApplicationContext());
+        profileViewModel.getUserInfor().observe(this, userResponse -> {
+            if (userResponse != null) {
+                callback.accept(userResponse); // gọi lại khi có dữ liệu
+            }
+        });
+    }
+
     private void setupViewModel() {
 
         // khoi tao viewmodel
         foodDetailViewModel = new ViewModelProvider(this).get(FoodDetailViewModel.class);
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         // lay ID tu intent
         Long foodId = getIntent().getLongExtra("foodId", -1);
