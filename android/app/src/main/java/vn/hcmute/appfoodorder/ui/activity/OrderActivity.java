@@ -1,156 +1,196 @@
 package vn.hcmute.appfoodorder.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import retrofit2.Call;
 import vn.hcmute.appfoodorder.R;
-import vn.hcmute.appfoodorder.data.api.OrderApi;
-import vn.hcmute.appfoodorder.data.network.RetrofitClient;
+import vn.hcmute.appfoodorder.databinding.ActivityOrderBinding;
+import vn.hcmute.appfoodorder.model.dto.request.OrderDetailRequest;
+import vn.hcmute.appfoodorder.model.dto.request.OrderRequest;
 import vn.hcmute.appfoodorder.model.entity.CartItem;
 import vn.hcmute.appfoodorder.ui.adapter.OrderReviewAdapter;
 import vn.hcmute.appfoodorder.ui.fragment.address.AddressBottomSheetFragment;
 import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.AddressViewModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import vn.hcmute.appfoodorder.viewmodel.OrderViewModel;
 
 public class OrderActivity extends AppCompatActivity {
 
-    private TextView tvAddress, tvEditAddress;
-    private Button btnAddAddress, btnOrder;
-    private ImageView btnBack;
-    private LinearLayout layoutAddressContainer;
+    private ActivityOrderBinding binding;
     private AddressViewModel addressViewModel;
-    private SessionManager session;
-    private String email;
-    private OrderReviewAdapter orderRvAdapter;
-    private Spinner spPaymentMethod;
-    private RecyclerView orderReviewItemRV;
+    private OrderViewModel orderViewModel;
+    private SessionManager sessionManager;
+    private String email, deliveryMethod;
     private List<CartItem> cartList;
+    private Double totalPrice, taxFee, deliveryFee, deliveryFeeTmp, subtotal;
+    private Set<OrderDetailRequest> orderDetailRequests = new HashSet<>();
+    private OrderReviewAdapter orderRvAdapter;
+    private Boolean haveAddress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_order);
-        getExtraFromCartFragment();
-        mappingAndInit();
-        updateAddressUI();
-        setupRVOrderReview();
-        createPaymentMethod();
+        binding = ActivityOrderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        getExtrasFromIntent();
+        setupSessionAndViewModels();
+        setupAddressUI();
+        setupRecyclerView();
+        setupPaymentMethodSpinner();
+        handleOrderCreation();
+        deliveryMethodSelection();
+
+        handleEvents();
     }
 
-    private void createPaymentMethod() {
-        // Tạo một danh sách các phương thức thanh toán
-        List<String> paymentMethods = new ArrayList<>();
-        paymentMethods.add("VNPay");
-        paymentMethods.add("Momo");
-        paymentMethods.add("PayPal");
+    private void deliveryMethodSelection() {
+        deliveryMethod = "PICKUP";
+        deliveryFee = 0.0;
+        binding.rgShipping.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbStandard) {
+                deliveryFee = deliveryFeeTmp;
+                deliveryMethod = "STANDARD";
+            } else if (checkedId == R.id.rbExpress) {
+                deliveryFee = deliveryFeeTmp * 2;
+                deliveryMethod = "FAST";
+            }
+            else if (checkedId == R.id.rbPickup) {
+                deliveryFee = 0.0;
+                deliveryMethod = "PICKUP";
+            }
 
-        // Tạo một ArrayAdapter cho Spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            totalPrice = subtotal + deliveryFee + taxFee;// Demo tổng số tiền
 
-        // Set adapter cho Spinner
-        spPaymentMethod.setAdapter(adapter);
-
-        // Set VNPay làm giá trị mặc định cho Spinner
-        int position = paymentMethods.indexOf("VNPay");
-        spPaymentMethod.setSelection(position);
+            // Cập nhật UI
+            binding.tvDeliveryOrder.setText("Delivery: + " + deliveryFee);
+            binding.tvTotalOrder.setText("Total bill: " + totalPrice);
+        });
     }
 
-
-    private void setupRVOrderReview() {
-        //Adapter
-        orderRvAdapter = new OrderReviewAdapter(this, cartList);
-        orderReviewItemRV.setAdapter(orderRvAdapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        orderReviewItemRV.setLayoutManager(layoutManager);
-    }
-
-    private void getExtraFromCartFragment() {
+    private void getExtrasFromIntent() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            double subtotal = extras.getDouble("subtotal", 0);
-            double taxFee = extras.getDouble("taxFee", 0);
-            double total = extras.getDouble("total", 0);
             cartList = (List<CartItem>) extras.getSerializable("cartList");
+            totalPrice = extras.getDouble("total");
+            taxFee = extras.getDouble("taxFee");
+            subtotal = extras.getDouble("subtotal");
+
+            //Binding data
+            binding.tvSubTotalOrder.setText("Subtotal: + "+ subtotal);
+            binding.tvDiscountOrder.setText("Discount: - "+0);
+            binding.tvDeliveryOrder.setText("Delivery: + "+ deliveryFee);
+            binding.tvFeeTaxOrder.setText("Tex fees: + "+taxFee);
+            binding.tvTotalOrder.setText("Total bill: "+ totalPrice);
         }
+        deliveryFeeTmp = 10000.0;
     }
 
-    private void mappingAndInit() {
-        tvAddress = findViewById(R.id.tvAddress);
-        btnAddAddress = findViewById(R.id.btnAddAddress);
-        tvEditAddress = findViewById(R.id.tvEditAddress);
-        btnBack = findViewById(R.id.imgVBackOrder);
-        layoutAddressContainer = findViewById(R.id.layoutAddressContainer);
-        orderReviewItemRV = findViewById(R.id.rcvOrderReview);
-        btnOrder = findViewById(R.id.btn_Order);
-        spPaymentMethod = findViewById(R.id.spPaymentMethod);
-
-        //Address ViewModel
+    private void setupSessionAndViewModels() {
+        sessionManager = new SessionManager(this);
+        email = sessionManager.getUserInfor().getEmail();
         addressViewModel = new ViewModelProvider(this).get(AddressViewModel.class);
-
-        //Lấy email
-        session = new SessionManager(this);
-        email = session.getUserInfor().getEmail();
-
+        orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
     }
 
-    public void updateAddressUI() {
-        // Quan sát LiveData để nhận dữ liệu và cập nhật UI khi dữ liệu thay đổi
+    public void setupAddressUI() {
         addressViewModel.getAddressLiveData().observe(this, response -> {
-            if (response != null && response.getResult() != null) {
-                List<String> addresses = response.getResult();
-                if (!addresses.isEmpty()) {
-                    tvAddress.setText(addresses.get(0));
-                    btnAddAddress.setVisibility(View.GONE);
-                    tvEditAddress.setVisibility(View.VISIBLE);
-                } else {
-                    tvAddress.setText("🏠 Shipping address");
-                    btnAddAddress.setVisibility(View.VISIBLE);
-                    tvEditAddress.setVisibility(View.GONE);
-                }
+            if (response != null && response.getResult() != null && !response.getResult().isEmpty()) {
+                String address = response.getResult().get(0);
+                haveAddress = true;
+                binding.tvAddress.setText(address);
+                binding.btnAddAddress.setVisibility(View.GONE);
+                binding.tvEditAddress.setVisibility(View.VISIBLE);
             } else {
-                tvAddress.setText("🏠 Shipping address");
-                btnAddAddress.setVisibility(View.VISIBLE);
-                tvEditAddress.setVisibility(View.GONE);
+                binding.tvAddress.setText("Shipping address");
+                haveAddress = false;
+                binding.btnAddAddress.setVisibility(View.VISIBLE);
+                binding.tvEditAddress.setVisibility(View.GONE);
             }
         });
 
-        // Gọi phương thức trong ViewModel để lấy địa chỉ giao hàng từ API
         addressViewModel.getAddressShipping(email);
 
-        btnAddAddress.setOnClickListener(v -> openAddressBottomSheetFragment());
-        tvEditAddress.setOnClickListener(v -> openAddressBottomSheetFragment());
+        binding.btnAddAddress.setOnClickListener(v -> openAddressBottomSheetFragment());
+        binding.tvEditAddress.setOnClickListener(v -> openAddressBottomSheetFragment());
     }
 
-    // Mở AddressBottomSheetFragment để sửa địa chỉ
-    public void openAddressBottomSheetFragment(){
-        AddressBottomSheetFragment addressBottomSheet = new AddressBottomSheetFragment();
-        addressBottomSheet.show(getSupportFragmentManager(), addressBottomSheet.getTag());
+    private void openAddressBottomSheetFragment() {
+        AddressBottomSheetFragment fragment = new AddressBottomSheetFragment();
+        fragment.show(getSupportFragmentManager(), fragment.getTag());
+    }
+
+    private void setupRecyclerView() {
+        orderRvAdapter = new OrderReviewAdapter(this, cartList);
+        binding.rcvOrderReview.setLayoutManager(new LinearLayoutManager(this));
+        binding.rcvOrderReview.setAdapter(orderRvAdapter);
+    }
+
+    private void setupPaymentMethodSpinner() {
+        List<String> paymentMethods = new ArrayList<>();
+        paymentMethods.add("COD");
+        paymentMethods.add("VNPAY");
+        paymentMethods.add("MOMO");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spPaymentMethod.setAdapter(adapter);
+
+        int position = paymentMethods.indexOf("COD");
+        binding.spPaymentMethod.setSelection(position);
+    }
+
+    private void handleOrderCreation() {
+        binding.btnOrder.setOnClickListener(view -> {
+            if(haveAddress == true){
+                String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
+                OrderRequest request = new OrderRequest();
+                if (selectedPayment.equals("COD")) {
+                    request.setPaymentOption("COD");
+                    request.setOrderStatus("PENDING");
+                } else {
+                    request.setPaymentOption("VNPAY");
+                    Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
+                }
+                for (CartItem caI: cartList) {
+                    OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
+                    orderDetailRequests.add(o);
+                }
+                request.setOrderDetails(orderDetailRequests);
+                request.setEmail(email);
+                request.setDeliveryMethod(deliveryMethod);
+                request.setFullAddress(binding.tvAddress.getText().toString());
+
+                orderViewModel.createOrder(request).observe(this, response -> {
+                    if (response.getCode() == 200) {
+                        Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            else {
+                Toast.makeText(this, "You must fill your shipping address", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void handleEvents() {
+        binding.imgVBackOrder.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -158,5 +198,4 @@ public class OrderActivity extends AppCompatActivity {
         super.onResume();
         addressViewModel.getAddressShipping(email);
     }
-
 }

@@ -17,12 +17,21 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Not null")
+    @Column(nullable = false)
+    private String foodName;
+
+    @Column(nullable = false)
+    @NotNull(message = "Not null")
+    private Double unitPrice;
+
     @NotNull(message = "Quantity cannot be null")
+    @Column(nullable = false)
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
     private Integer quantity;
 
-    private String foodName;
-    private Double unitPrice;
+    @NotNull(message = "Not null")
+    @Column(nullable = false)
     private String foodImage;
 
     @NotNull(message = "Price cannot be null")

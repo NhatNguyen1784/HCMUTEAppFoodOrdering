@@ -52,7 +52,7 @@ public class AddressBottomSheetFragment extends BottomSheetDialogFragment {
                                     Toast.makeText(getContext(), "Address added successfully", Toast.LENGTH_SHORT).show();
                                     dismiss(); // Đóng bottom sheet nếu thành công
                                     if(getActivity() instanceof OrderActivity){
-                                        ((OrderActivity) getActivity()).updateAddressUI();
+                                        ((OrderActivity) getActivity()).setupAddressUI();
                                     }
                                 } else {
                                     Toast.makeText(getContext(), apiResponse.getMessage(), Toast.LENGTH_SHORT).show();

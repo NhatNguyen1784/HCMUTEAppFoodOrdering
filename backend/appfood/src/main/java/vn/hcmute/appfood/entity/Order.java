@@ -1,11 +1,15 @@
 package vn.hcmute.appfood.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import vn.hcmute.appfood.utils.DeliveryMethod;
+import vn.hcmute.appfood.utils.OrderStatus;
+import vn.hcmute.appfood.utils.PaymentOption;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -24,6 +28,27 @@ public class Order {
     @Column(nullable = false)
     @NotNull(message = "Shipping address cannot be null")
     private String fullAddress;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Payment option cannot be null")
+    private PaymentOption paymentOption;
+
+    @Column(nullable = false)
+    @NotNull(message = "status not null")
+    @Enumerated(EnumType.STRING)//Lưu tên enum dưới dạng string
+    @JsonFormat(shape = JsonFormat.Shape.STRING)// Muốn enum ignore case khi deserialize từ JSON
+    private OrderStatus orderStatus;
+
+    @Column(nullable = false)
+    @NotNull(message = "Total quantity not null")
+    private int totalQuantity;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Delivery method cannot be null")
+    private DeliveryMethod deliveryMethod;
+
 
     @Column(name = "total_price", nullable = false)
     @NotNull(message = "Total price cannot be null")

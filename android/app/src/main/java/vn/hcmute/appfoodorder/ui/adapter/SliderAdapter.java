@@ -37,7 +37,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     @Override
     public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
         SliderItem item = sliderItems.get(position);
-        Log.d("SliderItem", "Image URL: " + item.getImageUrl());
+        //Log.d("SliderItem", "Image URL: " + item.getImageUrl());
         holder.txtTitle.setText(item.getTitle());
         Glide.with(context)
                 .load(item.getImageUrl())

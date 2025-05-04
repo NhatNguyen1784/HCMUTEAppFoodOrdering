@@ -125,11 +125,11 @@ public class CartFragment extends Fragment {
                     // tính tổng giá (subtotal)
                     double subtotal = cartItems.stream().mapToDouble(CartItem::getPrice).sum();
 
-                    // giả sử phí giao hàng và thuế cố định
-                    double deliveryFee = 3;
+                    // Mặc định pickup
+                    double deliveryFee = 0;
                     double taxFee = subtotal * 0.1; // thuế 10%
 
-                    // tổng cộng
+                    // Demo tổng số tiền trả trước, không tính phần Intent vì sẽ phim phạm bảo mật
                     double total = subtotal + deliveryFee + taxFee;
 
                     // hiển thị lên UI
@@ -138,8 +138,6 @@ public class CartFragment extends Fragment {
                     tvFeeTax.setText(String.format("%,.0f đ", taxFee));
                     tvTotal.setText(String.format("%,.0f đ", total));
 
-                    // Khi giỏ hàng có ít nhất 1 mặt hàng, cho phép đặt hàng
-                    btnOrder.setEnabled(true); // Kích hoạt nút "Order"
                     btnOrder.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), OrderActivity.class);
                         Bundle bundle = new Bundle(); // Xài Bundle thay putExtra vì các kiểu dữ liệu phức tạp
@@ -153,9 +151,9 @@ public class CartFragment extends Fragment {
                     });
 
                 } else {
-                    // Nếu giỏ hàng trống, không cho phép nhấn nút "Order"
-                    btnOrder.setEnabled(false); // Vô hiệu hóa nút "Order"
-                    Toast.makeText(getContext(), "You must add food to cart", Toast.LENGTH_SHORT).show();
+                    btnOrder.setOnClickListener(v-> {
+                        Toast.makeText(getContext(), "You must add food to cart", Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
         });
