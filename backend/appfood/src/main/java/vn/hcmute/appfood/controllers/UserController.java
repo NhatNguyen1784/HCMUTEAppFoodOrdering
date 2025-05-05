@@ -1,6 +1,7 @@
 package vn.hcmute.appfood.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,17 +9,21 @@ import vn.hcmute.appfood.dto.*;
 import vn.hcmute.appfood.services.Impl.OtpService;
 import vn.hcmute.appfood.services.Impl.UserService;
 
+import java.time.Duration;
 import java.util.regex.Pattern;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @Autowired
     private OtpService otpService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     //API đăng nhập
     @PostMapping("/login")
@@ -42,7 +47,7 @@ public class UserController {
         return ResponseEntity.badRequest().body(ApiResponse.error("Login failed",null));
     }
 
-    //API gửi mã xác thực về mail
+    //API gửi mã xác thực về mail dang ky tai khoan
     @PostMapping("/sendOtp")
     public ResponseEntity<?> sendOTP(@RequestBody EmailRequest emailRequest) {
         String otp;
@@ -95,6 +100,102 @@ public class UserController {
         }
         return ResponseEntity.badRequest().body(ApiResponse.error("OTP is incorrect",null));
     }
+
+    // API gui yeu cau reset mat khau
+//    http://localhost:8081/api/auth/reset-password/request
+    @PostMapping("/reset-password/request")
+    public ResponseEntity<?> requestResetPassword(@RequestBody ResetPasswordDTO request) {
+        try{
+            String email = request.getEmail().trim();
+            String newPassword = request.getNewPassword();
+
+            if (email.isEmpty() || newPassword.isEmpty()) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Email and new password are required", null));
+            }
+
+            UserDTO user = userService.findByEmail(email);
+            if (user == null) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Email not found", null));
+            }
+
+            // Lưu vào Redis
+            redisTemplate.opsForValue().set("resetPassword:" + email, newPassword, Duration.ofMinutes(5));
+
+            String otp = otpService.generateOtp(email);
+            otpService.sendOTP(email, otp);
+
+            return ResponseEntity.ok(ApiResponse.success("OTP sent", new ResetPasswordResponse(email, 300)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to send OTP", e.getMessage()));
+        }
+
+    }
+
+    // API xac minh OTP va doi mat khau
+//    http://localhost:8081/api/auth/reset-password/verify
+    @PostMapping("/reset-password/verify")
+    public ResponseEntity<?> resetPassword(@RequestBody VerifyResetPasswordDTO request) {
+        try {
+            String email = request.getEmail();
+            String otp = request.getOtpCode();
+
+            if (!otpService.validateOtp(email, otp)) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Invalid or expired OTP", null));
+            }
+
+            // lay password moi trong redis
+            String newPassword = redisTemplate.opsForValue().get("resetPassword:" + email);
+            if (newPassword == null) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("New password expired or not found", null));
+            }
+
+            // Tìm user
+            UserDTO user = userService.findByEmail(email);
+            if (user == null) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Email not found", null));
+            }
+
+            // Cập nhật mật khẩu
+            user.setPassword(newPassword); // Có thể dùng BCrypt nếu muốn bảo mật
+            userService.saveUser(user);
+
+            // xoa password khoi redis
+            redisTemplate.delete("resetPassword:" + email);
+
+            return ResponseEntity.ok(ApiResponse.success("Password has been reset successfully", null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to reset password", e.getMessage()));
+        }
+    }
+
+    // gui lai OTP de reset mat khau
+    @PostMapping("/reset-password/resend-otp")
+    public ResponseEntity<?> resendResetPasswordOtp(@RequestParam("email") String email) {
+        try {
+            email = email.trim();
+
+            if (email.isEmpty()) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Email is required", null));
+            }
+
+            // Kiểm tra xem new password còn trong Redis không
+            String newPassword = redisTemplate.opsForValue().get("resetPassword:" + email);
+            if (newPassword == null) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Reset password request has expired. Please submit a new request.", null));
+            }
+
+            // Gửi lại OTP
+            String otp = otpService.generateOtp(email);
+            otpService.sendOTP(email, otp);
+
+            return ResponseEntity.ok(ApiResponse.success("OTP resent successfully", new ResetPasswordResponse(email, 300)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to resend OTP", e.getMessage()));
+        }
+    }
+
+
 
 /*
     //API đăng kí

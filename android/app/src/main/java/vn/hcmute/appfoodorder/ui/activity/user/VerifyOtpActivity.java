@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityVerifyOtpBinding;
 import vn.hcmute.appfoodorder.model.dto.InforRegisAccount;
+import vn.hcmute.appfoodorder.model.dto.response.ResetPasswordResponse;
 import vn.hcmute.appfoodorder.viewmodel.VerifyOtpViewModel;
 
 public class VerifyOtpActivity extends AppCompatActivity {
@@ -28,7 +29,6 @@ public class VerifyOtpActivity extends AppCompatActivity {
 
         //Lay gia tri khi putExtra tu activity truoc
         InforRegisAccount in = (InforRegisAccount)getIntent().getSerializableExtra("Infor");
-
         if(in != null){
             viewModel.setInf(in);
             Toast.makeText(this, "Email: "+ viewModel.getInf().getEmail(), Toast.LENGTH_SHORT).show();
@@ -43,10 +43,10 @@ public class VerifyOtpActivity extends AppCompatActivity {
         verifyOtpRegister();
 
         //Resend Otp notification
-        resendOtp();
+        resendOtpRegister();
     }
 
-    private void resendOtp() {
+    private void resendOtpRegister() {
         viewModel.resendOtp.observe(this, response ->{
             if(response.getCode() == 200){
                 Toast.makeText(this, "Resend code successfully", Toast.LENGTH_SHORT).show();
