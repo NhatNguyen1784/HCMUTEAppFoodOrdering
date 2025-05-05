@@ -2,22 +2,38 @@ package vn.hcmute.appfoodorder.repository;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.hcmute.appfoodorder.data.api.AuthApi;
 import vn.hcmute.appfoodorder.data.network.RetrofitClient;
+import vn.hcmute.appfoodorder.model.dto.ApiErrorResponse;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.request.EmailRequest;
 import vn.hcmute.appfoodorder.model.dto.request.LoginRequest;
 import vn.hcmute.appfoodorder.model.dto.request.RegisterRequest;
+import vn.hcmute.appfoodorder.model.dto.request.ResetPasswordRequest;
+import vn.hcmute.appfoodorder.model.dto.request.VerifyResetPasswordRequest;
+import vn.hcmute.appfoodorder.model.dto.response.ResetPasswordResponse;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
+import vn.hcmute.appfoodorder.utils.Resource;
 
 public class AuthRepository {
     private final AuthApi authApi;
-
+    private static AuthRepository instance;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public AuthRepository() {
         authApi = RetrofitClient.getRetrofit().create(AuthApi.class);
+    }
+
+    public static AuthRepository getInstance(){
+        if (instance == null){
+            instance = new AuthRepository();
+        }
+        return instance;
     }
 
     //Login
@@ -94,4 +110,114 @@ public class AuthRepository {
         });
         return data;
     }
+
+    // send request reset mat khau
+    public LiveData<Resource<ResetPasswordResponse>> requestResetPassword(String email, String newPassword){
+        MutableLiveData<Resource<ResetPasswordResponse>> resultLiveData = new MutableLiveData<>();
+        ResetPasswordRequest request = new ResetPasswordRequest(email, newPassword);
+
+        authApi.requestResetPassword(request).enqueue(new Callback<ApiResponse<ResetPasswordResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ResetPasswordResponse>> call, Response<ApiResponse<ResetPasswordResponse>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    ApiResponse<ResetPasswordResponse> apiResult = response.body();
+                    if(apiResult.getCode() == 200){
+                        resultLiveData.postValue(Resource.success(apiResult.getResult()));
+                    }
+                    else{
+                        resultLiveData.postValue(Resource.error("ERROR code: " + apiResult.getCode(), apiResult.getResult()));
+                    }
+                }
+                else {
+                    // xu li loi tu response
+                    String errorMessage =  "Unknown error occurred";
+                    if(response.errorBody() != null){
+                        ApiErrorResponse errorResponse = gson.fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
+                        errorMessage = errorResponse.getMessage();
+                    }
+                    resultLiveData.postValue(Resource.error(errorMessage, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ResetPasswordResponse>> call, Throwable throwable) {
+                resultLiveData.postValue(Resource.error("Network error: " + throwable.getMessage(), null));
+            }
+        });
+
+        return resultLiveData;
+    }
+
+    // resend otp reset mat khau
+    public LiveData<Resource<ResetPasswordResponse>> resendOtpResetPassword(String email){
+        MutableLiveData<Resource<ResetPasswordResponse>> resultLiveData = new MutableLiveData<>();
+
+        authApi.resendOtpResetPassword(email).enqueue(new Callback<ApiResponse<ResetPasswordResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ResetPasswordResponse>> call, Response<ApiResponse<ResetPasswordResponse>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    ApiResponse<ResetPasswordResponse> apiResult = response.body();
+                    if(apiResult.getCode() == 200){
+                        resultLiveData.postValue(Resource.success(apiResult.getResult()));
+                    }
+                    else{
+                        resultLiveData.postValue(Resource.error("ERROR code: " + apiResult.getCode(), apiResult.getResult()));
+                    }
+                }
+                else {
+                    // xu li loi tu response
+                    String errorMessage =  "Unknown error occurred";
+                    if(response.errorBody() != null){
+                        ApiErrorResponse errorResponse = gson.fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
+                        errorMessage = errorResponse.getMessage();
+                    }
+                    resultLiveData.postValue(Resource.error(errorMessage, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ResetPasswordResponse>> call, Throwable throwable) {
+                resultLiveData.postValue(Resource.error("Network error: " + throwable.getMessage(), null));
+            }
+        });
+
+        return resultLiveData;
+    }
+
+    // verify OTP & cap nhat mat khau
+    public LiveData<Resource<Object>> verifyOtpResetPassword(VerifyResetPasswordRequest request){
+        MutableLiveData<Resource<Object>> resultLiveData = new MutableLiveData<>();
+
+        authApi.verifyOtpResetPassword(request).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    ApiResponse<Object> apiResult = response.body();
+                    if (apiResult.getCode() == 200){
+                        resultLiveData.postValue(Resource.success(apiResult.getResult()));
+                    }
+                    else {
+                        resultLiveData.postValue(Resource.error("ERROR code: " + apiResult.getCode(), apiResult.getResult()));
+                    }
+                }
+                else {
+                    // xu li loi tu response
+                    String errorMessage =  "Unknown error occurred";
+                    if(response.errorBody() != null){
+                        ApiErrorResponse errorResponse = gson.fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
+                        errorMessage = errorResponse.getMessage();
+                    }
+                    resultLiveData.postValue(Resource.error(errorMessage, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable throwable) {
+                resultLiveData.postValue(Resource.error("Network error: " + throwable.getMessage(), null));
+            }
+        });
+
+        return resultLiveData;
+    }
+
 }
