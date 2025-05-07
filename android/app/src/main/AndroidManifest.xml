@@ -16,11 +16,23 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.VNPayActivity"
-            android:exported="false" />
+            android:name=".ui.activity.PaymentNotification"
+            android:exported="true" />
         <activity
             android:name=".ui.activity.OrderActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:label="Merchant Demo"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.FoodDetailActivity"
             android:exported="false"
