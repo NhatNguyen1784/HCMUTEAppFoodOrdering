@@ -11,11 +11,12 @@ import vn.hcmute.appfood.entity.Cart;
 import vn.hcmute.appfood.services.Impl.CartService;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api/cart") // http://localhost:8081/api/cart
 public class CartController {
     @Autowired
     private CartService cartService;
 
+    // http://localhost:8081/api/cart/get
     @GetMapping("/get")
     public ResponseEntity<?> getCartByUser(@RequestParam("email") String email) {
         try{
@@ -26,6 +27,7 @@ public class CartController {
         }
     }
 
+    // http://localhost:8081/api/cart/add
     @PostMapping("/add")
     public ResponseEntity<?> addItemToCart(@RequestBody CartRequest request) {
         try{
@@ -36,6 +38,7 @@ public class CartController {
         }
     }
 
+    // http://localhost:8081/api/cart/update
     @PutMapping("/update")
     public ResponseEntity<?> updateCartItem(@RequestBody CartRequest request) {
         try {
@@ -46,6 +49,7 @@ public class CartController {
         }
     }
 
+    // http://localhost:8081/api/cart/delete
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteItemFromCart(@RequestBody DeleteCartRequest request) {
         try {

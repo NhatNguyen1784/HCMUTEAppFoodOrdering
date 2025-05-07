@@ -61,4 +61,9 @@ public class User {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Address> addresses;//Address shippping
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<ProductReview> reviews; // reviews
 }

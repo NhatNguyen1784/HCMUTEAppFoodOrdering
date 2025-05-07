@@ -50,7 +50,7 @@ public class CategoryController {
         return new ResponseEntity<>(new ApiResponse<>(200, "Add category successfully", categoryService.saveCategory(cateDTO)), HttpStatus.OK);
     }
 
-    // http://localhost:8081/api/categories/update
+    // http://localhost:8081/api/categories/update/{}
     @PutMapping("/update/{cateId}")
     public ResponseEntity<?> updateCategory(@PathVariable("cateId") Long cateId, @ModelAttribute CategoryDTO cateDTO) {
         Optional<Category> category = categoryService.getCategoryById(cateId);

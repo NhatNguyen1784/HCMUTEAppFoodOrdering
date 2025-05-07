@@ -1,6 +1,7 @@
 package vn.hcmute.appfood.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_detail_id")
     private Long id;
 
     @NotNull(message = "Not null")
@@ -43,4 +45,8 @@ public class OrderDetail {
     @NotNull(message = "Order cannot be null")
     @JsonIgnore // Ngăn không cho vòng lặp vô hạn khi trả về JSON
     private Order order;
+
+    @OneToOne(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // nếu cần serialize sang JSON
+    private ProductReview review;
 }

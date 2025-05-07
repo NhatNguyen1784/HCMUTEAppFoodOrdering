@@ -14,30 +14,34 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/foods")
+@RequestMapping("/api/foods") // http://localhost:8081/api/foods
 public class FoodController {
     @Autowired
     private FoodService foodService;
 
     // lay danh sach tat ca food
+    // http://localhost:8081/api/foods
     @GetMapping
     public ResponseEntity<?> getAllFoods() {
         return new ResponseEntity<>(new ApiResponse(200, "List All Foods", foodService.findAll()), HttpStatus.OK);
     }
 
     //lay food theo food_id
+    // http://localhost:8081/api/foods/{}
     @GetMapping("/{foodId}")
     public ResponseEntity<?> getFoodById(@PathVariable Long foodId) {
         return new ResponseEntity<>(new ApiResponse(200, "Food item", foodService.findById(foodId)), HttpStatus.OK);
     }
 
     // lay danh sach food theo category
+    // http://localhost:8081/api/foods/category/{}
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getFoodByCategory(@PathVariable Long categoryId) {
         return new ResponseEntity<>(new ApiResponse(200, "List Foods", foodService.findByCategoryId(categoryId)), HttpStatus.OK);
     }
 
     // add new food
+    // http://localhost:8081/api/foods/add
     @PostMapping("/add")
     public ResponseEntity<?> addFood(@ModelAttribute FoodDTO foodDTO){
         Optional<Food> food = foodService.findByName(foodDTO.getFoodName());
@@ -50,6 +54,7 @@ public class FoodController {
     }
 
     // update food
+    // http://localhost:8081/api/foods/update/{}
     @PutMapping("/update/{foodId}")
     public ResponseEntity<?> updateFood(@Validated @ModelAttribute FoodDTO foodDTO, @Validated @PathVariable Long foodId){
         Optional<Food> food = foodService.findById(foodId);
@@ -61,6 +66,8 @@ public class FoodController {
         }
     }
 
+    // tim kiem theo ten mon an
+    // http://localhost:8081/api/foods/search?keyword=
     @GetMapping("/search")
     public ResponseEntity<?> searchFoodsByName(@RequestParam String keyword) {
         try{
