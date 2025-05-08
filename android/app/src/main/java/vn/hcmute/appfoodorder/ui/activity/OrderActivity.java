@@ -9,12 +9,10 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityOrderBinding;
 import vn.hcmute.appfoodorder.model.dto.request.OrderDetailRequest;
@@ -82,6 +80,8 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void getExtrasFromIntent() {
+        deliveryFeeTmp = 10000.0;
+        deliveryFee = 0.0;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             cartList = (List<CartItem>) extras.getSerializable("cartList");
@@ -90,13 +90,12 @@ public class OrderActivity extends AppCompatActivity {
             subtotal = extras.getDouble("subtotal");
 
             //Binding data
-            binding.tvSubTotalOrder.setText("Subtotal: + "+ subtotal);
-            binding.tvDiscountOrder.setText("Discount: - "+0);
-            binding.tvDeliveryOrder.setText("Delivery: + "+ deliveryFee);
-            binding.tvFeeTaxOrder.setText("Tex fees: + "+taxFee);
-            binding.tvTotalOrder.setText("Total bill: "+ totalPrice);
+            binding.tvSubTotalOrder.setText(subtotal == 0 ? "Subtotal: + 0 đ" : String.format("Subtotal: + %,.0f đ", subtotal));
+            binding.tvDeliveryOrder.setText(deliveryFee == 0 ? "Delivery: + 0 đ" : String.format("Delivery: + %,.0f đ", deliveryFee));
+            binding.tvFeeTaxOrder.setText(taxFee == 0 ? "Tax fees: + 0 đ" : String.format("Tax fees: + %,.0f đ", taxFee));
+            binding.tvTotalOrder.setText(totalPrice == 0 ? "Total bill: 0 đ" : String.format("Total bill: %,.0f đ", totalPrice));
+
         }
-        deliveryFeeTmp = 10000.0;
     }
 
     private void setupSessionAndViewModels() {
@@ -142,8 +141,7 @@ public class OrderActivity extends AppCompatActivity {
     private void setupPaymentMethodSpinner() {
         List<String> paymentMethods = new ArrayList<>();
         paymentMethods.add("COD");
-        paymentMethods.add("VNPAY");
-        paymentMethods.add("MOMO");
+        paymentMethods.add("ZALOPAY");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -162,7 +160,7 @@ public class OrderActivity extends AppCompatActivity {
                     request.setPaymentOption("COD");
                     request.setOrderStatus("PENDING");
                 } else {
-                    request.setPaymentOption("VNPAY");
+                    request.setPaymentOption("ZALOPAY");
                     Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
                 }
                 for (CartItem caI: cartList) {
