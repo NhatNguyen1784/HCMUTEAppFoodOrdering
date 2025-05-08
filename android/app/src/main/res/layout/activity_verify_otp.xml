@@ -63,23 +63,26 @@
                     android:textStyle="bold" />
 
                 <com.chaos.view.PinView
-                    android:layout_gravity="center_horizontal"
                     android:id="@+id/pinvOtpCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp"
                     android:cursorVisible="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:importantForAccessibility="yes"
                     android:inputType="number"
+                    android:text="@={verify.otpCode}"
                     app:cursorColor="@color/black"
                     app:hideLineWhenFilled="false"
-                    android:importantForAccessibility="no"
                     app:itemCount="6"
                     app:itemHeight="50dp"
                     app:itemRadius="5dp"
                     app:itemWidth="50dp"
                     app:lineColor="@color/red"
                     app:lineWidth="2dp"
-                    android:text="@={verify.otpCode}"/>
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <LinearLayout
                     android:layout_marginTop="32dp"

@@ -22,6 +22,12 @@
             android:name=".ui.activity.OrderActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.user.VerifyOtpResetPassActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.user.ResetPassActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.FoodDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.AppFoodOrder" />

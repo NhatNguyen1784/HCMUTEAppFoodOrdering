@@ -21,6 +21,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String successMsg = getIntent().getStringExtra("message");
+        if (successMsg != null && !successMsg.isEmpty()) {
+            Toast.makeText(this, successMsg, Toast.LENGTH_SHORT).show();
+        }
+
         //Khởi tạo data binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
@@ -43,10 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvForgetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(LoginActivity.this, )
+                Intent intent = new Intent(LoginActivity.this, ResetPassActivity.class);
                 startActivity(intent);
                 finish();
-                 */
             }
         });
     }
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     //Quan sát LiveData để phản hồi kết quả đăng nhập
     private void observeLoginResult() {
