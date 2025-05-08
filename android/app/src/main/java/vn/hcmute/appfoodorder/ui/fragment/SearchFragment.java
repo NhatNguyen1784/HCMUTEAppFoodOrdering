@@ -111,7 +111,7 @@ public class SearchFragment extends Fragment {
                 "Xôi", "Bánh ngọt", "Kem", "Trà trái cây", "Sinh tố", "Sinh tố dâu", "Sinh tố bơ", "Sinh tố dừa", "Bánh mì que", "Cơm bò xào", "Cơm bắp cải",
                 "Canh chua", "Canh khổ qua", "Canh chua cá Pasa", "Canh chua cá lóc",
                 //Tên món tiếng anh
-                "Rice", "Rice noodles", "Pho", "Milk tea", "Pizza", "Hamburger", "Vietnamese baguette", "Hu Tieu", "Broken rice", "Fried rice",
+                "Rice", "Rice noodles", "Pho", "Milk tea", "Pizza", "Vietnamese baguette", "Hu Tieu", "Broken rice", "Fried rice",
                 "Sticky rice", "Pastry", "Ice cream", "Fruit tea", "Smoothie", "Strawberry smoothie", "Avocado smoothie", "Coconut smoothie",
                 "Breadstick", "Stir-fried beef with rice", "Cabbage rice", "Sour soup", "Bitter melon soup", "Sour soup with basa fish", "Sour soup with snakehead fish");
 
