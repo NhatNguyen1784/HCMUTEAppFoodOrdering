@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="90dp">
+            android:paddingBottom="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPagerFoodDetailImages"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="300dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +119,7 @@
                     android:id="@+id/tvRatingNumFoodDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5 rating"
+                    android:text="5 đánh giá"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ratingBarFoodDetail"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -131,11 +131,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Description"
+                android:text="Mô tả"
                 android:textColor="@color/blue_gray"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/tvDescriptionFoodDetail"
                 android:layout_width="match_parent"
@@ -144,6 +147,7 @@
                 android:text="Description content"
                 android:textColor="@color/blue_gray"
                 android:textSize="16sp" />
+            </ScrollView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -155,7 +159,7 @@
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quantity"
+                    android:text="Số lượng"
                     android:textColor="@color/blue_gray"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -205,6 +209,27 @@
                     app:layout_constraintStart_toEndOf="@+id/tvQuantityFoodDetail"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvUserReviewsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Đánh giá của khách hàng"
+                android:textColor="@color/blue_gray"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUserReviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_review" />
 
         </LinearLayout>
     </ScrollView>
@@ -228,7 +253,7 @@
             android:textSize="20sp"
             android:drawableStart="@drawable/cart"
             android:paddingStart="16dp"
-            android:text="Add to cart"
+            android:text="Thêm vào \n giỏ hàng"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -238,7 +263,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="Total price"
+            android:text="Tổng cộng"
             android:textColor="@color/blue_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btnAddToCart" />

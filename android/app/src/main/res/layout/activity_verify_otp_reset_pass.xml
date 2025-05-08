@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Code has been send to your email"
+                android:text="Mã OTP đã được gửi về email của bạn"
                 android:textColor="@color/blue_gray"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -82,7 +82,7 @@
                     android:id="@+id/textViewtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="You don't get OTP? "
+                    android:text="Bạn không nhận được OTP? "
                     android:textColor="@color/blue_gray"
                     android:textSize="16sp" />
 
@@ -90,7 +90,7 @@
                     android:id="@+id/tvResendOtpResetPass"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RESEND OTP"
+                    android:text="Gửi lại OTP"
                     android:textColor="@color/red"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
                 android:background="@drawable/red_button_background"
-                android:text="Verify code"
+                android:text="Xác nhận OTP"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
