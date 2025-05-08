@@ -100,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Change fragment
+    public void  showFragment(Fragment fragment){
+        setCurrentFragment(fragment);
+    }
+
     //Dialog show
     private void showLoginDialog() {
         new AlertDialog.Builder(this)
