@@ -17,7 +17,7 @@ public class CloudinaryService {
     @Autowired
     private Cloudinary cloudinary;
 
-    // up 1 anh
+    // up anh
     public String uploadImage(MultipartFile file) {
         try {
             Map<String, String> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
@@ -25,18 +25,6 @@ public class CloudinaryService {
         } catch (IOException e) {
             throw new RuntimeException("Loi khi up anh: " + e.getMessage());
         }
-    }
-
-    // up nhieu anh
-    public List<String> uploadMultipleImages(List<MultipartFile> files) {
-        List<String> imgUrls = new ArrayList<String>();
-        String imgUrl;
-        for (MultipartFile file : files) {
-            imgUrl = uploadImage(file);
-            imgUrls.add(imgUrl);
-        }
-
-        return imgUrls;
     }
 
     // xoa anh bang url

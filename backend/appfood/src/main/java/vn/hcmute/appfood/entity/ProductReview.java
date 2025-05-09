@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,12 +26,15 @@ public class ProductReview {
     @Column(name = "review_id")
     private Long id;
 
-    private String comment;
-
     @Min(1)
     @Max(5)
     @Column(nullable = false)
     private int rating; // Từ 1 đến 5 sao
+
+    private String comment;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewImage> images;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

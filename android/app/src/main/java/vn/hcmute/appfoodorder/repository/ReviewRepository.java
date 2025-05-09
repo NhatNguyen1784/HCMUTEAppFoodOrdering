@@ -6,6 +6,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,10 +43,23 @@ public class ReviewRepository {
         return instance;
     }
 
-    public LiveData<Resource<ReviewResponse>> submitReview(ReviewRequest request){
+    public LiveData<Resource<ReviewResponse>> submitReview(ReviewRequest request, List<File> imageFiles){
         MutableLiveData<Resource<ReviewResponse>> resultLiveData = new MutableLiveData<>();
 
-        reviewApi.submitReview(request).enqueue(new Callback<ApiResponse<ReviewResponse>>() {
+        // Convert JSON reviewRequest thành RequestBody
+        String reviewJson = gson.toJson(request);
+        RequestBody reviewBody = RequestBody.create(MediaType.parse("application/json"), reviewJson);
+
+        // Conver từng ảnh thành MutipartBody.Part
+        List<MultipartBody.Part> imageParts = new ArrayList<>();
+        for(int i = 0; i<imageFiles.size(); i++){
+            File file = imageFiles.get(i);
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("images", file.getName(), fileBody);
+            imageParts.add(part);
+        }
+
+        reviewApi.submitReview(reviewBody, imageParts).enqueue(new Callback<ApiResponse<ReviewResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<ReviewResponse>> call, Response<ApiResponse<ReviewResponse>> response) {
                 if (response.isSuccessful() && response.body() != null){

@@ -2,6 +2,7 @@ package vn.hcmute.appfood.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vn.hcmute.appfood.dto.ReviewListResponse;
 import vn.hcmute.appfood.dto.ReviewRequest;
 import vn.hcmute.appfood.dto.ReviewResponse;
@@ -31,8 +32,11 @@ public class ReviewService {
     @Autowired
     private FoodRepository foodRepository;
 
+    @Autowired
+    private CloudinaryService uploadService;
+
     // danh gia mon an
-    public ReviewResponse submitReview(ReviewRequest reviewRequest) {
+    public ReviewResponse submitReview(ReviewRequest reviewRequest, MultipartFile[] images) {
         OrderDetail orderDetail = orderDetailRepository.findById(reviewRequest.getOrderDetailId())
                 .orElseThrow(() -> new ResourceNotFoundException("Can not find order detail with ID: " + reviewRequest.getOrderDetailId()));
         User user = userRepository.findByEmail(reviewRequest.getUserEmail())
@@ -57,6 +61,19 @@ public class ReviewService {
         review.setRating(reviewRequest.getRating());
         review.setComment(reviewRequest.getComment());
         review.setOrderDetail(orderDetail);
+        review.setUser(user);
+
+        // xu ly anh upload kem theo (neu co)
+        if(images != null && images.length > 0){
+            for(MultipartFile image : images){
+                String imageUrl = uploadService.uploadImage(image);
+                ReviewImage reviewImage = new ReviewImage();
+                reviewImage.setUrl(imageUrl);
+                reviewImage.setReview(review);
+                review.getImages().add(reviewImage);
+            }
+
+        }
 
         ProductReview savedReview = reviewRepository.save(review);
         return convertToDTO(savedReview);
@@ -100,6 +117,11 @@ public class ReviewService {
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
         dto.setCreatedAt(review.getCreatedAt());
+        dto.setImageUrls(
+                review.getImages().stream()
+                        .map(ReviewImage::getUrl)
+                        .collect(Collectors.toList())
+        );
         return dto;
     }
 }

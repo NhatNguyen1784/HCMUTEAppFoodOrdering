@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import java.io.File;
+import java.util.List;
+
 import vn.hcmute.appfoodorder.model.dto.request.ReviewRequest;
 import vn.hcmute.appfoodorder.model.dto.response.ReviewListResponse;
 import vn.hcmute.appfoodorder.model.dto.response.ReviewResponse;
@@ -22,8 +25,8 @@ public class ReviewViewModel extends ViewModel {
         this.reviewRepository = ReviewRepository.getInstance();
     }
 
-    public void submitReview(ReviewRequest request){
-        reviewRepository.submitReview(request).observeForever(new Observer<Resource<ReviewResponse>>() {
+    public void submitReview(ReviewRequest request, List<File> imageFiles){
+        reviewRepository.submitReview(request, imageFiles).observeForever(new Observer<Resource<ReviewResponse>>() {
             @Override
             public void onChanged(Resource<ReviewResponse> result) {
                 reviewLiveData.setValue(result.getData());
