@@ -74,8 +74,8 @@ public class OrderActivity extends AppCompatActivity {
             totalPrice = subtotal + deliveryFee + taxFee;// Demo tổng số tiền
 
             // Cập nhật UI
-            binding.tvDeliveryOrder.setText("Delivery: + " + deliveryFee);
-            binding.tvTotalOrder.setText("Total bill: " + totalPrice);
+            binding.tvDeliveryOrder.setText("Vận chuyển: + " + deliveryFee);
+            binding.tvTotalOrder.setText("Tổng hóa đơn: " + totalPrice);
         });
     }
 
@@ -90,10 +90,10 @@ public class OrderActivity extends AppCompatActivity {
             subtotal = extras.getDouble("subtotal");
 
             //Binding data
-            binding.tvSubTotalOrder.setText(subtotal == 0 ? "Subtotal: + 0 đ" : String.format("Subtotal: + %,.0f đ", subtotal));
-            binding.tvDeliveryOrder.setText(deliveryFee == 0 ? "Delivery: + 0 đ" : String.format("Delivery: + %,.0f đ", deliveryFee));
-            binding.tvFeeTaxOrder.setText(taxFee == 0 ? "Tax fees: + 0 đ" : String.format("Tax fees: + %,.0f đ", taxFee));
-            binding.tvTotalOrder.setText(totalPrice == 0 ? "Total bill: 0 đ" : String.format("Total bill: %,.0f đ", totalPrice));
+            binding.tvSubTotalOrder.setText(subtotal == 0 ? "Tổng phụ: + 0 đ" : String.format("Tổng phụ: + %,.0f đ", subtotal));
+            binding.tvDeliveryOrder.setText(deliveryFee == 0 ? "Vận chuyển: + 0 đ" : String.format("Vận chuyển: + %,.0f đ", deliveryFee));
+            binding.tvFeeTaxOrder.setText(taxFee == 0 ? "Thuế: + 0 đ" : String.format("Thuế: + %,.0f đ", taxFee));
+            binding.tvTotalOrder.setText(totalPrice == 0 ? "Tổng hóa đơn: 0 đ" : String.format("Tổng hóa đơn: %,.0f đ", totalPrice));
 
         }
     }
@@ -114,7 +114,7 @@ public class OrderActivity extends AppCompatActivity {
                 binding.btnAddAddress.setVisibility(View.GONE);
                 binding.tvEditAddress.setVisibility(View.VISIBLE);
             } else {
-                binding.tvAddress.setText("Shipping address");
+                binding.tvAddress.setText("Địa chỉ giao hàng");
                 haveAddress = false;
                 binding.btnAddAddress.setVisibility(View.VISIBLE);
                 binding.tvEditAddress.setVisibility(View.GONE);

@@ -45,7 +45,7 @@
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="FOOD APP"
+                        android:text="Gửi OTP"
                         android:textColor="@color/blue_gray"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Code has been send to your email"
+                    android:text="OTP đã gửi về mail của bạn "
                     android:textColor="@color/blue_gray"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -95,33 +95,33 @@
                         android:id="@+id/textViewtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:text="Bạn chưa nhận được OTP? "
                         android:textColor="@color/blue_gray"
-                        android:text="You dont't get OTP? " />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tvResendOtp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="@{() -> verify.resendOtp()}"
+                        android:text="Gửi lại"
                         android:textColor="@color/red"
-                        android:textSize="16sp"
-                        android:text="RESEND OTP"
-                        android:onClick="@{() -> verify.resendOtp()}"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
 
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnVerifyOtp"
+                    style="@android:style/Widget.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/red_button_background"
                     android:layout_margin="32dp"
+                    android:background="@drawable/red_button_background"
+                    android:onClick="@{()->verify.VerifyOtp()}"
+                    android:text="Xác thực OTP"
                     android:textColor="@color/white"
-                    style="@android:style/Widget.Button"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:text="Verify code"
-                    android:onClick="@{()->verify.VerifyOtp()}"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </ScrollView>
