@@ -21,7 +21,11 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
         try{
             Long orderId = orderService.createOrder(orderDTO);
-            return ResponseEntity.ok(ApiResponse.success("Order created successfully", orderId));
+            if(orderId != null) {
+                return ResponseEntity.ok(ApiResponse.success("Order created successfully", orderId));
+            }
+            else
+                return ResponseEntity.ok(ApiResponse.success("Order creation failed. You already have a pending order and cannot place another one."));
         }
         catch(Exception ex){
             ex.printStackTrace();

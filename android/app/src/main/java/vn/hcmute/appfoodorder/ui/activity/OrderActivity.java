@@ -166,7 +166,7 @@ public class OrderActivity extends AppCompatActivity {
                         .show();
             }
             else {
-                Toast.makeText(this, "You must fill your shipping address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bạn phải điền địa chỉ giao hàng", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -180,6 +180,7 @@ public class OrderActivity extends AppCompatActivity {
         } else {
             request.setPaymentOption("ZALOPAY");
             Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
+            return;
         }
         for (CartItem caI: cartList) {
             OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
@@ -192,7 +193,12 @@ public class OrderActivity extends AppCompatActivity {
 
         orderViewModel.createOrder(request).observe(this, response -> {
             if (response.getCode() == 200) {
-                Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                if(response.getResult() != null){
+                    Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(this, "Bạn đang có 1 đơn hàng chờ xử lý, không thể đặt thêm đơn khác!!!", Toast.LENGTH_SHORT).show();
+                }
                 startActivity(new Intent(this, OrderStatusActivity.class));
                 finish();
             } else {

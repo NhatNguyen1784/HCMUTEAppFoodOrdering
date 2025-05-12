@@ -27,7 +27,7 @@ public class OrderRepository {
             public void onResponse(Call<ApiResponse<Long>> call, Response<ApiResponse<Long>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     order.setValue(response.body());
-                    Log.d("Order", "Create order sucessfull");
+                    Log.d("Order", response.body().getMessage());
                 }
             }
 
