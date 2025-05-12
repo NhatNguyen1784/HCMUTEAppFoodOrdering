@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDetailDTO {
+    private Long id;
     private String foodName;
     private Double unitPrice;
     private Integer quantity;

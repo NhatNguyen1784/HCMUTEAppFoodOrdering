@@ -98,12 +98,14 @@ public class OrderService implements IOrderService {
     }
 
     //Count order by user id
-    long countByUserId(Long userId) {
+    @Override
+    public long countByUserId(Long userId) {
         Long count = orderRepository.countByUserId(userId);
         return count != null ? count : 0;// Nếu count == null thì trả về 0
     }
 
-    long countByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus) {
+    @Override
+    public long countByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus) {
         Long count = orderRepository.countByUserIdAndOrderStatus(userId, orderStatus);
         return count != null ? count : 0;  // Nếu count == null thì trả về 0
     }

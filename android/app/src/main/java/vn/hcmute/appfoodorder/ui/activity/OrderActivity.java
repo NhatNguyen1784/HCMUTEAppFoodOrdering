@@ -195,11 +195,18 @@ public class OrderActivity extends AppCompatActivity {
             if (response.getCode() == 200) {
                 if(response.getResult() != null){
                     Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, OrderDetailActivity.class);
+                    Long orderId = response.getResult();
+                    intent.putExtra("order_id", orderId);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(this, "Bạn đang có 1 đơn hàng chờ xử lý, không thể đặt thêm đơn khác!!!", Toast.LENGTH_SHORT).show();
+                    //startActivity(new Intent(this, OrderStatusActivity.class));
+                    Intent intent = new Intent(this, OrderDetailActivity.class);
+                    intent.putExtra("order_id", 1L);
+                    startActivity(intent);
                 }
-                startActivity(new Intent(this, OrderStatusActivity.class));
                 finish();
             } else {
                 Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
