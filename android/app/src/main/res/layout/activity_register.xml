@@ -214,8 +214,10 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnRegister"
                     style="@android:style/Widget.Button"
-                    android:layout_width="347dp"
+                    android:layout_width="290dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
                     android:layout_marginStart="32dp"
                     android:background="@drawable/red_button_background"
                     android:onClick="@{()->register.onRegisterButtonClick()}"

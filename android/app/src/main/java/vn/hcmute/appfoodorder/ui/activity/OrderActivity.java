@@ -1,5 +1,7 @@
 package vn.hcmute.appfoodorder.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -154,35 +156,47 @@ public class OrderActivity extends AppCompatActivity {
     private void handleOrderCreation() {
         binding.btnOrder.setOnClickListener(view -> {
             if(haveAddress == true){
-                String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
-                OrderRequest request = new OrderRequest();
-                if (selectedPayment.equals("COD")) {
-                    request.setPaymentOption("COD");
-                    request.setOrderStatus("PENDING");
-                } else {
-                    request.setPaymentOption("ZALOPAY");
-                    Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
-                }
-                for (CartItem caI: cartList) {
-                    OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
-                    orderDetailRequests.add(o);
-                }
-                request.setOrderDetails(orderDetailRequests);
-                request.setEmail(email);
-                request.setDeliveryMethod(deliveryMethod);
-                request.setFullAddress(binding.tvAddress.getText().toString());
-
-                orderViewModel.createOrder(request).observe(this, response -> {
-                    if (response.getCode() == 200) {
-                        Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                new AlertDialog.Builder(this)
+                        .setTitle("Xác nhận đặt hàng")
+                        .setMessage("Bạn có chắc muốn đặt hàng không?")
+                        .setPositiveButton("Đồng ý",(dialog, which) -> {
+                        createOrder();
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
             }
             else {
                 Toast.makeText(this, "You must fill your shipping address", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void createOrder() {
+        String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
+        OrderRequest request = new OrderRequest();
+        if (selectedPayment.equals("COD")) {
+            request.setPaymentOption("COD");
+            request.setOrderStatus("PENDING");
+        } else {
+            request.setPaymentOption("ZALOPAY");
+            Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
+        }
+        for (CartItem caI: cartList) {
+            OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
+            orderDetailRequests.add(o);
+        }
+        request.setOrderDetails(orderDetailRequests);
+        request.setEmail(email);
+        request.setDeliveryMethod(deliveryMethod);
+        request.setFullAddress(binding.tvAddress.getText().toString());
+
+        orderViewModel.createOrder(request).observe(this, response -> {
+            if (response.getCode() == 200) {
+                Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, OrderStatusActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

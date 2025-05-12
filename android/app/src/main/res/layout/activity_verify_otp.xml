@@ -57,10 +57,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="OTP đã gửi về mail của bạn "
+                    android:layout_marginTop="10dp"
+                    android:text="Nhập OTP của bạn ở đây"
                     android:textColor="@color/blue_gray"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="normal" />
 
                 <com.chaos.view.PinView
                     android:id="@+id/pinvOtpCode"
