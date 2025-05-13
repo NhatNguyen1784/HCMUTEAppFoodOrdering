@@ -41,7 +41,7 @@
         android:padding="16dp">
 
         <LinearLayout
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -185,9 +185,86 @@
                 android:id="@+id/payOption_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:paddingTop="8dp"
                 android:text="Thanh toán:"
                 android:textSize="14sp" />
+            <LinearLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="16dp"
+                android:background="#FFFFFF">
+
+                <Button
+                    android:id="@+id/btnCancelOrder"
+                    android:layout_width="210dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#F6493D"
+                    android:text="Hủy đơn hàng"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#B6ABAB"
+                    app:strokeWidth="2dp" />
+
+                <Button
+                    android:id="@+id/btnReviewOrderDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="Đánh giá"
+                    android:visibility="gone"
+                    android:textColor="#E45D5D"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#E45D5D"
+                    app:strokeWidth="3dp"  />
+
+                <Button
+                    android:id="@+id/btnSupportOrderDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:visibility="gone"
+                    android:text="Hổ trợ"
+                    android:textColor="#E45D5D"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#E45D5D"
+                    app:strokeWidth="3dp" />
+
+                <Button
+                    android:id="@+id/btnROD"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:enabled="false"
+                    android:visibility="gone"
+                    android:text="Đã đánh giá"
+                    android:textColor="#A49595"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#AFA5A5"
+                    app:strokeWidth="3dp" />
+
+                <Button
+                    android:id="@+id/btnReorder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F44848"
+                    android:visibility="gone"
+                    android:text="Đặt lại"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="3dp" />
+            </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
 </RelativeLayout>
