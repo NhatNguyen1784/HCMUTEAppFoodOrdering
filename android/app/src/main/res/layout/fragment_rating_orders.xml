@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Ban"
+            android:text="Bạn chưa có đơn hàng nào để đánh giá"
             android:textAlignment="center"
             android:textSize="18sp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Bạn sẽ nhìn thấy các món đang được chuẩn bị hoặc giao đi tại đây để kiểm tra đơn hàng nhanh hơn!"
+            android:text="Bạn có thể đánh giá trải nghiệm của bạn đây!"
             android:textAlignment="center"
             android:textSize="14sp" />
     </LinearLayout>

@@ -31,13 +31,13 @@
         <ImageView
             android:layout_width="271dp"
             android:layout_height="188dp"
-            android:src="@drawable/ic_no_orders" />
+            android:src="@drawable/ic_history" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Quên chưa đặt món rồi nè bạn ơi?"
+            android:text="Hiện tại chưa có lịch sử mua hàng"
             android:textAlignment="center"
             android:textSize="18sp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Bạn sẽ nhìn thấy các món đang được chuẩn bị hoặc giao đi tại đây để kiểm tra đơn hàng nhanh hơn!"
+            android:text="Bạn sẽ nhìn thấy lịch sử đơn hàng ở đây để kiểm tra đơn hàng nhanh hơn!"
             android:textAlignment="center"
             android:textSize="14sp" />
     </LinearLayout>
