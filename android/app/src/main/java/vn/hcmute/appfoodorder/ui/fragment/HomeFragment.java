@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
     private void setupRecyclerView() {
         categoryAdapter = new CategoryAdapter(getContext());
         rcvCategory.setAdapter(categoryAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
         rcvCategory.setLayoutManager(layoutManager);
     }
 

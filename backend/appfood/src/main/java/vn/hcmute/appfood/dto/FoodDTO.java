@@ -25,5 +25,5 @@ public class FoodDTO {
     private Long categoryId;
 
     @Size(max = 5, message = "Tối đa 5 ảnh được phép tải lên")
-    private List<@NotNull(message = "Ảnh không được để trống") MultipartFile> foodImage;
+    private List<MultipartFile> foodImage;
 }
