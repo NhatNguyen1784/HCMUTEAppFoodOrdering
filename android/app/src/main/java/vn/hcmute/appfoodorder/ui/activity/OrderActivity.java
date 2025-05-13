@@ -183,7 +183,7 @@ public class OrderActivity extends AppCompatActivity {
             return;
         }
         for (CartItem caI: cartList) {
-            OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
+            OrderDetailRequest o = new OrderDetailRequest(caI.getFoodId(), caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
             orderDetailRequests.add(o);
         }
         request.setOrderDetails(orderDetailRequests);

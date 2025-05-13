@@ -13,4 +13,5 @@ public class OrderDetailDTO {
     private Double unitPrice;
     private Integer quantity;
     private String foodImage;
+    private Long foodId;
 }

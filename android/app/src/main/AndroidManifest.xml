@@ -24,7 +24,7 @@
         <activity
             android:name=".ui.activity.ReviewActivity"
             android:exported="false" />
-        <!-- C?u h?nh FileProvider -->
+        <!-- Cau hinh FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="vn.hcmute.appfoodorder.fileprovider"
@@ -35,10 +35,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-<!--        <activity-->
-<!--            android:name=".ui.activity.VNPayActivity"-->
-<!--            android:name=".ui.activity.OrderDetailActivity"-->
-<!--            android:exported="false" />-->
         <activity
             android:name=".ui.activity.OrderStatusActivity"
             android:exported="false" />
@@ -47,6 +43,9 @@
 <!--            android:exported="false" />-->
         <activity
             android:name=".ui.activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.OrderDetailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.OrderActivity"

@@ -3,10 +3,12 @@ package vn.hcmute.appfood.services.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.dto.OrderDTO;
+import vn.hcmute.appfood.entity.Food;
 import vn.hcmute.appfood.entity.Order;
 import vn.hcmute.appfood.entity.OrderDetail;
 import vn.hcmute.appfood.entity.User;
 import vn.hcmute.appfood.exception.ResourceNotFoundException;
+import vn.hcmute.appfood.repository.FoodRepository;
 import vn.hcmute.appfood.repository.OrderRepository;
 import vn.hcmute.appfood.repository.UserRepository;
 import vn.hcmute.appfood.services.IOrderService;
@@ -24,6 +26,9 @@ public class OrderService implements IOrderService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FoodRepository foodRepository;
 
     //Create order
     @Override
@@ -47,6 +52,7 @@ public class OrderService implements IOrderService {
             }
             order.setFullAddress(orderDTO.getFullAddress());
 
+
             // Chuyển đổi OrderDTO thành OrderDetail
             Set<OrderDetail> orderDetails = orderDTO.getOrderDetails().stream().map(dto -> {
                 OrderDetail detail = new OrderDetail();
@@ -55,6 +61,8 @@ public class OrderService implements IOrderService {
                 detail.setQuantity(dto.getQuantity());
                 detail.setPrice(dto.getUnitPrice() * dto.getQuantity());
                 detail.setFoodImage(dto.getFoodImage());
+                Food food = foodRepository.findById(dto.getFoodId()).get();
+                detail.setFood(food);
                 detail.setOrder(order);
                 return detail;
             }).collect(Collectors.toSet());
