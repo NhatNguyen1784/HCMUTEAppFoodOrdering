@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.ApiResponse;
 import vn.hcmute.appfood.dto.OrderDTO;
 import vn.hcmute.appfood.dto.OrderDetailResponseDTO;
+import vn.hcmute.appfood.dto.OrderResponse;
 import vn.hcmute.appfood.services.Impl.OrderDetailService;
 import vn.hcmute.appfood.services.Impl.OrderService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
@@ -53,6 +56,19 @@ public class OrderController {
         catch (Exception ex){
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(ApiResponse.error("Get order details failed", null));
+        }
+    }
+
+    //Get all order by email
+    //http://localhost:8081/api/order?email=nd2004lk13@gmail.com
+    @GetMapping
+    public ResponseEntity<?> getOrdersByUserEmail(@RequestParam String email) {
+        List<OrderResponse> order = orderService.getOrdersByUserEmail(email);
+        if(order != null) {
+            return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", order));
+        }
+        else{
+            return ResponseEntity.ok(ApiResponse.error("Orders retrieved fail", null));
         }
     }
 }

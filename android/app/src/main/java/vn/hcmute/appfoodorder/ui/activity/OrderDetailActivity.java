@@ -43,7 +43,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         viewModel = new OrderDetailViewModel();
 
-        orderId = getIntent().getLongExtra("order_id", -1L);
+        orderId = getIntent().getLongExtra("orderId", -1L);
 
         if (orderId != -1L) {
             loadOrderDetail(orderId);
@@ -63,7 +63,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(OrderDetailActivity.this, OrderStatusActivity.class); //Thay thanh Review Activity
                 intent.putExtra("o_detail_id_list", listId);
                 startActivity(intent);
-
                  */
                 Toast.makeText(OrderDetailActivity.this, listId.toString(), Toast.LENGTH_SHORT).show();
             }

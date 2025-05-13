@@ -201,14 +201,14 @@
 
                 <Button
                     android:id="@+id/btnCancelOrder"
-                    android:layout_width="210dp"
+                    android:layout_width="183dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#F6493D"
+                    android:backgroundTint="#FFFFFF"
                     android:text="Hủy đơn hàng"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#EF2E2E"
                     app:cornerRadius="3dp"
-                    app:strokeColor="#B6ABAB"
-                    app:strokeWidth="2dp" />
+                    app:strokeColor="#EF2E2E"
+                    app:strokeWidth="3dp" />
 
                 <Button
                     android:id="@+id/btnReviewOrderDetail"

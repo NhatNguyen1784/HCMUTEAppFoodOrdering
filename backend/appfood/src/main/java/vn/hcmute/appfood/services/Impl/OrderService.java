@@ -3,6 +3,7 @@ package vn.hcmute.appfood.services.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.dto.OrderDTO;
+import vn.hcmute.appfood.dto.OrderResponse;
 import vn.hcmute.appfood.entity.Food;
 import vn.hcmute.appfood.entity.Order;
 import vn.hcmute.appfood.entity.OrderDetail;
@@ -15,6 +16,9 @@ import vn.hcmute.appfood.services.IOrderService;
 import vn.hcmute.appfood.utils.DeliveryMethod;
 import vn.hcmute.appfood.utils.OrderStatus;
 import vn.hcmute.appfood.utils.PaymentOption;
+
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -96,13 +100,25 @@ public class OrderService implements IOrderService {
         }
     }
 
-
     //List order by user
     @Override
-    public List<Order> getAllOrdersByUserId(String email) {
+    public List<OrderResponse> getOrdersByUserEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         List<Order> orders = orderRepository.findAllByUserId(user.getId());
-        return orders;
+        if(orders.isEmpty()){
+            return new ArrayList<>();
+        }
+        List<OrderResponse> orderResponse = orders.stream().map(list -> {
+            OrderResponse response = new OrderResponse();
+            response.setOrderId(list.getId());
+            response.setTotalPrice(list.getTotalPrice());
+            response.setTotalQuantity(list.getTotalQuantity());
+            response.setOrderStatus(list.getOrderStatus().toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+            response.setCreatedDate(list.getCreatedDate().format(formatter));
+            return response;
+        }).collect(Collectors.toList());
+        return orderResponse;
     }
 
     //Count order by user id

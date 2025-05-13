@@ -5,28 +5,64 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import vn.hcmute.appfoodorder.R;
-import vn.hcmute.appfoodorder.viewmodel.PendingOrderViewModel;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import vn.hcmute.appfoodorder.databinding.FragmentPendingOrderBinding;
+import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
+import vn.hcmute.appfoodorder.ui.adapter.TabStatusOrderAdapter;
 
 public class PendingOrdersFragment extends Fragment {
+    private static final String ARG_ORDERS = "orders";
+    private List<OrderResponse> orders;
+    private FragmentPendingOrderBinding binding;
+    private TabStatusOrderAdapter adapter;
 
-    public static PendingOrdersFragment newInstance() {
-        return new PendingOrdersFragment();
+    public static PendingOrdersFragment newInstance(List<OrderResponse> orders) {
+        PendingOrdersFragment fragment = new PendingOrdersFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ORDERS, (Serializable) orders);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pending_order, container, false);
+        binding = FragmentPendingOrderBinding.inflate(inflater, container, false);
 
-
-        return view;
+        if (getArguments() != null) {
+            orders = (List<OrderResponse>) getArguments().getSerializable(ARG_ORDERS);
+            if (orders != null && !orders.isEmpty()) {
+                binding.recyclerViewPendingOrders.setVisibility(View.VISIBLE);
+                binding.noOrdersLayout.setVisibility(View.GONE);
+                adapter = new TabStatusOrderAdapter(getContext(), 0, orders);
+                binding.recyclerViewPendingOrders.setAdapter(adapter);
+                binding.recyclerViewPendingOrders.setLayoutManager(new LinearLayoutManager(getContext()));
+            } else {
+                binding.recyclerViewPendingOrders.setVisibility(View.GONE);
+                binding.noOrdersLayout.setVisibility(View.VISIBLE);
+                //Toast.makeText(getContext(), "No pending orders", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            binding.recyclerViewPendingOrders.setVisibility(View.GONE);
+            binding.noOrdersLayout.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "No orders data available", Toast.LENGTH_SHORT).show();
+        }
+        return binding.getRoot();
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

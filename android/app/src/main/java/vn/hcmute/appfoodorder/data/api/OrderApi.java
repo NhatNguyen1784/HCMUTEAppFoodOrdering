@@ -1,12 +1,16 @@
 package vn.hcmute.appfoodorder.data.api;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.request.OrderRequest;
+import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 
 public interface OrderApi {
@@ -15,4 +19,7 @@ public interface OrderApi {
 
     @GET("order/{orderId}/details")
     Call<ApiResponse<OrderDetail>> findOrderDetailByOrderId(@Path("orderId") Long orderid);
+
+    @GET("order")
+    Call<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(@Query("email") String email);
 }
