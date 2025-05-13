@@ -49,4 +49,9 @@ public class OrderDetail {
     @OneToOne(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference // nếu cần serialize sang JSON
     private ProductReview review;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_id", referencedColumnName = "food_id", nullable = false)
+    @JsonIgnore
+    private Food food;
 }

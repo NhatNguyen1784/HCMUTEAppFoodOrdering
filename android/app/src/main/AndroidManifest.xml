@@ -35,16 +35,16 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".ui.activity.VNPayActivity"
-            android:name=".ui.activity.OrderDetailActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ui.activity.VNPayActivity"-->
+<!--            android:name=".ui.activity.OrderDetailActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ui.activity.OrderStatusActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.activity.OrdersOverviewActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ui.activity.OrdersOverviewActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false" />

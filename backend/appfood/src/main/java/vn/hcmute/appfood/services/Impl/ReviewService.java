@@ -16,6 +16,7 @@ import vn.hcmute.appfood.repository.UserRepository;
 import vn.hcmute.appfood.utils.OrderStatus;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +43,10 @@ public class ReviewService {
         User user = userRepository.findByEmail(reviewRequest.getUserEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Can not find user with email: " + reviewRequest.getUserEmail()));
 
+        // kiem tra item co bi update khong
+        if(validateFoodModified(orderDetail)){ // neu da update roi thi khong duoc danh gia
+            throw new AccessDeniedException("Cannot review product. Food information has been updated.");
+        }
         // kiem tra trang thai da nhan hang chua
         Order order = orderDetail.getOrder();
         if(!order.getOrderStatus().equals(OrderStatus.DELIVERED)){
@@ -77,6 +82,14 @@ public class ReviewService {
 
         ProductReview savedReview = reviewRepository.save(review);
         return convertToDTO(savedReview);
+    }
+
+    private boolean validateFoodModified(OrderDetail orderDetail) {
+        Food food = orderDetail.getFood();
+        if(food.getFoodName().equals(orderDetail.getFoodName())){
+           return true;
+        }
+        return false;
     }
 
     // Lay danh sach danh gia theo ten mon an
