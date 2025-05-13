@@ -21,7 +21,6 @@ import vn.hcmute.appfoodorder.databinding.ActivityOrderDetailBinding;
 import vn.hcmute.appfoodorder.model.dto.response.OrderDetailDTO;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 import vn.hcmute.appfoodorder.ui.adapter.OrderDetailAdapter;
-import vn.hcmute.appfoodorder.ui.adapter.OrderReviewAdapter;
 import vn.hcmute.appfoodorder.viewmodel.OrderDetailViewModel;
 
 public class OrderDetailActivity extends AppCompatActivity {
