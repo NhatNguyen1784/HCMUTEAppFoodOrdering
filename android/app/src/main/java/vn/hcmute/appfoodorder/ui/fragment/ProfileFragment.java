@@ -11,12 +11,14 @@
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.ViewGroup;
+    import android.widget.ImageButton;
     import android.widget.ImageView;
     import android.widget.LinearLayout;
     import android.widget.TextView;
     import android.widget.Toast;
     import com.bumptech.glide.Glide;
     import vn.hcmute.appfoodorder.R;
+    import vn.hcmute.appfoodorder.ui.activity.MainActivity;
     import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
     import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
@@ -26,6 +28,7 @@
         private View rootView;
         private TextView tvUNamePro, tvEmailUPro;
         private ImageView imgAUser;
+        private ImageButton imageBtnCart;
         public static ProfileFragment newInstance() {
             return new ProfileFragment();
         }
@@ -84,6 +87,7 @@
             tvEmailUPro = rootView.findViewById(R.id.txtEmailUPro);
             tvUNamePro = rootView.findViewById(R.id.txtNameUPro);
             imgAUser = rootView.findViewById(R.id.imgAUser);
+            imageBtnCart = rootView.findViewById(R.id.imgBtnCart);
         }
 
     }

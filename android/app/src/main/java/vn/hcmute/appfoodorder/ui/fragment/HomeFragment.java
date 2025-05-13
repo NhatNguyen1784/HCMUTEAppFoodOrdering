@@ -21,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.relex.circleindicator.CircleIndicator3;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.entity.Category;
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment {
     private List<SliderItem> sliderItems;
     private SliderAdapter sliderAdapter;
     private Handler sliderHandler = new Handler();
+    private CircleIndicator3 circleIndicator;
 
     private Runnable sliderRunnable = new Runnable() {
         @Override
@@ -66,6 +68,7 @@ public class HomeFragment extends Fragment {
     private void mappingAndInit(View view) {
         //Mapping
         rcvCategory = view.findViewById(R.id.rcvCategory);
+        circleIndicator = view.findViewById(R.id.circleIndicator);
         viewPager2 = view.findViewById(R.id.viewPagerSlider);
 
         //Init
@@ -116,6 +119,8 @@ public class HomeFragment extends Fragment {
     private void setupSlider(List<SliderItem> items) {
         sliderAdapter = new SliderAdapter(items, getContext());
         viewPager2.setAdapter(sliderAdapter);
+
+        circleIndicator.setViewPager(viewPager2);//Gan indicator
 
         viewPager2.setOffscreenPageLimit(3);
         viewPager2.setClipToPadding(false);

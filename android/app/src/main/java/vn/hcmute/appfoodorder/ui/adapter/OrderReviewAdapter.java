@@ -44,7 +44,7 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
                 .transform(new CenterCrop(), new RoundedCorners(30))
                 .into(holder.imageFood);
         holder.tvFoodName.setText(item.getQuantity() + " x "+ item.getFoodName());
-        holder.tvTotalPrice.setText("Price "+item.getPrice());
+        holder.tvTotalPrice.setText(String.format("Giá + %,.0f đ", item.getUnitPrice()));
     }
 
     @Override

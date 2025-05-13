@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import vn.hcmute.appfood.dto.*;
 import vn.hcmute.appfood.services.Impl.AddressService;
 import vn.hcmute.appfood.services.Impl.OtpService;
@@ -199,27 +198,8 @@ public class UserController {
         }
     }
 
-
-
-/*
-    //API đăng kí
-    @PostMapping("/register")
-    public ResponseEntity<?> registerAccount(@RequestBody RegisterDTO registerDTO) {
-        try {
-            List<String> addresses = addressService.findAllByUserId(email);
-            if (addresses.isEmpty()) {
-                return ResponseEntity.ok(ApiResponse.success("No addresses found", null));
-            }
-            return ResponseEntity.ok(ApiResponse.success("Addresses found", addresses));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to fetch addresses", e.getMessage()));
-        }
-    }
-*/
-
     //Api get all Address shipping
-    @GetMapping("/user/shipping_address")
+    @GetMapping("/user/shipping-address")
     public ResponseEntity<?> getAllShippingAddresses(@RequestParam String email) {
         try {
             List<String> addresses = addressService.findAllByUserId(email);
@@ -234,7 +214,7 @@ public class UserController {
     }
 
     //Api add new address
-    @PostMapping("/user/add_address")
+    @PostMapping("/user/add-address")
     public ResponseEntity<?> addNewAddress(@RequestBody AddressDTO addAddressDTO) {
         try {
             String fullAddress = addAddressDTO.getFullAddress().trim();

@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:text="Order Confirmation"
+                    android:text="Xác nhận đơn hàng"
                     android:textColor="#F00E0E"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -62,7 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Order Review"
+                        android:text="Chi tiết đơn hàng"
                         android:textColor="#212121"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -96,7 +96,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Shipping address"
+                        android:text="Địa chỉ giao hàng"
                         android:textColor="#424242"
                         android:textSize="16sp" />
 
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
-                        android:text="Edit"
+                        android:text="Sửa"
                         android:textColor="#1976D2"
                         android:textSize="14sp"
                         android:visibility="gone" />
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:backgroundTint="#4CAF50"
-                        android:text="Add address"
+                        android:text="Thêm địa chỉ"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp"
                         android:visibility="visible" />
@@ -168,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:hint="Note"
+                    android:hint="Ghi chú"
                     android:minHeight="48dp"
                     android:padding="16dp"
                     android:paddingBottom="15dp"
@@ -192,7 +192,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Shipping Method"
+                        android:text="Chọn phương thức vận chuyển"
                         android:textColor="#212121"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -202,20 +202,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp">
+
                         <RadioButton
                             android:id="@+id/rbPickup"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:checked="true"
-                            android:text="Pickup"
+                            android:text="Tự lấy"
                             android:textSize="16sp" />
+
                         <RadioButton
                             android:id="@+id/rbStandard"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Standard"
+                            android:text="Tiêu chuẩn"
                             android:textSize="16sp" />
 
                         <RadioButton
@@ -223,7 +225,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Fast"
+                            android:text="Hỏa tốc"
                             android:textSize="16sp" />
                     </RadioGroup>
                 </LinearLayout>
@@ -246,7 +248,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Payment Details"
+                        android:text="Chi tiết thanh toán"
                         android:textColor="#212121"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -256,7 +258,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Total price: 0"
+                        android:text="Tổng phụ: 0"
                         android:textSize="16sp" />
 
                     <TextView
@@ -264,7 +266,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Discount: 0"
+                        android:text="Giảm giá: 0"
                         android:textSize="16sp" />
 
                     <TextView
@@ -272,7 +274,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Delivery: 0"
+                        android:text="Vận chuyển: 0"
                         android:textSize="16sp" />
 
                     <TextView
@@ -280,7 +282,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Tax fee (10%): 0"
+                        android:text="Thuế (10%): 0"
                         android:textSize="16sp" />
 
                     <TextView
@@ -288,7 +290,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Total bill: 0"
+                        android:text="Tổng hóa đơn: 0"
                         android:textColor="#D81B60"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -312,7 +314,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Payment Method"
+                        android:text="Phương thức thanh toán"
                         android:textColor="#212121"
                         android:textSize="18sp"
                         android:textStyle="bold" />

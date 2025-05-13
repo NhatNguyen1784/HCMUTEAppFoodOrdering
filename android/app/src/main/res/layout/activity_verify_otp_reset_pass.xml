@@ -60,8 +60,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:cursorVisible="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:importantForAccessibility="yes"
                 android:inputType="number"
-                android:importantForAccessibility="no"
                 app:cursorColor="@color/black"
                 app:hideLineWhenFilled="false"
                 app:itemCount="6"
@@ -69,7 +71,8 @@
                 app:itemRadius="5dp"
                 app:itemWidth="50dp"
                 app:lineColor="@color/red"
-                app:lineWidth="2dp" />
+                app:lineWidth="2dp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <LinearLayout
                 android:layout_marginTop="32dp"

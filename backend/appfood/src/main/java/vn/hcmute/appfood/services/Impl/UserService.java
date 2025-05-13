@@ -44,6 +44,7 @@ public class UserService implements IUserService {
             userDTO.setAddress(user.get().getAddress());
             userDTO.setFullName(user.get().getFullName());
             userDTO.setPhone(user.get().getPhone());
+            userDTO.setUrlImage(user.get().getUrlImage());
             return userDTO;
         }
         return null;

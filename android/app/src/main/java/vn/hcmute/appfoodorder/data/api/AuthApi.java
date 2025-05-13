@@ -28,10 +28,10 @@ public interface AuthApi {
     @POST("auth/verifyOtp")
     Call<ApiResponse<String>> verifyOtp(@Body RegisterRequest request);
 
-    @GET("user/shipping_address")
+    @GET("auth/user/shipping-address")
     Call<ApiResponse<List<String>>> getAllAddresses(@Query("email") String email);
 
-    @POST("user/add_address")
+    @POST("auth/user/add-address")
     Call<ApiResponse<String>> addShippingAddress(@Body Address address);
 
     // gui yeu cau email, new password

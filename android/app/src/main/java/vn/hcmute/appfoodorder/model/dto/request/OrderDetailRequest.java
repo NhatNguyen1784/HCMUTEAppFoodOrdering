@@ -1,6 +1,7 @@
 package vn.hcmute.appfoodorder.model.dto.request;
 
 public class OrderDetailRequest {
+    private Long id;
     private String foodName;
     private Double unitPrice;
     private Integer quantity;
@@ -10,6 +11,13 @@ public class OrderDetailRequest {
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.foodImage = foodImage;
+    }
+
+    public OrderDetailRequest() {
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setFoodName(String foodName) {

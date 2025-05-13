@@ -1,5 +1,7 @@
 package vn.hcmute.appfoodorder.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -9,12 +11,10 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.databinding.ActivityOrderBinding;
 import vn.hcmute.appfoodorder.model.dto.request.OrderDetailRequest;
@@ -76,12 +76,14 @@ public class OrderActivity extends AppCompatActivity {
             totalPrice = subtotal + deliveryFee + taxFee;// Demo tổng số tiền
 
             // Cập nhật UI
-            binding.tvDeliveryOrder.setText("Delivery: + " + deliveryFee);
-            binding.tvTotalOrder.setText("Total bill: " + totalPrice);
+            binding.tvDeliveryOrder.setText("Vận chuyển: + " + deliveryFee);
+            binding.tvTotalOrder.setText("Tổng hóa đơn: " + totalPrice);
         });
     }
 
     private void getExtrasFromIntent() {
+        deliveryFeeTmp = 10000.0;
+        deliveryFee = 0.0;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             cartList = (List<CartItem>) extras.getSerializable("cartList");
@@ -90,13 +92,12 @@ public class OrderActivity extends AppCompatActivity {
             subtotal = extras.getDouble("subtotal");
 
             //Binding data
-            binding.tvSubTotalOrder.setText("Subtotal: + "+ subtotal);
-            binding.tvDiscountOrder.setText("Discount: - "+0);
-            binding.tvDeliveryOrder.setText("Delivery: + "+ deliveryFee);
-            binding.tvFeeTaxOrder.setText("Tex fees: + "+taxFee);
-            binding.tvTotalOrder.setText("Total bill: "+ totalPrice);
+            binding.tvSubTotalOrder.setText(subtotal == 0 ? "Tổng phụ: + 0 đ" : String.format("Tổng phụ: + %,.0f đ", subtotal));
+            binding.tvDeliveryOrder.setText(deliveryFee == 0 ? "Vận chuyển: + 0 đ" : String.format("Vận chuyển: + %,.0f đ", deliveryFee));
+            binding.tvFeeTaxOrder.setText(taxFee == 0 ? "Thuế: + 0 đ" : String.format("Thuế: + %,.0f đ", taxFee));
+            binding.tvTotalOrder.setText(totalPrice == 0 ? "Tổng hóa đơn: 0 đ" : String.format("Tổng hóa đơn: %,.0f đ", totalPrice));
+
         }
-        deliveryFeeTmp = 10000.0;
     }
 
     private void setupSessionAndViewModels() {
@@ -115,7 +116,7 @@ public class OrderActivity extends AppCompatActivity {
                 binding.btnAddAddress.setVisibility(View.GONE);
                 binding.tvEditAddress.setVisibility(View.VISIBLE);
             } else {
-                binding.tvAddress.setText("Shipping address");
+                binding.tvAddress.setText("Địa chỉ giao hàng");
                 haveAddress = false;
                 binding.btnAddAddress.setVisibility(View.VISIBLE);
                 binding.tvEditAddress.setVisibility(View.GONE);
@@ -142,8 +143,7 @@ public class OrderActivity extends AppCompatActivity {
     private void setupPaymentMethodSpinner() {
         List<String> paymentMethods = new ArrayList<>();
         paymentMethods.add("COD");
-        paymentMethods.add("VNPAY");
-        paymentMethods.add("MOMO");
+        paymentMethods.add("ZALOPAY");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -156,35 +156,60 @@ public class OrderActivity extends AppCompatActivity {
     private void handleOrderCreation() {
         binding.btnOrder.setOnClickListener(view -> {
             if(haveAddress == true){
-                String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
-                OrderRequest request = new OrderRequest();
-                if (selectedPayment.equals("COD")) {
-                    request.setPaymentOption("COD");
-                    request.setOrderStatus("PENDING");
-                } else {
-                    request.setPaymentOption("VNPAY");
-                    Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
-                }
-                for (CartItem caI: cartList) {
-                    OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
-                    orderDetailRequests.add(o);
-                }
-                request.setOrderDetails(orderDetailRequests);
-                request.setEmail(email);
-                request.setDeliveryMethod(deliveryMethod);
-                request.setFullAddress(binding.tvAddress.getText().toString());
-
-                orderViewModel.createOrder(request).observe(this, response -> {
-                    if (response.getCode() == 200) {
-                        Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                new AlertDialog.Builder(this)
+                        .setTitle("Xác nhận đặt hàng")
+                        .setMessage("Bạn có chắc muốn đặt hàng không?")
+                        .setPositiveButton("Đồng ý",(dialog, which) -> {
+                        createOrder();
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
             }
             else {
-                Toast.makeText(this, "You must fill your shipping address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bạn phải điền địa chỉ giao hàng", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void createOrder() {
+        String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
+        OrderRequest request = new OrderRequest();
+        if (selectedPayment.equals("COD")) {
+            request.setPaymentOption("COD");
+            request.setOrderStatus("PENDING");
+        } else {
+            request.setPaymentOption("ZALOPAY");
+            Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        for (CartItem caI: cartList) {
+            OrderDetailRequest o = new OrderDetailRequest(caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
+            orderDetailRequests.add(o);
+        }
+        request.setOrderDetails(orderDetailRequests);
+        request.setEmail(email);
+        request.setDeliveryMethod(deliveryMethod);
+        request.setFullAddress(binding.tvAddress.getText().toString());
+
+        orderViewModel.createOrder(request).observe(this, response -> {
+            if (response.getCode() == 200) {
+                if(response.getResult() != null){
+                    Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, OrderDetailActivity.class);
+                    Long orderId = response.getResult();
+                    intent.putExtra("order_id", orderId);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(this, "Bạn đang có 1 đơn hàng chờ xử lý, không thể đặt thêm đơn khác!!!", Toast.LENGTH_SHORT).show();
+                    //startActivity(new Intent(this, OrderStatusActivity.class));
+                    Intent intent = new Intent(this, OrderDetailActivity.class);
+                    intent.putExtra("order_id", 1L);
+                    startActivity(intent);
+                }
+                finish();
+            } else {
+                Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

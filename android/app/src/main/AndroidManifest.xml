@@ -24,7 +24,7 @@
         <activity
             android:name=".ui.activity.ReviewActivity"
             android:exported="false" />
-        <!-- Cấu hình FileProvider -->
+        <!-- C?u h?nh FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="vn.hcmute.appfoodorder.fileprovider"
@@ -37,6 +37,16 @@
 
         <activity
             android:name=".ui.activity.VNPayActivity"
+            android:name=".ui.activity.OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.OrderStatusActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.OrdersOverviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MainActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.OrderActivity"
@@ -64,7 +74,7 @@
             android:name=".ui.activity.user.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.intro.OnBoardingActivity"
             android:exported="true"
             android:theme="@style/Theme.AppFoodOrder.Splash">
             <intent-filter>
