@@ -19,11 +19,12 @@
     import com.bumptech.glide.Glide;
     import vn.hcmute.appfoodorder.R;
     import vn.hcmute.appfoodorder.ui.activity.MainActivity;
+    import vn.hcmute.appfoodorder.ui.activity.OrderStatusActivity;
     import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
     import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
     public class ProfileFragment extends Fragment {
-        private LinearLayout layoutLogout;
+        private LinearLayout layoutLogout, layoutOrder;
         private ProfileViewModel mViewModel;
         private View rootView;
         private TextView tvUNamePro, tvEmailUPro;
@@ -51,6 +52,17 @@
             });
             logout();
             userInfor();
+            orderStatus();
+
+        }
+
+        private void orderStatus() {
+            layoutOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(), OrderStatusActivity.class));
+                }
+            });
         }
 
         private void userInfor() {
@@ -88,6 +100,7 @@
             tvUNamePro = rootView.findViewById(R.id.txtNameUPro);
             imgAUser = rootView.findViewById(R.id.imgAUser);
             imageBtnCart = rootView.findViewById(R.id.imgBtnCart);
+            layoutOrder = rootView.findViewById(R.id.layoutOrder);
         }
 
     }
