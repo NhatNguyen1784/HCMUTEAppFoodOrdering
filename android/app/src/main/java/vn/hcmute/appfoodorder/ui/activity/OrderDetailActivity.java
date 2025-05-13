@@ -2,6 +2,7 @@ package vn.hcmute.appfoodorder.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,6 +30,11 @@ public class OrderDetailActivity extends AppCompatActivity {
     private OrderDetailViewModel viewModel;
     private OrderDetailAdapter adapter;
     private ArrayList<Long> listId;
+    private Long orderId;
+    // Polling
+    private Handler handler = new Handler();
+    private Runnable pollingRunnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +44,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         viewModel = new OrderDetailViewModel();
 
-        Long orderId = getIntent().getLongExtra("order_id", -1L);
+        orderId = getIntent().getLongExtra("order_id", -1L);
 
         if (orderId != -1L) {
             loadOrderDetail(orderId);
@@ -67,6 +73,10 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private void loadOrderDetail(Long orderId) {
         viewModel.fetchOrderDetail(orderId);
+        setupObserver(orderId);
+    }
+
+    private void setupObserver(Long orderId) {
         viewModel.getOrderDetail().observe(this, response -> {
             if(response.getCode() == 200 && response.getResult()!=null){
                 OrderDetail oDetail = response.getResult();
@@ -86,7 +96,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                     binding.orderDetailTotalBillTv.setText(String.format("Tổng đơn hàng: %,.0f đ",oDetail.getTotalPrice()));
                     binding.payOptionTv.setText("Thanh toán: "+oDetail.getPaymentOption());
                     binding.createdDateTv.setText("Thời gian đặt hàng: "+oDetail.getCreatedDate());
-                    
+
                     if(oDetail.getOrderStatus().equals("SHIPPING")){
                         binding.detailOrderDetailTv.setText("Đơn của bạn đã được xác nhận. Vui lòng đợi quán nấu và giao tới!");
                         binding.statusOrderDetailTv.setText("Đã xác nhận đơn hàng");
@@ -134,6 +144,36 @@ public class OrderDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+    public void startPolling(){
+        pollingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                loadOrderDetail(orderId);//Call API
+                handler.postDelayed(this, 30_000); // Call lai sau 30s
+            }
+        };
+        handler.post(pollingRunnable);
+    }
+
+    private void stopPolling() {
+        if (pollingRunnable != null) {
+            handler.removeCallbacks(pollingRunnable);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (orderId != -1L) {
+            startPolling();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopPolling();
     }
 }
