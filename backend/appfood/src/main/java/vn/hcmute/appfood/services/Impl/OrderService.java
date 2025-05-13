@@ -20,6 +20,7 @@ import vn.hcmute.appfood.utils.PaymentOption;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -132,5 +133,21 @@ public class OrderService implements IOrderService {
     public long countByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus) {
         Long count = orderRepository.countByUserIdAndOrderStatus(userId, orderStatus);
         return count != null ? count : 0;  // Nếu count == null thì trả về 0
+    }
+
+    @Override
+    public boolean cancelOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(order.getOrderStatus().equals(OrderStatus.CANCELLED)){
+            return false;//Da o trang thai Cancel roi
+        }
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+        return true;
     }
 }

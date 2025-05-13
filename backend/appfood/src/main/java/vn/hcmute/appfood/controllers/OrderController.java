@@ -68,7 +68,18 @@ public class OrderController {
             return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", order));
         }
         else{
-            return ResponseEntity.ok(ApiResponse.error("Orders retrieved fail", null));
+            return ResponseEntity.badRequest().body(ApiResponse.error("Orders retrieved fail", null));
         }
+    }
+
+    //User cancel order
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
+        boolean check = orderService.cancelOrder(orderId);
+        if(check) {
+            return ResponseEntity.ok(ApiResponse.success("Order cancelled successfully"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(ApiResponse.error("Order cancellation failed. The order may not exist or is already cancelled.", null));        }
     }
 }

@@ -73,9 +73,21 @@
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#FFFFFF"
             android:text="Hủy đơn hàng"
-            android:textColor="#EF2E2E"
+            android:textColor="#F25656"
             card_view:cornerRadius="3dp"
-            card_view:strokeColor="#EF2E2E"
+            card_view:strokeColor="#F25656"
+            card_view:strokeWidth="3dp" />
+        <Button
+            android:id="@+id/pendingNotCancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Hủy đơn hàng"
+            android:visibility="gone"
+            android:textColor="#A49595"
+            android:backgroundTint="#FFFFFF"
+            card_view:cornerRadius="3dp"
+            card_view:strokeColor="#AFA5A5"
             card_view:strokeWidth="3dp" />
 
     </LinearLayout>

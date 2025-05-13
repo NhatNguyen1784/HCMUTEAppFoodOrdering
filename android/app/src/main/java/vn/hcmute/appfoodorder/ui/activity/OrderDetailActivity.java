@@ -1,16 +1,14 @@
 package vn.hcmute.appfoodorder.ui.activity;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -22,11 +20,13 @@ import vn.hcmute.appfoodorder.model.dto.response.OrderDetailDTO;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 import vn.hcmute.appfoodorder.ui.adapter.OrderDetailAdapter;
 import vn.hcmute.appfoodorder.viewmodel.OrderDetailViewModel;
+import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
     private ActivityOrderDetailBinding binding;
     private OrderDetailViewModel viewModel;
+    private OrderStatusViewModel statusViewModel;
     private OrderDetailAdapter adapter;
     private ArrayList<Long> listId;
     private Long orderId;
@@ -42,6 +42,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         viewModel = new OrderDetailViewModel();
+        statusViewModel = new ViewModelProvider(this).get(OrderStatusViewModel.class);
 
         orderId = getIntent().getLongExtra("orderId", -1L);
 
@@ -53,6 +54,17 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
 
         reviewOrder();
+        backOnclick();
+    }
+
+    private void backOnclick() {
+        binding.backImgVOrderDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                finish();
+            }
+        });
     }
 
     private void reviewOrder() {
@@ -94,6 +106,26 @@ public class OrderDetailActivity extends AppCompatActivity {
                     binding.orderDetailTotalBillTv.setText(String.format("Tổng đơn hàng: %,.0f đ",oDetail.getTotalPrice()));
                     binding.payOptionTv.setText("Thanh toán: "+oDetail.getPaymentOption());
                     binding.createdDateTv.setText("Thời gian đặt hàng: "+oDetail.getCreatedDate());
+                    binding.btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(OrderDetailActivity.this)
+                                    .setTitle("Xác nhận hủy đơn hàng")
+                                    .setMessage("Bạn có chắc muốn hủy đơn hàng này không?")
+                                    .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            statusViewModel.cancelOrderByOrderId(orderId); // orderId truyền vào Fragment
+                                            Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng " + orderId, Toast.LENGTH_SHORT).show();
+
+
+                                            startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                                        }
+                                    })
+                                    .setNegativeButton("Không", null)
+                                    .show();
+                        }
+                    });
 
                     if(oDetail.getOrderStatus().equals("SHIPPING")){
                         binding.detailOrderDetailTv.setText("Đơn của bạn đã được xác nhận. Vui lòng đợi quán nấu và giao tới!");

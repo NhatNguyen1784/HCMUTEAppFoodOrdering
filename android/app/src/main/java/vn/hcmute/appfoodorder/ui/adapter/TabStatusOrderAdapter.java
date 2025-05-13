@@ -1,28 +1,38 @@
 package vn.hcmute.appfoodorder.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
 import vn.hcmute.appfoodorder.ui.activity.OrderDetailActivity;
+import vn.hcmute.appfoodorder.ui.activity.OrderStatusActivity;
+import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 
 public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAdapter.TabViewHolder> {
     private Context context;
     private int isView;
     private List<OrderResponse> orders;
+    private OrderStatusViewModel viewModel;
 
-    public TabStatusOrderAdapter(Context context, int isView, List<OrderResponse> orders) {
+    public TabStatusOrderAdapter(Context context, int isView, List<OrderResponse> orders, OrderStatusViewModel viewModel) {
         this.context = context;
         this.isView = isView;
         this.orders = orders;
+        this.viewModel = viewModel;
     }
 
     @NonNull
@@ -46,20 +56,21 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
         OrderResponse order = orders.get(position);
         holder.orderId.setText("Mã đơn hàng: " + order.getOrderId().toString());
         if(order.getOrderStatus().equals("PENDING")){
-            holder.status.setText(holder.status.getText()+" "+ "Chờ xác nhận");
+            holder.status.setText("Trạng thái: Chờ xác nhận");
         }
         else if(order.getOrderStatus().equals("SHIPPING")){
-            holder.status.setText(holder.status.getText()+" "+ "Xác nhận");
+            holder.status.setText("Trạng thái: Xác nhận");
+            holder.pendingCancelBtn.setVisibility(View.GONE);
         }
         else if(order.getOrderStatus().equals("CANCELLED")){
-            holder.status.setText(holder.status.getText()+" "+ "Đã hủy");
+            holder.status.setText("Trạng thái: Đã hủy");
         }
         else if(order.getOrderStatus().equals("DELIVERED")){
-            holder.status.setText(holder.status.getText()+" "+ "Thành công");
+            holder.status.setText("Trạng thái: Thành công");
         }
         holder.createdDate.setText(order.getCreatedDate());
-        holder.totalQuantity.setText(holder.totalQuantity.getText()+" "+ String.valueOf(order.getTotalQuantity()));
-        holder.totalBill.setText(holder.totalBill.getText()+" "+ String.format("%.0f đ", order.getTotalPrice()));
+        holder.totalQuantity.setText("Số lượng: "+String.valueOf(order.getTotalQuantity()));
+        holder.totalBill.setText("Tổng đơn hàng: "+ String.format("%.0f đ", order.getTotalPrice()));
 
         //Next activity order detail
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +85,30 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
                 }
             }
         });
+
+        holder.pendingCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setTitle("Xác nhận hủy đơn hàng")
+                        .setMessage("Bạn có chắc muốn hủy đơn hàng " + order.getOrderId() + " không?")
+                        .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                viewModel.cancelOrderByOrderId(order.getOrderId());
+                                Toast.makeText(context, "Bạn đã hủy đơn hàng " + order.getOrderId() + " thành công", Toast.LENGTH_SHORT).show();
+                                notifyDataSetChanged();
+
+                                if (context instanceof Activity) {
+                                    ((Activity) context).finish();
+                                    context.startActivity(new Intent(context, OrderStatusActivity.class));
+                                }
+                            }
+                        })
+                        .setNegativeButton("Không", null)
+                        .show();
+            }
+        });
     }
 
     @Override
@@ -83,7 +118,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
 
     public class TabViewHolder extends RecyclerView.ViewHolder {
         private TextView orderId, totalBill, totalQuantity, status, createdDate;
-        private Button pendingCancelBtn, reOrderBtn;
+        private Button pendingCancelBtn, reOrderBtn, pendingNotCancelBtn;
         public TabViewHolder(@NonNull View itemView) {
             super(itemView);
             orderId = itemView.findViewById(R.id.orderId_tv);
@@ -93,6 +128,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             createdDate = itemView.findViewById(R.id.createdDate_tv);
             if(isView==0){
                 pendingCancelBtn = itemView.findViewById(R.id.pendingCancel_btn);
+                pendingNotCancelBtn = itemView.findViewById(R.id.pendingNotCancel_btn);
             }
             else if(isView==1){
                 reOrderBtn = itemView.findViewById(R.id.reorder_btn);
