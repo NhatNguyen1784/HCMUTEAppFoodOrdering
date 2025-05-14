@@ -23,19 +23,15 @@ public class ReviewController {
     @PostMapping("/submit")
     public ResponseEntity<?> submitReview(@RequestPart("review") ReviewRequest dto,
                                           @RequestPart(value = "images", required = false) MultipartFile[] images ) {
-        try{
-            ReviewResponse dtoReview = reviewService.submitReview(dto, images);
-            return ResponseEntity.ok(ApiResponse.success("Submit review successfully", dtoReview));
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(ApiResponse.error("Submit review failed", e));
-        }
+        ReviewResponse dtoReview = reviewService.submitReview(dto, images);
+        return ResponseEntity.ok(ApiResponse.success("Submit review successfully", dtoReview));
     }
 
     // http://localhost:8081/api/reviews/product?foodName=
     @GetMapping("/product")
-    public ResponseEntity<?> getReviewProduct(@RequestParam("foodName") @Validated String foodName){
+    public ResponseEntity<?> getReviewProduct(@RequestParam("foodId") @Validated Long foodId){
         try{
-            ReviewListResponse listResponse = reviewService.getAllReviewByFoodName(foodName);
+            ReviewListResponse listResponse = reviewService.getAllReviewByFoodId(foodId);
             return ResponseEntity.ok(ApiResponse.success("Fetched reviews", listResponse));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.error("Submit review failed", e));

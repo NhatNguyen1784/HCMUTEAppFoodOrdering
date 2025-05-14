@@ -91,10 +91,10 @@ public class ReviewRepository {
         return resultLiveData;
     }
 
-    public LiveData<Resource<ReviewListResponse>> getReviewByFoodName(String foodName){
+    public LiveData<Resource<ReviewListResponse>> getReviewByFoodName(Long foodId){
         MutableLiveData<Resource<ReviewListResponse>> resultLiveData = new MutableLiveData<>();
 
-        reviewApi.getReviewProduct(foodName).enqueue(new Callback<ApiResponse<ReviewListResponse>>() {
+        reviewApi.getReviewProduct(foodId).enqueue(new Callback<ApiResponse<ReviewListResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<ReviewListResponse>> call, Response<ApiResponse<ReviewListResponse>> response) {
                 if (response.isSuccessful() && response.body() != null){

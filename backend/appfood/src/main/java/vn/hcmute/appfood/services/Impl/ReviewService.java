@@ -84,21 +84,21 @@ public class ReviewService {
         return convertToDTO(savedReview);
     }
 
-    private boolean validateFoodModified(OrderDetail orderDetail) {
+    public boolean validateFoodModified(OrderDetail orderDetail) {
         Food food = orderDetail.getFood();
-        if(food.getFoodName().equals(orderDetail.getFoodName())){
+        if(!food.getFoodName().equals(orderDetail.getFoodName())){ // neu nhu name khac nhau thi da duoc updatte
            return true;
         }
         return false;
     }
 
-    // Lay danh sach danh gia theo ten mon an
-    public ReviewListResponse getAllReviewByFoodName(String foodName){
-        Food food = foodRepository.findByFoodName(foodName)
-                .orElseThrow(() -> new ResourceNotFoundException("Can not find food with name: " + foodName));
+    // Lay danh sach danh gia theo ID mon an
+    public ReviewListResponse getAllReviewByFoodId(Long foodId){
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new ResourceNotFoundException("Can not find food with ID: " + foodId));
 
         // lay tat ca review cua nguoi dung ve mon an
-        List<ProductReview> reviews  = reviewRepository.findByOrderDetail_FoodName(food.getFoodName());
+        List<ProductReview> reviews  = reviewRepository.findByOrderDetail_Food(food.getId());
 
         // chuyen entity thanh DTO de tra ve
         List<ReviewResponse> responses = reviews.stream().map(this::convertToDTO).collect(Collectors.toList());

@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.activity.FoodDetailActivity">
 
     <ScrollView
@@ -33,6 +34,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
                 <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                     android:id="@+id/dotsIndicator"
                     android:layout_width="wrap_content"
@@ -41,7 +43,7 @@
                     app:layout_constraintTop_toBottomOf="@id/viewPagerFoodDetailImages"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:dotsColor="@color/gray"
+                    app:dotsColor="@color/gray1"
                     app:selectedDotColor="@color/red" />
 
                 <ImageView

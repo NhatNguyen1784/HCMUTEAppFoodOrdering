@@ -39,6 +39,7 @@ public class CartFragment extends Fragment {
     private Button btnOrder;
     private CartAdapter cartAdapter;
     private CartViewModel cartViewModel;
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @Nullable
     @Override
@@ -59,6 +60,8 @@ public class CartFragment extends Fragment {
             public void onIncreaseQuantity(CartItem item) {
                 item.setQuantity(item.getQuantity() + 1);
                 updateCartItem(item);
+                int position = cartItems.indexOf(item);
+                cartAdapter.notifyItemChanged(position);
             }
 
             @Override
@@ -66,6 +69,8 @@ public class CartFragment extends Fragment {
                 if(item.getQuantity() > 1){
                     item.setQuantity(item.getQuantity() - 1);
                     updateCartItem(item);
+                    int position = cartItems.indexOf(item);
+                    cartAdapter.notifyItemChanged(position);
                 }
             }
 
@@ -119,7 +124,7 @@ public class CartFragment extends Fragment {
             @Override
             public void onChanged(Cart cart) {
                 if (cart != null && cart.getCartDetails() != null && !cart.getCartDetails().isEmpty()) { // Kiểm tra giỏ hàng không rỗng
-                    List<CartItem> cartItems = cart.getCartDetails();
+                    cartItems = cart.getCartDetails();
                     cartAdapter.setData(cartItems);
 
                     // tính tổng giá (subtotal)
@@ -180,6 +185,7 @@ public class CartFragment extends Fragment {
     private void setupRecycleView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rcvCart.setLayoutManager(layoutManager);
+        rcvCart.setItemAnimator(null);
         cartAdapter = new CartAdapter(getContext());
         rcvCart.setAdapter(cartAdapter);
     }

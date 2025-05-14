@@ -16,14 +16,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ImagePickerUtils {
-    public static final int PICK_IMAGE_REQUEST = 1;
-    public static final int CAMERA_REQUEST_CODE = 2;
+    private static File currentPhotoFile;
 
     // Mở gallery để chọn ảnh
     public static void openGallery(Activity activity) {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        activity.startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        activity.startActivityForResult(intent, Constants.PICK_IMAGE_REQUEST);
     }
 
     // Mở camera để chụp ảnh
@@ -33,7 +32,7 @@ public class ImagePickerUtils {
         if (photoFile != null) {
             Uri photoURI = FileProvider.getUriForFile(activity, "vn.hcmute.appfoodorder.fileprovider", photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            activity.startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            activity.startActivityForResult(intent, Constants.CAMERA_REQUEST_CODE);
         }
     }
 
@@ -48,7 +47,8 @@ public class ImagePickerUtils {
         if (storageDir != null) {
             try {
                 // Tạo file ảnh mới
-                return File.createTempFile(imageFileName, ".jpg", storageDir);
+                currentPhotoFile =  File.createTempFile(imageFileName, ".jpg", storageDir);
+                return currentPhotoFile;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -68,5 +68,8 @@ public class ImagePickerUtils {
             return filePath;
         }
         return null;
+    }
+    public static File getCurrentPhotoFile() {
+        return currentPhotoFile;
     }
 }
