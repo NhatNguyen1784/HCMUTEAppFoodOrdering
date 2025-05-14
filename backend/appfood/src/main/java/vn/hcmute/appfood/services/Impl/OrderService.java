@@ -105,7 +105,11 @@ public class OrderService implements IOrderService {
 
             // Lưu đơn hàng và trả về id của đơn hàng đó
             Order savedOrder = orderRepository.save(order);
+
+            // xoa cac item trong cart
             cartRepository.delete(cart);
+            cartRepository.save(cart);
+
             return savedOrder.getId();
         }
     }

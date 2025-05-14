@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.ApiResponse;
 import vn.hcmute.appfood.dto.FoodDTO;
+import vn.hcmute.appfood.dto.FoodWithStarDTO;
 import vn.hcmute.appfood.entity.Food;
 import vn.hcmute.appfood.services.Impl.FoodService;
 
@@ -37,7 +38,8 @@ public class FoodController {
     // http://localhost:8081/api/foods/category/{}
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getFoodByCategory(@PathVariable Long categoryId) {
-        return new ResponseEntity<>(new ApiResponse(200, "List Foods", foodService.findByCategoryId(categoryId)), HttpStatus.OK);
+        List<FoodWithStarDTO> foods = foodService.findByCategoryId(categoryId);
+        return ResponseEntity.ok().body(ApiResponse.success("List Foods", foods));
     }
 
     // add new food

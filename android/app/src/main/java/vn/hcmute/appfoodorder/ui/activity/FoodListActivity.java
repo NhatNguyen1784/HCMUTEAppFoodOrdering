@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.response.FoodWithStarResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.ui.adapter.FoodListAdapter;
 import vn.hcmute.appfoodorder.viewmodel.FoodListViewModel;
@@ -93,10 +94,10 @@ public class FoodListActivity extends AppCompatActivity {
             foodViewModel.fetchListFood(cate_id);
         }
 
-        foodViewModel.getFoodList().observe(this, new Observer<List<Food>>() {
+        foodViewModel.getFoodList().observe(this, new Observer<List<FoodWithStarResponse>>() {
             @Override
-            public void onChanged(List<Food> foods) {
-                foodAdapter.setData(foods);
+            public void onChanged(List<FoodWithStarResponse> foodWithStarResponses) {
+                foodAdapter.setData(foodWithStarResponses);
             }
         });
 

@@ -27,7 +27,7 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success("Submit review successfully", dtoReview));
     }
 
-    // http://localhost:8081/api/reviews/product?foodName=
+    // http://localhost:8081/api/reviews/product?foodId=
     @GetMapping("/product")
     public ResponseEntity<?> getReviewProduct(@RequestParam("foodId") @Validated Long foodId){
         try{

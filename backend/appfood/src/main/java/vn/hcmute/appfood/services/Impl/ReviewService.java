@@ -86,6 +86,7 @@ public class ReviewService {
         return convertToDTO(savedReview);
     }
 
+
     public boolean validateFoodModified(OrderDetail orderDetail) {
         Food food = orderDetail.getFood();
         if(!food.getFoodName().equals(orderDetail.getFoodName())){ // neu nhu name khac nhau thi da duoc updatte
@@ -109,13 +110,7 @@ public class ReviewService {
         long totalReviews = responses.size();
 
         // tinh rating trung binh
-        double avgRating = reviews.stream()
-                .mapToInt(ProductReview::getRating)
-                .average()
-                .orElse(0.0);
-
-        // lam tron den 1 chu so thap phan
-        avgRating = Math.round(avgRating * 10.0) / 10.0;
+        double avgRating = calculateAverageRating(reviews);
 
         ReviewListResponse listResponse = new ReviewListResponse();
         listResponse.setTotalReviews(totalReviews);
@@ -123,6 +118,19 @@ public class ReviewService {
         listResponse.setReviews(responses);
 
         return listResponse;
+    }
+
+    // Hàm tính điểm trung bình
+    public double calculateAverageRating(List<ProductReview> reviews) {
+        double avgRating =  reviews.stream()
+                .mapToInt(ProductReview::getRating)
+                .average()
+                .orElse(0.0); // Trả về 0 nếu không có đánh giá nào
+
+        // lam tron den 1 chu so thap phan
+        avgRating = Math.round(avgRating * 10.0) / 10.0;
+
+        return avgRating;
     }
 
 

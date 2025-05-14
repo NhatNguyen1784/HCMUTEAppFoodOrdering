@@ -3,11 +3,17 @@ package vn.hcmute.appfood.services.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.dto.FoodDTO;
+import vn.hcmute.appfood.dto.FoodWithStarDTO;
 import vn.hcmute.appfood.entity.Category;
 import vn.hcmute.appfood.entity.Food;
+import vn.hcmute.appfood.entity.FoodImage;
+import vn.hcmute.appfood.entity.ProductReview;
 import vn.hcmute.appfood.repository.CategoryRepository;
 import vn.hcmute.appfood.repository.FoodRepository;
+import vn.hcmute.appfood.repository.OrderDetailRepository;
+import vn.hcmute.appfood.repository.ReviewRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +23,16 @@ public class FoodService {
     private FoodRepository foodRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ReviewService reviewService;
 
     @Autowired
     private FoodImageService foodImageService;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     // lay ra tat ca mon an
     public List<Food> findAll() {
@@ -37,9 +49,49 @@ public class FoodService {
         return foodRepository.findByFoodName(name);
     }
 
+    // lay so luong ban duoc dua vao food ID trong OrderDetail
+    public Long getTotalSoldByFoodId(Long foodId) {
+        if (foodId == null) {
+            throw new IllegalArgumentException("Food ID không được để trống");
+        }
+        // Đếm số lượng đánh giá từ các đơn hàng có trạng thái SUCCESSFUL
+        Long totalSold = orderDetailRepository.countReviewsByFoodId(foodId);
+
+        // Nếu không có kết quả (món ăn chưa được bán), trả về 0
+        return totalSold != null ? totalSold : 0L;
+    }
+
     // tim theo category
-    public List<Food> findByCategoryId(Long categoryId) {
-        return foodRepository.findByCategoryId(categoryId);
+    public List<FoodWithStarDTO> findByCategoryId(Long categoryId) {
+        List<Food> foods = foodRepository.findByCategoryId(categoryId);
+        List<FoodWithStarDTO> foodWithStarDTOs = new ArrayList<FoodWithStarDTO>();
+
+        for (Food food : foods) {
+            // tinh tong so luong ban duoc cua tung food
+            Long totalSold = getTotalSoldByFoodId(food.getId());
+
+            // tinh avgRating cho tung food
+            List<ProductReview> reviews = reviewRepository.findByOrderDetail_Food(food.getId());
+            double avgRating = reviewService.calculateAverageRating(reviews);
+
+            // Chỉ lấy hình ảnh đầu tiên của food (nếu có)
+            String firstImageUrl = null;
+            if (food.getFoodImages() != null && !food.getFoodImages().isEmpty()) {
+                firstImageUrl = food.getFoodImages().get(0).getImageUrl();
+            }
+
+            // gan data cho DTO de tra ve
+            FoodWithStarDTO dto = new FoodWithStarDTO();
+            dto.setFoodId(food.getId());
+            dto.setFoodName(food.getFoodName());
+            dto.setTotalSold(totalSold);
+            dto.setAvgRating(avgRating);
+            dto.setFoodPrice(food.getFoodPrice());
+            dto.setFoodImageUrls(firstImageUrl);
+
+            foodWithStarDTOs.add(dto); // Thêm DTO vào danh sách kết quả
+        }
+        return foodWithStarDTOs;
     }
 
     // create food
