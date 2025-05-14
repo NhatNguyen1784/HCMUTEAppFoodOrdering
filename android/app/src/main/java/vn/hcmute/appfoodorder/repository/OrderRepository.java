@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,6 +14,7 @@ import vn.hcmute.appfoodorder.data.api.OrderApi;
 import vn.hcmute.appfoodorder.data.network.RetrofitClient;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.request.OrderRequest;
+import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 
 public class OrderRepository {
@@ -59,5 +62,63 @@ public class OrderRepository {
             }
         });
         return orderDetail;
+    }
+
+    public LiveData<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(String email){
+        MutableLiveData<ApiResponse<List<OrderResponse>>> orders = new MutableLiveData<>();
+        api.getOrdersByUserEmail(email).enqueue(new Callback<ApiResponse<List<OrderResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<OrderResponse>>> call, Response<ApiResponse<List<OrderResponse>>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    orders.setValue(response.body());
+                    Log.d("Orders", "Get orders by user's email successful");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<OrderResponse>>> call, Throwable throwable) {
+                Log.d("Orders", "Netword error "+ throwable.getMessage());
+                orders.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
+            }
+        });
+        return orders;
+    }
+
+    public LiveData<ApiResponse> cancelOrder(Long orderId){
+        MutableLiveData<ApiResponse> cancel = new MutableLiveData<>();
+        api.cancelOrder(orderId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    cancel.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable throwable) {
+                Log.d("Orders", "Netword error "+ throwable.getMessage());
+                cancel.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
+            }
+        });
+        return cancel;
+    }
+
+    public LiveData<ApiResponse> confirmOrder(Long orderId){
+        MutableLiveData<ApiResponse> cancel = new MutableLiveData<>();
+        api.confirmOrder(orderId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    cancel.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable throwable) {
+                Log.d("Orders", "Netword error "+ throwable.getMessage());
+                cancel.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
+            }
+        });
+        return cancel;
     }
 }

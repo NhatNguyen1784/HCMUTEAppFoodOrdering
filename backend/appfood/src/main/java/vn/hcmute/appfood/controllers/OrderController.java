@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.ApiResponse;
 import vn.hcmute.appfood.dto.OrderDTO;
 import vn.hcmute.appfood.dto.OrderDetailResponseDTO;
+import vn.hcmute.appfood.dto.OrderResponse;
 import vn.hcmute.appfood.services.Impl.OrderDetailService;
 import vn.hcmute.appfood.services.Impl.OrderService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
@@ -55,4 +58,66 @@ public class OrderController {
             return ResponseEntity.badRequest().body(ApiResponse.error("Get order details failed", null));
         }
     }
+
+    //Get all order by email
+    //http://localhost:8081/api/order?email=nd2004lk13@gmail.com
+    @GetMapping
+    public ResponseEntity<?> getOrdersByUserEmail(@RequestParam String email) {
+        List<OrderResponse> order = orderService.getOrdersByUserEmail(email);
+        if(order != null) {
+            return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", order));
+        }
+        else{
+            return ResponseEntity.badRequest().body(ApiResponse.error("Orders retrieved fail", null));
+        }
+    }
+
+    //Shipping order
+    //http://localhost:8081/api/order/1/shipping
+    @PutMapping("/{orderId}/shipping")
+    public ResponseEntity<?> shippingOrder(@PathVariable Long orderId) {
+        boolean check = orderService.shippingOrder(orderId);
+        if(check) {
+            return ResponseEntity.ok(ApiResponse.success("Order shipping successfully"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(ApiResponse.error("Order shipping failed. The order may not exist or is already cancelled.", null));        }
+    }
+
+    //Delivered order
+    //http://localhost:8081/api/order/1/delivered
+    @PutMapping("/{orderId}/delivered")
+    public ResponseEntity<?> deliveredOrder(@PathVariable Long orderId) {
+        boolean check = orderService.deliveredOrder(orderId);
+        if(check) {
+            return ResponseEntity.ok(ApiResponse.success("Order delivered successfully"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(ApiResponse.error("Order delivered failed. The order may not exist or is already cancelled.", null));        }
+    }
+
+    //Confirm order
+    //http://localhost:8081/api/order/1/confirm
+    @PutMapping("/{orderId}/confirm")
+    public ResponseEntity<?> confirmOrder(@PathVariable Long orderId) {
+        boolean check = orderService.confirmOrder(orderId);
+        if(check) {
+            return ResponseEntity.ok(ApiResponse.success("Order confirm successfully"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(ApiResponse.error("Order confirm failed. The order may not exist or is already cancelled.", null));        }
+    }
+
+    //User cancel order
+    //http://localhost:8081/api/order/1/cancel
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
+        boolean check = orderService.cancelOrder(orderId);
+        if(check) {
+            return ResponseEntity.ok(ApiResponse.success("Order cancelled successfully"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(ApiResponse.error("Order cancellation failed. The order may not exist or is already cancelled.", null));        }
+    }
+
 }

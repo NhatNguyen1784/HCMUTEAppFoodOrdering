@@ -1,13 +1,11 @@
 package vn.hcmute.appfoodorder.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,8 +54,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .into(holder.imgFood);
         holder.tvFoodName.setText(item.getFoodName().trim());
         holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
-        holder.tvUnitPrice.setText(String.valueOf(item.getUnitPrice()));
-        holder.tvPrice.setText(String.valueOf(item.getPrice()));
+        holder.tvUnitPrice.setText(String.format("%,.0f đ", item.getUnitPrice()));
+        holder.tvPrice.setText(String.format("%,.0f đ", item.getPrice()));
 
         // xu li su kien khi bam tang/giam so luong
         holder.tvPlus.setOnClickListener(view -> {

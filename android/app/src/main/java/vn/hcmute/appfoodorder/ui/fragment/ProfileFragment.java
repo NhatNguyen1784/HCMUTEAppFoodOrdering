@@ -18,8 +18,7 @@
     import android.widget.Toast;
     import com.bumptech.glide.Glide;
     import vn.hcmute.appfoodorder.R;
-    import vn.hcmute.appfoodorder.ui.activity.MainActivity;
-    import vn.hcmute.appfoodorder.ui.activity.OrderStatusActivity;
+    import vn.hcmute.appfoodorder.ui.activity.order.OrderStatusActivity;
     import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
     import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 

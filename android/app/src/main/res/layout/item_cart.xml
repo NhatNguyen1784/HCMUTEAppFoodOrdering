@@ -43,7 +43,7 @@
             android:layout_marginTop="8dp"
             android:text="price"
             android:textColor="@color/blue_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/tvFoodNameItemCart"
             app:layout_constraintTop_toBottomOf="@+id/tvFoodNameItemCart" />
 
@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="$100"
-            android:textSize="18sp"
             android:textColor="@color/red"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imgItemCart"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -72,20 +72,20 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
+            android:layout_width="88dp"
+            android:layout_height="25dp"
             app:layout_constraintBottom_toBottomOf="@+id/imgItemCart"
             app:layout_constraintStart_toStartOf="@+id/tvUnitPriceFoodItemCart">
 
             <TextView
                 android:id="@+id/tvMinusItemCart"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:text="-"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:background="@drawable/editext_background"
-                android:textStyle="bold"
                 android:gravity="center"
+                android:text="-"
                 android:textColor="@color/red"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -106,13 +106,13 @@
 
             <TextView
                 android:id="@+id/tvPlusItemCart"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:text="+"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:background="@drawable/editext_background"
-                android:textStyle="bold"
                 android:gravity="center"
+                android:text="+"
                 android:textColor="@color/red"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

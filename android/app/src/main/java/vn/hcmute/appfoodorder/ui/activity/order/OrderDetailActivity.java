@@ -1,16 +1,14 @@
-package vn.hcmute.appfoodorder.ui.activity;
-
+package vn.hcmute.appfoodorder.ui.activity.order;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -21,13 +19,14 @@ import vn.hcmute.appfoodorder.databinding.ActivityOrderDetailBinding;
 import vn.hcmute.appfoodorder.model.dto.response.OrderDetailDTO;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 import vn.hcmute.appfoodorder.ui.adapter.OrderDetailAdapter;
-import vn.hcmute.appfoodorder.ui.adapter.OrderReviewAdapter;
 import vn.hcmute.appfoodorder.viewmodel.OrderDetailViewModel;
+import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
     private ActivityOrderDetailBinding binding;
     private OrderDetailViewModel viewModel;
+    private OrderStatusViewModel statusViewModel;
     private OrderDetailAdapter adapter;
     private ArrayList<Long> listId;
     private Long orderId;
@@ -43,8 +42,10 @@ public class OrderDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         viewModel = new OrderDetailViewModel();
+        statusViewModel = new ViewModelProvider(this).get(OrderStatusViewModel.class);
 
-        orderId = getIntent().getLongExtra("order_id", -1L);
+        //Get data from back activity
+        orderId = getIntent().getLongExtra("orderId", -1L);
 
         if (orderId != -1L) {
             loadOrderDetail(orderId);
@@ -54,6 +55,17 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
 
         reviewOrder();
+        backOnclick();
+    }
+
+    private void backOnclick() {
+        binding.backImgVOrderDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                finish();
+            }
+        });
     }
 
     private void reviewOrder() {
@@ -64,7 +76,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(OrderDetailActivity.this, OrderStatusActivity.class); //Thay thanh Review Activity
                 intent.putExtra("o_detail_id_list", listId);
                 startActivity(intent);
-
                  */
                 Toast.makeText(OrderDetailActivity.this, listId.toString(), Toast.LENGTH_SHORT).show();
             }
@@ -96,31 +107,75 @@ public class OrderDetailActivity extends AppCompatActivity {
                     binding.orderDetailTotalBillTv.setText(String.format("Tổng đơn hàng: %,.0f đ",oDetail.getTotalPrice()));
                     binding.payOptionTv.setText("Thanh toán: "+oDetail.getPaymentOption());
                     binding.createdDateTv.setText("Thời gian đặt hàng: "+oDetail.getCreatedDate());
+                    if(oDetail.getOrderStatus().equals("PENDING")){
+                        binding.btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new AlertDialog.Builder(OrderDetailActivity.this)
+                                        .setTitle("Xác nhận hủy đơn hàng")
+                                        .setMessage("Bạn có chắc muốn hủy đơn hàng này không?")
+                                        .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                statusViewModel.cancelOrderByOrderId(orderId); // orderId truyền vào Fragment
+                                                Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng " + orderId, Toast.LENGTH_SHORT).show();
 
-                    if(oDetail.getOrderStatus().equals("SHIPPING")){
+
+                                                startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                                                finish();
+                                            }
+                                        })
+                                        .setNegativeButton("Không", null)
+                                        .show();
+                            }
+                        });
+                    }
+                    else if(oDetail.getOrderStatus().equals("SHIPPING")){
                         binding.detailOrderDetailTv.setText("Đơn của bạn đã được xác nhận. Vui lòng đợi quán nấu và giao tới!");
                         binding.statusOrderDetailTv.setText("Đã xác nhận đơn hàng");
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_delivery);
                         //Button
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnROD.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.VISIBLE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.GONE);
                         binding.btnReviewOrderDetail.setVisibility(View.GONE);
+                        binding.btnConfirmOrder.setVisibility(View.GONE);
                     }
                     else if(oDetail.getOrderStatus().equals("DELIVERED")){
+                        binding.detailOrderDetailTv.setText("Đơn đã giao thành công, bạn vui lòng xác nhận và đánh giá nhé!");
+                        binding.statusOrderDetailTv.setText("Giao hàng thành công");
+                        binding.imgStatusOrder.setImageResource(R.drawable.ic_delivered);
+                        binding.btnCancelOrder.setVisibility(View.GONE);
+                        binding.btnROD.setVisibility(View.GONE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.GONE);
+                        binding.btnReorder.setVisibility(View.GONE);
+                        binding.btnReviewOrderDetail.setVisibility(View.GONE);
+                        binding.btnConfirmOrder.setVisibility(View.VISIBLE);
+
+                        binding.btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                statusViewModel.confirmOrderByOrderId(orderId);
+                                Toast.makeText(OrderDetailActivity.this, "Đã nhận hàng thành công " + orderId, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                            }
+                        });
+                    }
+                    else if(oDetail.getOrderStatus().equals("SUCCESSFUL")) {
                         binding.detailOrderDetailTv.setText("Nếu cần hổ trợ thêm, bạn vui lòng truy cập và nhắn tin cho quán nhé!");
                         binding.statusOrderDetailTv.setText("Hoàn thành");
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_received);
                         binding.btnCancelOrder.setVisibility(View.GONE);
+                        binding.btnConfirmOrder.setVisibility(View.GONE);
                         /*
-                        * Neu da danh gia hien
-                        * binding.btnROD.setVisibility(View.VISIBLE);
-                        * binding.btnReviewOrderDetail.setVisibility(View.GONE);
+                         * Neu da danh gia hien
+                         * binding.btnROD.setVisibility(View.VISIBLE);
+                         * binding.btnReviewOrderDetail.setVisibility(View.GONE);
                          * */
                         //chua danh gia
                         binding.btnCancelOrder.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.GONE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.GONE);
                         binding.btnReorder.setVisibility(View.VISIBLE);
                         binding.btnROD.setVisibility(View.GONE);
                         binding.btnReviewOrderDetail.setVisibility(View.VISIBLE);
@@ -131,7 +186,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_cancelorder);
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnROD.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.VISIBLE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.VISIBLE);
                         binding.btnReviewOrderDetail.setVisibility(View.GONE);
                     }
@@ -151,7 +206,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 loadOrderDetail(orderId);//Call API
-                handler.postDelayed(this, 30_000); // Call lai sau 30s
+                handler.postDelayed(this, 10_000); // Call lai sau 15s
             }
         };
         handler.post(pollingRunnable);

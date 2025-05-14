@@ -201,13 +201,25 @@
 
                 <Button
                     android:id="@+id/btnCancelOrder"
-                    android:layout_width="210dp"
+                    android:layout_width="183dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#F6493D"
+                    android:backgroundTint="#FFFFFF"
                     android:text="Hủy đơn hàng"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#EF2E2E"
                     app:cornerRadius="3dp"
-                    app:strokeColor="#B6ABAB"
+                    app:strokeColor="#EF2E2E"
+                    app:strokeWidth="3dp" />
+
+                <Button
+                    android:id="@+id/btnConfirmOrder"
+                    android:layout_width="183dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#437FE4"
+                    android:text="Đã nhận hàng"
+                    android:textColor="#FFFFFF"
+                    android:visibility="gone"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#A2A1A1"
                     app:strokeWidth="2dp" />
 
                 <Button
@@ -225,17 +237,18 @@
                     app:strokeWidth="3dp"  />
 
                 <Button
-                    android:id="@+id/btnSupportOrderDetail"
+                    android:id="@+id/btnNotCancelOrderDetail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="#FFFFFF"
+                    android:enabled="false"
                     android:visibility="gone"
-                    android:text="Hổ trợ"
-                    android:textColor="#E45D5D"
+                    android:text="Hủy đơn hàng"
+                    android:textColor="#ADA7A7"
                     app:cornerRadius="3dp"
-                    app:strokeColor="#E45D5D"
+                    app:strokeColor="#ADA7A7"
                     app:strokeWidth="3dp" />
 
                 <Button
@@ -244,14 +257,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#FFFFFF"
                     android:enabled="false"
                     android:visibility="gone"
                     android:text="Đã đánh giá"
                     android:textColor="#A49595"
                     app:cornerRadius="3dp"
                     app:strokeColor="#AFA5A5"
-                    app:strokeWidth="3dp" />
+                    app:strokeWidth="3dp"
+                    android:backgroundTint="#FFFFFF" />
 
                 <Button
                     android:id="@+id/btnReorder"

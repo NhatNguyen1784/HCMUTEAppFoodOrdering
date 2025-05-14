@@ -4,6 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.dto.OrderDTO;
 import vn.hcmute.appfood.entity.*;
+import vn.hcmute.appfood.dto.OrderResponse;
+import vn.hcmute.appfood.entity.Food;
+import vn.hcmute.appfood.entity.Order;
+import vn.hcmute.appfood.entity.OrderDetail;
+import vn.hcmute.appfood.entity.User;
 import vn.hcmute.appfood.exception.ResourceNotFoundException;
 import vn.hcmute.appfood.repository.CartRepository;
 import vn.hcmute.appfood.repository.FoodRepository;
@@ -13,7 +18,11 @@ import vn.hcmute.appfood.services.IOrderService;
 import vn.hcmute.appfood.utils.DeliveryMethod;
 import vn.hcmute.appfood.utils.OrderStatus;
 import vn.hcmute.appfood.utils.PaymentOption;
+
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -101,13 +110,25 @@ public class OrderService implements IOrderService {
         }
     }
 
-
     //List order by user
     @Override
-    public List<Order> getAllOrdersByUserId(String email) {
+    public List<OrderResponse> getOrdersByUserEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         List<Order> orders = orderRepository.findAllByUserId(user.getId());
-        return orders;
+        if(orders.isEmpty()){
+            return new ArrayList<>();
+        }
+        List<OrderResponse> orderResponse = orders.stream().map(list -> {
+            OrderResponse response = new OrderResponse();
+            response.setOrderId(list.getId());
+            response.setTotalPrice(list.getTotalPrice());
+            response.setTotalQuantity(list.getTotalQuantity());
+            response.setOrderStatus(list.getOrderStatus().toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
+            response.setCreatedDate(list.getCreatedDate().format(formatter));
+            return response;
+        }).collect(Collectors.toList());
+        return orderResponse;
     }
 
     //Count order by user id
@@ -121,5 +142,69 @@ public class OrderService implements IOrderService {
     public long countByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus) {
         Long count = orderRepository.countByUserIdAndOrderStatus(userId, orderStatus);
         return count != null ? count : 0;  // Nếu count == null thì trả về 0
+    }
+
+    @Override
+    public boolean cancelOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(order.getOrderStatus().equals(OrderStatus.CANCELLED) || !order.getOrderStatus().equals(OrderStatus.PENDING)){
+            return false;//Da o trang thai Cancel roi
+        }
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+        return true;
+    }
+
+    @Override
+    public boolean confirmOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(!order.getOrderStatus().equals(OrderStatus.DELIVERED)){
+            return false;
+        }
+        order.setOrderStatus(OrderStatus.SUCCESSFUL);
+        orderRepository.save(order);
+        return true;
+    }
+
+    @Override
+    public boolean deliveredOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(!order.getOrderStatus().equals(OrderStatus.SHIPPING)){
+            return false;
+        }
+        order.setOrderStatus(OrderStatus.DELIVERED);
+        orderRepository.save(order);
+        return true;
+    }
+
+    @Override
+    public boolean shippingOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(!order.getOrderStatus().equals(OrderStatus.PENDING)){
+            return false;
+        }
+        order.setOrderStatus(OrderStatus.SHIPPING);
+        orderRepository.save(order);
+        return true;
     }
 }

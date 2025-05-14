@@ -46,7 +46,7 @@
         </provider>
 
         <activity
-            android:name=".ui.activity.OrderStatusActivity"
+            android:name=".ui.activity.order.OrderStatusActivity"
             android:exported="false" />
 <!--        <activity-->
 <!--            android:name=".ui.activity.OrdersOverviewActivity"-->
@@ -55,10 +55,10 @@
             android:name=".ui.activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.OrderDetailActivity"
+            android:name=".ui.activity.order.OrderDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.OrderActivity"
+            android:name=".ui.activity.order.OrderActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.user.VerifyOtpResetPassActivity"
