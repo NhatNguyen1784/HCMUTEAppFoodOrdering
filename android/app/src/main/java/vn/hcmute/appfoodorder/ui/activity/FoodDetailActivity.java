@@ -13,6 +13,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -29,6 +30,7 @@ import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.model.entity.FoodImage;
 import vn.hcmute.appfoodorder.ui.adapter.ImageFoodSliderAdapter;
+import vn.hcmute.appfoodorder.ui.adapter.ReviewAdapter;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.FoodDetailViewModel;
 import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
@@ -47,6 +49,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     private Button btnAddToCart;
     private ReviewViewModel reviewViewModel;
     private RecyclerView rcvReview;
+    private ReviewAdapter reviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +196,13 @@ public class FoodDetailActivity extends AppCompatActivity {
 
                 float avgRating = (float) reviewListResponse.getAvgRating();
                 ratingBar.setRating(avgRating); // danh gia trung binh
+
+                List<ReviewResponse> reviews = reviewListResponse.getReviews();
+                reviewAdapter = new ReviewAdapter(FoodDetailActivity.this);
+                reviewAdapter.setData(reviews);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FoodDetailActivity.this, RecyclerView.VERTICAL, false);
+                rcvReview.setLayoutManager(layoutManager);
+                rcvReview.setAdapter(reviewAdapter);
             }
         });
     }

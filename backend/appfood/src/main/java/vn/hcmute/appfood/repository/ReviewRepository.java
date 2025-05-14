@@ -20,6 +20,6 @@ public interface ReviewRepository extends JpaRepository<ProductReview, Long> {
             "JOIN pr.orderDetail od " +
             "JOIN od.order o " +
             "WHERE od.food.id = :foodId " +
-            "AND o.orderStatus = 'DELIVERED'")
+            "AND o.orderStatus = 'SUCCESSFUL'")
     List<ProductReview> findByOrderDetail_Food(Long foodId);
 }

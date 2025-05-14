@@ -49,7 +49,7 @@ public class ReviewService {
         }
         // kiem tra trang thai da nhan hang chua
         Order order = orderDetail.getOrder();
-        if(!order.getOrderStatus().equals(OrderStatus.DELIVERED)){
+        if(!order.getOrderStatus().equals(OrderStatus.SUCCESSFUL)){
             // neu chua nhan duoc thi khong duoc review
             throw new AccessDeniedException("Cannot review product. Order not delivered yet.");
         }
@@ -67,6 +67,8 @@ public class ReviewService {
         review.setComment(reviewRequest.getComment());
         review.setOrderDetail(orderDetail);
         review.setUser(user);
+        orderDetail.setIsReview(true);
+        orderDetailRepository.save(orderDetail);
 
         // xu ly anh upload kem theo (neu co)
         if(images != null && images.length > 0){
@@ -128,6 +130,7 @@ public class ReviewService {
     private ReviewResponse convertToDTO(ProductReview review) {
         ReviewResponse dto = new ReviewResponse();
         dto.setRating(review.getRating());
+        dto.setUserEmail(review.getUser().getFullName());
         dto.setComment(review.getComment());
         dto.setCreatedAt(review.getCreatedAt());
         dto.setImageUrls(

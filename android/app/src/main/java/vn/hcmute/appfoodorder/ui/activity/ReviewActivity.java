@@ -32,6 +32,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,7 +51,7 @@ import vn.hcmute.appfoodorder.viewmodel.ReviewViewModel;
 
 public class ReviewActivity extends AppCompatActivity {
 
-    private ImageView productImg;
+    private ImageView productImg, btnBack;
     private TextView tvProductName, tvProductDesc;
     private EditText reviewComment;
     private RatingBar ratingBarReview;
@@ -65,37 +68,39 @@ public class ReviewActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_review);
         anhxa();
-        // lay du lieu tu order detail chuyen vao man hinh
-
-        setupListener();
         setupReview();
+        setupListener();
     }
 
     private void setupReview() {
         // lay du lieu tu order detail
-        Long ordeDetailId = 1L;
-        String foodName = "";
+        Intent intent = getIntent();
+        long ordeDetailId = intent.getLongExtra("oddId", -1L);
+        String foodName = intent.getStringExtra("foodName");
+        double unitPrice = intent.getDoubleExtra("unitPrice", -99);
+        String imageFood = intent.getStringExtra("foodImage");
+
+        if(ordeDetailId != -1 && foodName != null && unitPrice != 99 && imageFood != null){
+            // gan data
+            tvProductName.setText(foodName);
+            tvProductDesc.setText(String.format("Giá %,.0f đ", unitPrice));
+            Glide.with(this)
+                    .load(imageFood)
+                    .transform(new CenterCrop(), new RoundedCorners(30))
+                    .into(productImg);
+        }
 
         // setup session and viewModel
         sessionManager = new SessionManager(this);
-        String email = sessionManager.getUserInfor().getEmail();
         reviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
-
-        // fake data
-        tvProductName.setText("Pizza hải sản");
-
-        int star = (int) ratingBarReview.getRating();
-
         request = new ReviewRequest();
         request.setOrderDetailId(ordeDetailId);
-        request.setRating(star);
-        request.setComment(reviewComment.getText().toString().trim());
-        request.setUserEmail(email);
 
         reviewViewModel.getMessageSuccess().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
@@ -103,11 +108,30 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
     private void setupListener() {
+
+        ratingBarReview.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
+            if (rating > 0) {
+                btnSubmit.setEnabled(true);
+                btnSubmit.setAlpha(1f); // bật lại nút
+            } else {
+                btnSubmit.setEnabled(false);
+                btnSubmit.setAlpha(0.5f); // tắt nút
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         addmediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +142,13 @@ public class ReviewActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String email = sessionManager.getUserInfor().getEmail();
+                int star = (int) ratingBarReview.getRating();
+
+                request.setRating(star);
+                request.setComment(reviewComment.getText().toString().trim());
+                request.setUserEmail(email);
+
                 reviewViewModel.submitReview(request, uploadedImageFiles);
             }
         });
@@ -289,6 +320,7 @@ public class ReviewActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
+        btnBack = findViewById(R.id.btnBackReview);
         productImg = findViewById(R.id.productImage);
         tvProductName = findViewById(R.id.productTitle);
         tvProductDesc = findViewById(R.id.productVariant);
@@ -297,5 +329,9 @@ public class ReviewActivity extends AppCompatActivity {
         addmediaLayout = findViewById(R.id.addMediaLayout);
         btnSubmit = findViewById(R.id.btnSubmitReview);
         mediaLayout = findViewById(R.id.mediaLayout);
+
+        // Ban đầu disable nút Gửi
+        btnSubmit.setEnabled(false);
+        btnSubmit.setAlpha(0.5f); // làm mờ nút để thể hiện đã disable
     }
 }
