@@ -35,12 +35,12 @@ public class ReviewViewModel extends ViewModel {
             public void onChanged(Resource<ReviewResponse> result) {
                 if (result.isSuccess()){
                     reviewLiveData.setValue(result.getData());
-                    messageSuccess.setValue(result.getMessage());
-                    Log.d("Review", result.getMessage());
+                    //messageSuccess.setValue(result.getMessage());
+                    //Log.d("Review", result.getMessage());
                 }
                 else if (result.isError()){
                     messageError.setValue(result.getMessage());
-                    Log.d("Review ERROR", result.getMessage());
+                    //Log.d("Review ERROR", result.getMessage());
                 }
             }
 
