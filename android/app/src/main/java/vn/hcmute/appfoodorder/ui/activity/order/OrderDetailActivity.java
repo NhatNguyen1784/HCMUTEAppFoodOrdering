@@ -47,7 +47,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         //Get data from back activity
         orderId = getIntent().getLongExtra("orderId", -1L);
-        Toast.makeText(this, orderId.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, orderId.toString(), Toast.LENGTH_SHORT).show();
         if (orderId != -1L) {
             loadOrderDetail(orderId);
         } else {

@@ -30,6 +30,9 @@ public interface OrderApi {
     @GET("order")
     Call<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(@Query("email") String email);
 
+    @PUT("order/{orderId}/shipping")
+    Call<ApiResponse> shippingOrder(@Path("orderId") Long orderId);
+
     @PUT("order/{orderId}/cancel")
     Call<ApiResponse> cancelOrder(@Path("orderId") Long orderId);
 

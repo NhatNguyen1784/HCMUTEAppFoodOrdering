@@ -14,14 +14,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.ui.activity.order.OrderDetailActivity;
+import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 import vn.hcmute.appfoodorder.viewmodel.OrderViewModel;
 
 public class PaymentVNPayActivity extends AppCompatActivity {
 
     private WebView webView;
     private String paymentUrl;
-    private OrderViewModel orderViewModel;
     private Long orderId;
+
+    private OrderStatusViewModel orderViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class PaymentVNPayActivity extends AppCompatActivity {
         //Get data from back activity
         orderId = getIntent().getLongExtra("orderId", -1L);
 
-        orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
+        orderViewModel = new ViewModelProvider(this).get(OrderStatusViewModel.class);
         // Khởi tạo WebView
         webView = findViewById(R.id.webview_vnpay);
         setupWebView();
@@ -68,6 +70,7 @@ public class PaymentVNPayActivity extends AppCompatActivity {
 
                     if ("00".equals(responseCode)) {
                         Toast.makeText(PaymentVNPayActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+                        orderViewModel.shippingOrderByOrderId(orderId);
                         Intent intent = new Intent(PaymentVNPayActivity.this, OrderDetailActivity.class);
                         intent.putExtra("orderId", orderId);
                         startActivity(intent);

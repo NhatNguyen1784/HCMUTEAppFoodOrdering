@@ -15,6 +15,7 @@ public class OrderStatusViewModel extends ViewModel {
     private final MutableLiveData<List<OrderResponse>> allOrders = new MutableLiveData<>();
     private final MutableLiveData<ApiResponse> cancelOrder = new MutableLiveData<>();
     private final MutableLiveData<ApiResponse> confirmOrder = new MutableLiveData<>();
+    private final MutableLiveData<ApiResponse> shippingOrder = new MutableLiveData<>();
 
     public OrderStatusViewModel() {
         orderRepository = new OrderRepository();
@@ -32,7 +33,9 @@ public class OrderStatusViewModel extends ViewModel {
         return allOrders;
     }
 
-
+    public LiveData<ApiResponse> getShippingOrder() {
+        return shippingOrder;
+    }
 
     //Get all order by user email
     public void fetchOrdersByEmail(String email){
@@ -64,6 +67,18 @@ public class OrderStatusViewModel extends ViewModel {
             }
             else {
                 confirmOrder.setValue(apiResponse);
+            }
+        });
+    }
+
+    //Shipping order
+    public void shippingOrderByOrderId(Long orderId){
+        orderRepository.shippingOrder(orderId).observeForever(apiResponse -> {
+            if(apiResponse.getCode() == 200){
+                shippingOrder.setValue(apiResponse);
+            }
+            else {
+                shippingOrder.setValue(apiResponse);
             }
         });
     }

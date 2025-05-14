@@ -29,12 +29,12 @@ public class Order {
     @NotNull(message = "Shipping address cannot be null")
     private String fullAddress;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Payment option cannot be null")
     private PaymentOption paymentOption;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     @NotNull(message = "status not null")
     @Enumerated(EnumType.STRING)//Lưu tên enum dưới dạng string
     @JsonFormat(shape = JsonFormat.Shape.STRING)// Muốn enum ignore case khi deserialize từ JSON

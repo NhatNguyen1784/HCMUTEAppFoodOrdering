@@ -107,22 +107,41 @@ public class OrderRepository {
     }
 
     public LiveData<ApiResponse> confirmOrder(Long orderId){
-        MutableLiveData<ApiResponse> cancel = new MutableLiveData<>();
+        MutableLiveData<ApiResponse> confirm = new MutableLiveData<>();
         api.confirmOrder(orderId).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    cancel.setValue(response.body());
+                    confirm.setValue(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable throwable) {
                 Log.d("Orders", "Netword error "+ throwable.getMessage());
-                cancel.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
+                confirm.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
             }
         });
-        return cancel;
+        return confirm;
+    }
+
+    public LiveData<ApiResponse> shippingOrder(Long orderId){
+        MutableLiveData<ApiResponse> shipping = new MutableLiveData<>();
+        api.shippingOrder(orderId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    shipping.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable throwable) {
+                Log.d("Orders", "Netword error "+ throwable.getMessage());
+                shipping.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
+            }
+        });
+        return shipping;
     }
 
     public LiveData<ResponseObject<VNPayResponse>> createVNPayPayment(String amount, String bankCode){
