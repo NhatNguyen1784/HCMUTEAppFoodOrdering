@@ -237,17 +237,18 @@
                     app:strokeWidth="3dp"  />
 
                 <Button
-                    android:id="@+id/btnSupportOrderDetail"
+                    android:id="@+id/btnNotCancelOrderDetail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="#FFFFFF"
+                    android:enabled="false"
                     android:visibility="gone"
-                    android:text="Hổ trợ"
-                    android:textColor="#E45D5D"
+                    android:text="Hủy đơn hàng"
+                    android:textColor="#ADA7A7"
                     app:cornerRadius="3dp"
-                    app:strokeColor="#E45D5D"
+                    app:strokeColor="#ADA7A7"
                     app:strokeWidth="3dp" />
 
                 <Button

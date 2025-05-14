@@ -122,6 +122,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
 
                                                 startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                                                finish();
                                             }
                                         })
                                         .setNegativeButton("Không", null)
@@ -136,7 +137,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         //Button
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnROD.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.VISIBLE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.GONE);
                         binding.btnReviewOrderDetail.setVisibility(View.GONE);
                         binding.btnConfirmOrder.setVisibility(View.GONE);
@@ -147,7 +148,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_delivered);
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnROD.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.GONE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.GONE);
                         binding.btnReorder.setVisibility(View.GONE);
                         binding.btnReviewOrderDetail.setVisibility(View.GONE);
                         binding.btnConfirmOrder.setVisibility(View.VISIBLE);
@@ -174,7 +175,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                          * */
                         //chua danh gia
                         binding.btnCancelOrder.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.GONE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.GONE);
                         binding.btnReorder.setVisibility(View.VISIBLE);
                         binding.btnROD.setVisibility(View.GONE);
                         binding.btnReviewOrderDetail.setVisibility(View.VISIBLE);
@@ -185,7 +186,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_cancelorder);
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnROD.setVisibility(View.GONE);
-                        binding.btnSupportOrderDetail.setVisibility(View.VISIBLE);
+                        binding.btnNotCancelOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.VISIBLE);
                         binding.btnReviewOrderDetail.setVisibility(View.GONE);
                     }
@@ -205,7 +206,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 loadOrderDetail(orderId);//Call API
-                handler.postDelayed(this, 15_000); // Call lai sau 15s
+                handler.postDelayed(this, 10_000); // Call lai sau 15s
             }
         };
         handler.post(pollingRunnable);
