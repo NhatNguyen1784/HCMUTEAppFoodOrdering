@@ -1,14 +1,16 @@
 package vn.hcmute.appfood.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.hcmute.appfood.dto.ApiResponse;
-import vn.hcmute.appfood.dto.OrderDTO;
-import vn.hcmute.appfood.dto.OrderDetailResponseDTO;
-import vn.hcmute.appfood.dto.OrderResponse;
+import vn.hcmute.appfood.dto.*;
+import vn.hcmute.appfood.dto.response.ApiResponse;
+import vn.hcmute.appfood.dto.response.ResponseObject;
 import vn.hcmute.appfood.services.Impl.OrderDetailService;
 import vn.hcmute.appfood.services.Impl.OrderService;
+import vn.hcmute.appfood.services.Impl.PaymentService;
 
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class OrderController {
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     //Create order (1 user max 2 order Pending + Shipping)
     //http://localhost:8081/api/order/create-order
@@ -120,4 +125,22 @@ public class OrderController {
             return ResponseEntity.badRequest().body(ApiResponse.error("Order cancellation failed. The order may not exist or is already cancelled.", null));        }
     }
 
+    @GetMapping("/payment/vn-pay")
+    public ResponseObject<PaymentDTO.VNPayResponse> pay(HttpServletRequest request) {
+        return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(request));
+    }
+    @GetMapping("/payment/vn-pay-callback")
+    public ResponseObject<PaymentDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request) {
+        String status = request.getParameter("vnp_ResponseCode");
+        if (status.equals("00")) {
+            PaymentDTO.VNPayResponse res = PaymentDTO.VNPayResponse.builder()
+                    .code("00")
+                    .message("Success")
+                    .paymentUrl("")
+                    .build();
+            return new ResponseObject<>(HttpStatus.OK, "Success", res);
+        } else {
+            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
+        }
+    }
 }

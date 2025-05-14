@@ -65,6 +65,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
         else if(order.getOrderStatus().equals("CANCELLED")){
             holder.status.setText("Trạng thái: Đã hủy");
             holder.cancelTv.setVisibility(View.VISIBLE);
+            holder.deliveredTv.setVisibility(View.GONE);
             holder.supportBtn.setVisibility(View.VISIBLE);
             holder.ratingBtn.setVisibility(View.GONE);
         }

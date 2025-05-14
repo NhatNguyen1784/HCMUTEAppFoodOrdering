@@ -1,8 +1,9 @@
 package vn.hcmute.appfoodorder.model.dto.request;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class OrderRequest {
+public class OrderRequest implements Serializable {
     private String email;
     private String fullAddress;
     private String paymentOption;
@@ -48,5 +49,29 @@ public class OrderRequest {
         } else {
             this.deliveryMethod = deliveryMethod;
         }
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public String getPaymentOption() {
+        return paymentOption;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public Set<OrderDetailRequest> getOrderDetails() {
+        return orderDetails;
     }
 }

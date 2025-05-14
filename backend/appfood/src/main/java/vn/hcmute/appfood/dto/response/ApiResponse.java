@@ -1,4 +1,4 @@
-package vn.hcmute.appfood.dto;
+package vn.hcmute.appfood.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

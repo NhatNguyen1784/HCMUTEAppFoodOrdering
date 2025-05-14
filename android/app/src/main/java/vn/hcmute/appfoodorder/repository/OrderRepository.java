@@ -1,6 +1,7 @@
 package vn.hcmute.appfoodorder.repository;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,6 +16,8 @@ import vn.hcmute.appfoodorder.data.network.RetrofitClient;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.request.OrderRequest;
 import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
+import vn.hcmute.appfoodorder.model.dto.response.ResponseObject;
+import vn.hcmute.appfoodorder.model.dto.response.VNPayResponse;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 
 public class OrderRepository {
@@ -120,5 +123,29 @@ public class OrderRepository {
             }
         });
         return cancel;
+    }
+
+    public LiveData<ResponseObject<VNPayResponse>> createVNPayPayment(String amount, String bankCode){
+        MutableLiveData<ResponseObject<VNPayResponse>> data = new MutableLiveData<>();
+        api.createVNPayPayment(amount, bankCode).enqueue(new Callback<ResponseObject<VNPayResponse>>() {
+            @Override
+            public void onResponse(Call<ResponseObject<VNPayResponse>> call, Response<ResponseObject<VNPayResponse>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    Log.d("VNPay", "Successful");
+                    data.setValue(response.body());
+                }
+                else{
+                    Log.d("VNPay", "Failed ");
+                    data.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObject<VNPayResponse>> call, Throwable throwable) {
+                Log.d("VNPay", "Netword error "+ throwable.getMessage());
+                data.setValue(null);
+            }
+        });
+        return data;
     }
 }

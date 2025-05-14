@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import vn.hcmute.appfood.dto.ApiResponse;
+import vn.hcmute.appfood.dto.response.ApiResponse;
 import vn.hcmute.appfood.dto.FoodDTO;
 import vn.hcmute.appfood.entity.Food;
 import vn.hcmute.appfood.services.Impl.FoodService;

@@ -22,9 +22,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.ReviewActivity"
+            android:name=".ui.activity.payment.PaymentVNPayActivity"
             android:exported="false" />
-        <!-- Cau hinh FileProvider -->
+        <activity
+            android:name=".ui.activity.ReviewActivity"
+            android:exported="false" /> <!-- Cau hinh FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="vn.hcmute.appfoodorder.fileprovider"
@@ -37,10 +39,9 @@
 
         <activity
             android:name=".ui.activity.order.OrderStatusActivity"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".ui.activity.OrdersOverviewActivity"-->
-<!--            android:exported="false" />-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".ui.activity.OrdersOverviewActivity" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false" />

@@ -84,6 +84,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#437FE4"
             android:text="Đã nhận hàng"
+            android:layout_gravity="center_horizontal"
             android:textColor="#FFFFFF"
             android:visibility="gone"
             card_view:cornerRadius="3dp"
