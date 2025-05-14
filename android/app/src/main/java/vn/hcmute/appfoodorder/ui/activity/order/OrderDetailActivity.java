@@ -1,4 +1,4 @@
-package vn.hcmute.appfoodorder.ui.activity;
+package vn.hcmute.appfoodorder.ui.activity.order;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,6 +44,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         viewModel = new OrderDetailViewModel();
         statusViewModel = new ViewModelProvider(this).get(OrderStatusViewModel.class);
 
+        //Get data from back activity
         orderId = getIntent().getLongExtra("orderId", -1L);
 
         if (orderId != -1L) {

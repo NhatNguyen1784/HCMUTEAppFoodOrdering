@@ -54,8 +54,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .into(holder.imgFood);
         holder.tvFoodName.setText(item.getFoodName().trim());
         holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
-        holder.tvUnitPrice.setText(String.valueOf(item.getUnitPrice()));
-        holder.tvPrice.setText(String.valueOf(item.getPrice()));
+        holder.tvUnitPrice.setText(String.format("%,.0f đ", item.getUnitPrice()));
+        holder.tvPrice.setText(String.format("%,.0f đ", item.getPrice()));
 
         // xu li su kien khi bam tang/giam so luong
         holder.tvPlus.setOnClickListener(view -> {

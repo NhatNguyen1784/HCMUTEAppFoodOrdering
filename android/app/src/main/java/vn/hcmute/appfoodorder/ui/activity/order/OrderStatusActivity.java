@@ -1,4 +1,4 @@
-package vn.hcmute.appfoodorder.ui.activity;
+package vn.hcmute.appfoodorder.ui.activity.order;
 
 import android.os.Bundle;
 import android.util.Log;

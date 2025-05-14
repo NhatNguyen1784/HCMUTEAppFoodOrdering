@@ -1,4 +1,4 @@
-package vn.hcmute.appfoodorder.ui.fragment;
+package vn.hcmute.appfoodorder.ui.fragment.tabstatus;
 
 import android.os.Bundle;
 
@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import vn.hcmute.appfoodorder.databinding.FragmentPendingOrderBinding;
@@ -58,7 +57,7 @@ public class PendingOrdersFragment extends Fragment {
         } else {
             binding.recyclerViewPendingOrders.setVisibility(View.GONE);
             binding.noOrdersLayout.setVisibility(View.VISIBLE);
-            Toast.makeText(getContext(), "No orders data available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No orders data available in pending", Toast.LENGTH_SHORT).show();
         }
         return binding.getRoot();
     }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#E7E6E6"
-    tools:context=".ui.fragment.RatingOrdersFragment">
+    tools:context=".ui.fragment.tabstatus.RatingOrdersFragment">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewRatingOrders"
         android:layout_width="match_parent"

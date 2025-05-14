@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.entity.Address;
-import vn.hcmute.appfoodorder.ui.activity.OrderActivity;
+import vn.hcmute.appfoodorder.ui.activity.order.OrderActivity;
 import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.AddressViewModel;
 

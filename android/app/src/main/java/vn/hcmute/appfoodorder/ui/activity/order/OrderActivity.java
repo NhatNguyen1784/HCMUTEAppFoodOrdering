@@ -1,4 +1,4 @@
-package vn.hcmute.appfoodorder.ui.activity;
+package vn.hcmute.appfoodorder.ui.activity.order;
 
 import android.app.AlertDialog;
 import android.content.Intent;

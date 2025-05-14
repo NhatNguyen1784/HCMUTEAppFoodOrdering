@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
-import vn.hcmute.appfoodorder.ui.fragment.HistoryOrdersFragment;
-import vn.hcmute.appfoodorder.ui.fragment.PendingOrdersFragment;
-import vn.hcmute.appfoodorder.ui.fragment.RatingOrdersFragment;
+import vn.hcmute.appfoodorder.ui.fragment.tabstatus.HistoryOrdersFragment;
+import vn.hcmute.appfoodorder.ui.fragment.tabstatus.PendingOrdersFragment;
+import vn.hcmute.appfoodorder.ui.fragment.tabstatus.RatingOrdersFragment;
 
 public class OrderStatusAdapter extends FragmentStateAdapter {
     private final List<OrderResponse> pendingOrders;
@@ -29,7 +29,7 @@ public class OrderStatusAdapter extends FragmentStateAdapter {
             case 0:
                 return PendingOrdersFragment.newInstance(pendingOrders);
             case 1:
-                return new HistoryOrdersFragment();
+                return HistoryOrdersFragment.newInstance(historyOrders);
             case 2:
                 return new RatingOrdersFragment();
             default:

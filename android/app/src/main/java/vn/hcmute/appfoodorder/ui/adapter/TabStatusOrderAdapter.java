@@ -13,13 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
-import vn.hcmute.appfoodorder.ui.activity.OrderDetailActivity;
-import vn.hcmute.appfoodorder.ui.activity.OrderStatusActivity;
+import vn.hcmute.appfoodorder.ui.activity.order.OrderDetailActivity;
+import vn.hcmute.appfoodorder.ui.activity.order.OrderStatusActivity;
 import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 
 public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAdapter.TabViewHolder> {
@@ -70,7 +69,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
         }
         holder.createdDate.setText(order.getCreatedDate());
         holder.totalQuantity.setText("Số lượng: "+String.valueOf(order.getTotalQuantity()));
-        holder.totalBill.setText("Tổng đơn hàng: "+ String.format("%.0f đ", order.getTotalPrice()));
+        holder.totalBill.setText("Tổng đơn hàng: "+ String.format("%,.0f đ", order.getTotalPrice()));
 
         //Next activity order detail
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -86,29 +85,31 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             }
         });
 
-        holder.pendingCancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(context)
-                        .setTitle("Xác nhận hủy đơn hàng")
-                        .setMessage("Bạn có chắc muốn hủy đơn hàng " + order.getOrderId() + " không?")
-                        .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                viewModel.cancelOrderByOrderId(order.getOrderId());
-                                Toast.makeText(context, "Bạn đã hủy đơn hàng " + order.getOrderId() + " thành công", Toast.LENGTH_SHORT).show();
-                                notifyDataSetChanged();
+        if(isView == 0){
+            holder.pendingCancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(context)
+                            .setTitle("Xác nhận hủy đơn hàng")
+                            .setMessage("Bạn có chắc muốn hủy đơn hàng " + order.getOrderId() + " không?")
+                            .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    viewModel.cancelOrderByOrderId(order.getOrderId());
+                                    Toast.makeText(context, "Bạn đã hủy đơn hàng " + order.getOrderId() + " thành công", Toast.LENGTH_SHORT).show();
+                                    notifyDataSetChanged();
 
-                                if (context instanceof Activity) {
-                                    ((Activity) context).finish();
-                                    context.startActivity(new Intent(context, OrderStatusActivity.class));
+                                    if (context instanceof Activity) {
+                                        ((Activity) context).finish();
+                                        context.startActivity(new Intent(context, OrderStatusActivity.class));
+                                    }
                                 }
-                            }
-                        })
-                        .setNegativeButton("Không", null)
-                        .show();
-            }
-        });
+                            })
+                            .setNegativeButton("Không", null)
+                            .show();
+                }
+            });
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ import vn.hcmute.appfoodorder.model.dto.request.DeleteCartRequest;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Cart;
 import vn.hcmute.appfoodorder.model.entity.CartItem;
-import vn.hcmute.appfoodorder.ui.activity.OrderActivity;
+import vn.hcmute.appfoodorder.ui.activity.order.OrderActivity;
 import vn.hcmute.appfoodorder.ui.adapter.CartAdapter;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
