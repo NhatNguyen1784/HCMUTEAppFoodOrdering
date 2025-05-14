@@ -42,12 +42,12 @@ public class OrderDetailActivity extends AppCompatActivity {
         binding = ActivityOrderDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        viewModel = new OrderDetailViewModel();
+        viewModel = new ViewModelProvider(this).get(OrderDetailViewModel.class);
         statusViewModel = new ViewModelProvider(this).get(OrderStatusViewModel.class);
 
         //Get data from back activity
         orderId = getIntent().getLongExtra("orderId", -1L);
-
+        Toast.makeText(this, orderId.toString(), Toast.LENGTH_SHORT).show();
         if (orderId != -1L) {
             loadOrderDetail(orderId);
         } else {
@@ -55,7 +55,6 @@ public class OrderDetailActivity extends AppCompatActivity {
             finish();
         }
 
-        reviewOrder();
         backOnclick();
     }
 
@@ -69,11 +68,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    //Next review activity
-    private void reviewOrder() {
-        //Toast.makeText(OrderDetailActivity.this, listId.toString(), Toast.LENGTH_SHORT).show();
     }
 
     private void loadOrderDetail(Long orderId) {

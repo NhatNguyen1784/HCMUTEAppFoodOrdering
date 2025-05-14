@@ -18,18 +18,19 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import java.util.List;
 
 import vn.hcmute.appfoodorder.R;
+import vn.hcmute.appfoodorder.model.dto.response.FoodWithStarResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.ui.activity.FoodDetailActivity;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodViewHolder> {
 
-    private List<Food> foods;
+    private List<FoodWithStarResponse> foods;
     private Context context;
 
     public FoodListAdapter(Context context) {
         this.context = context;
     }
-    public void setData(List<Food> foods){
+    public void setData(List<FoodWithStarResponse> foods){
         this.foods = foods;
         notifyDataSetChanged();
     }
@@ -44,20 +45,20 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
     @Override
     public void onBindViewHolder(@NonNull FoodListAdapter.FoodViewHolder holder, int position) {
         // gan data cho view
-        Food food = foods.get(position);
+        FoodWithStarResponse food = foods.get(position);
         Glide.with(context)
-                .load(food.getFirstImageUrl())
+                .load(food.getFoodImageUrls())
                 .transform(new CenterCrop(), new RoundedCorners(30))
                 .into(holder.imgFood);
         holder.tvFoodName.setText(food.getFoodName());
-        holder.tvPrice.setText(food.getFoodPrice().toString());
-        holder.tvRate.setText(5 + ""); // fix set rate
-        holder.tvSl.setText("Đã bán: " + 100); // fix só luong da ban
+        holder.tvPrice.setText(String.format("%,.0f đ", food.getFoodPrice()));
+        holder.tvRate.setText(food.getAvgRating().toString()); // fix set rate
+        holder.tvSl.setText("Đã bán: " + food.getTotalSold()); // fix só luong da ban
 
         // set su kien click item
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, FoodDetailActivity.class);
-            intent.putExtra("foodId", food.getId());
+            intent.putExtra("foodId", food.getFoodId());
             context.startActivity(intent);
         });
     }

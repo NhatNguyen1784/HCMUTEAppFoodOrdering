@@ -60,4 +60,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("me.relex:circleindicator:2.1.6")
+    implementation ("com.google.android.material:material:1.10.0")
 }

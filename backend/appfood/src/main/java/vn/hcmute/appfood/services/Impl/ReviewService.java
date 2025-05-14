@@ -49,7 +49,7 @@ public class ReviewService {
         }
         // kiem tra trang thai da nhan hang chua
         Order order = orderDetail.getOrder();
-        if(!order.getOrderStatus().equals(OrderStatus.DELIVERED)){
+        if(!order.getOrderStatus().equals(OrderStatus.SUCCESSFUL)){
             // neu chua nhan duoc thi khong duoc review
             throw new AccessDeniedException("Cannot review product. Order not delivered yet.");
         }
@@ -67,6 +67,8 @@ public class ReviewService {
         review.setComment(reviewRequest.getComment());
         review.setOrderDetail(orderDetail);
         review.setUser(user);
+        orderDetail.setIsReview(true);
+        orderDetailRepository.save(orderDetail);
 
         // xu ly anh upload kem theo (neu co)
         if(images != null && images.length > 0){
@@ -84,21 +86,22 @@ public class ReviewService {
         return convertToDTO(savedReview);
     }
 
-    private boolean validateFoodModified(OrderDetail orderDetail) {
+
+    public boolean validateFoodModified(OrderDetail orderDetail) {
         Food food = orderDetail.getFood();
-        if(food.getFoodName().equals(orderDetail.getFoodName())){
+        if(!food.getFoodName().equals(orderDetail.getFoodName())){ // neu nhu name khac nhau thi da duoc updatte
            return true;
         }
         return false;
     }
 
-    // Lay danh sach danh gia theo ten mon an
-    public ReviewListResponse getAllReviewByFoodName(String foodName){
-        Food food = foodRepository.findByFoodName(foodName)
-                .orElseThrow(() -> new ResourceNotFoundException("Can not find food with name: " + foodName));
+    // Lay danh sach danh gia theo ID mon an
+    public ReviewListResponse getAllReviewByFoodId(Long foodId){
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new ResourceNotFoundException("Can not find food with ID: " + foodId));
 
         // lay tat ca review cua nguoi dung ve mon an
-        List<ProductReview> reviews  = reviewRepository.findByOrderDetail_FoodName(food.getFoodName());
+        List<ProductReview> reviews  = reviewRepository.findByOrderDetail_Food(food.getId());
 
         // chuyen entity thanh DTO de tra ve
         List<ReviewResponse> responses = reviews.stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -107,13 +110,7 @@ public class ReviewService {
         long totalReviews = responses.size();
 
         // tinh rating trung binh
-        double avgRating = reviews.stream()
-                .mapToInt(ProductReview::getRating)
-                .average()
-                .orElse(0.0);
-
-        // lam tron den 1 chu so thap phan
-        avgRating = Math.round(avgRating * 10.0) / 10.0;
+        double avgRating = calculateAverageRating(reviews);
 
         ReviewListResponse listResponse = new ReviewListResponse();
         listResponse.setTotalReviews(totalReviews);
@@ -123,11 +120,25 @@ public class ReviewService {
         return listResponse;
     }
 
+    // Hàm tính điểm trung bình
+    public double calculateAverageRating(List<ProductReview> reviews) {
+        double avgRating =  reviews.stream()
+                .mapToInt(ProductReview::getRating)
+                .average()
+                .orElse(0.0); // Trả về 0 nếu không có đánh giá nào
+
+        // lam tron den 1 chu so thap phan
+        avgRating = Math.round(avgRating * 10.0) / 10.0;
+
+        return avgRating;
+    }
+
 
     // ham convert entity qua DTO
     private ReviewResponse convertToDTO(ProductReview review) {
         ReviewResponse dto = new ReviewResponse();
         dto.setRating(review.getRating());
+        dto.setUserEmail(review.getUser().getFullName());
         dto.setComment(review.getComment());
         dto.setCreatedAt(review.getCreatedAt());
         dto.setImageUrls(

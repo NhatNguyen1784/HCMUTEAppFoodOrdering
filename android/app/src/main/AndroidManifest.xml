@@ -2,12 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +29,12 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.ReviewActivity"
-            android:exported="false" /> <!-- Cau hinh FileProvider -->
+            android:exported="false" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        <!-- Cau hinh FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="vn.hcmute.appfoodorder.fileprovider"
@@ -39,9 +47,7 @@
 
         <activity
             android:name=".ui.activity.order.OrderStatusActivity"
-            android:exported="false" /> <!-- <activity -->
-        <!-- android:name=".ui.activity.OrdersOverviewActivity" -->
-        <!-- android:exported="false" /> -->
+            android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false" />

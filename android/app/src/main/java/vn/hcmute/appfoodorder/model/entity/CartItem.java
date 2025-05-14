@@ -1,7 +1,10 @@
 package vn.hcmute.appfoodorder.model.entity;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class CartItem implements Serializable {
     private Long foodId;
@@ -67,6 +70,22 @@ public class CartItem implements Serializable {
     }
 
     public CartItem() {
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(foodId, foodName, quantity, unitPrice);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return quantity == cartItem.quantity &&
+                foodId.equals(cartItem.foodId) &&
+                foodName.equals(cartItem.foodName) &&
+                unitPrice == cartItem.unitPrice;
     }
 
     public CartItem(Long foodId, String foodName, int quantity, double unitPrice, double price, List<FoodImage> foodImages) {

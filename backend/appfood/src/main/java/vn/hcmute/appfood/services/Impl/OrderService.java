@@ -3,12 +3,14 @@ package vn.hcmute.appfood.services.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.hcmute.appfood.dto.OrderDTO;
+import vn.hcmute.appfood.entity.*;
 import vn.hcmute.appfood.dto.OrderResponse;
 import vn.hcmute.appfood.entity.Food;
 import vn.hcmute.appfood.entity.Order;
 import vn.hcmute.appfood.entity.OrderDetail;
 import vn.hcmute.appfood.entity.User;
 import vn.hcmute.appfood.exception.ResourceNotFoundException;
+import vn.hcmute.appfood.repository.CartRepository;
 import vn.hcmute.appfood.repository.FoodRepository;
 import vn.hcmute.appfood.repository.OrderRepository;
 import vn.hcmute.appfood.repository.UserRepository;
@@ -35,11 +37,17 @@ public class OrderService implements IOrderService {
     @Autowired
     private FoodRepository foodRepository;
 
+    @Autowired
+    private CartRepository cartRepository;
+
     //Create order
     @Override
     public Long createOrder(OrderDTO orderDTO) {
         User user = userRepository.findByEmail(orderDTO.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with User: " + user.getEmail()));
         long countPenOrder = countByUserIdAndOrderStatus(user.getId(), OrderStatus.PENDING);
         long countShipOrder = countByUserIdAndOrderStatus(user.getId(), OrderStatus.SHIPPING);
         long totalOrderWaiting = countShipOrder + countPenOrder;
@@ -105,6 +113,11 @@ public class OrderService implements IOrderService {
 
             // Lưu đơn hàng và trả về id của đơn hàng đó
             Order savedOrder = orderRepository.save(order);
+
+            // xoa cac item trong cart
+            cartRepository.delete(cart);
+            cartRepository.save(cart);
+
             return savedOrder.getId();
         }
     }

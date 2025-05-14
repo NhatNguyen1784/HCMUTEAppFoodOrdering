@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import java.util.List;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.response.OrderDetailDTO;
+import vn.hcmute.appfoodorder.ui.activity.ReviewActivity;
 import vn.hcmute.appfoodorder.ui.activity.order.OrderStatusActivity;
 
 public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.OrderDetailViewHolder> {
@@ -54,15 +55,17 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
             holder.btnRatingOrderDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
+
                     if (context instanceof Activity) {
-                        Intent intent = new Intent(context, );
+                        Intent intent = new Intent(context, ReviewActivity.class);
                         intent.putExtra("oddId", item.getId());
-                        ((Activity) context).finish();
+                        intent.putExtra("foodName", item.getFoodName().toString().trim());
+                        intent.putExtra("unitPrice", item.getUnitPrice());
+                        intent.putExtra("foodImage", item.getFoodImage().trim());
                         context.startActivity(intent);
+                        ((Activity) context).finish();
                     }
-                     */
-                    Toast.makeText(context, "Orderdetail id "+item.getId(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Orderdetail id "+item.getId(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

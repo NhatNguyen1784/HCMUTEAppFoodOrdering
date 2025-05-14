@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class ProductReview {
     private String comment;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewImage> images;
+    private List<ReviewImage> images = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

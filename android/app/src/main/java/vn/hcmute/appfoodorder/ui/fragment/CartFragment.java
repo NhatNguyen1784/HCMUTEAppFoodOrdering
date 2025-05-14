@@ -39,6 +39,7 @@ public class CartFragment extends Fragment {
     private Button btnOrder;
     private CartAdapter cartAdapter;
     private CartViewModel cartViewModel;
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @Nullable
     @Override
@@ -92,8 +93,10 @@ public class CartFragment extends Fragment {
             String email = user.getEmail();
             request.setEmail(email);
             request.setFoodId(item.getFoodId());
+
+            cartViewModel.deleteCartItem(request);
         });
-        cartViewModel.deleteCartItem(request);
+
     }
 
     private void updateCartItem(CartItem item){
@@ -103,8 +106,8 @@ public class CartFragment extends Fragment {
             request.setEmail(email);
             request.setFoodId(item.getFoodId());
             request.setQuantity(item.getQuantity());
+            cartViewModel.updateCartItem(request);
         });
-        cartViewModel.updateCartItem(request);
     }
 
     private void getMyCart() {
@@ -119,7 +122,7 @@ public class CartFragment extends Fragment {
             @Override
             public void onChanged(Cart cart) {
                 if (cart != null && cart.getCartDetails() != null && !cart.getCartDetails().isEmpty()) { // Kiểm tra giỏ hàng không rỗng
-                    List<CartItem> cartItems = cart.getCartDetails();
+                    cartItems = cart.getCartDetails();
                     cartAdapter.setData(cartItems);
 
                     // tính tổng giá (subtotal)
@@ -159,6 +162,16 @@ public class CartFragment extends Fragment {
                     });
 
                 } else {
+
+                    // Giỏ hàng rỗng - cập nhật lại giao diện
+                    cartItems.clear();
+                    cartAdapter.setData(cartItems); // Cập nhật adapter để xóa hết item
+
+                    tvSubTotal.setText("0 đ");
+                    tvDelivery.setText("0 đ");
+                    tvFeeTax.setText("0 đ");
+                    tvTotal.setText("0 đ");
+
                     btnOrder.setOnClickListener(v-> {
                         Toast.makeText(getContext(), "You must add food to cart", Toast.LENGTH_SHORT).show();
                     });
@@ -188,6 +201,7 @@ public class CartFragment extends Fragment {
     private void setupRecycleView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rcvCart.setLayoutManager(layoutManager);
+        rcvCart.setItemAnimator(null);
         cartAdapter = new CartAdapter(getContext());
         rcvCart.setAdapter(cartAdapter);
     }

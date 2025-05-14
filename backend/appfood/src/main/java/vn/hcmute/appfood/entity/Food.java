@@ -31,4 +31,5 @@ public class Food {
     @ToString.Exclude
     @JsonManagedReference // Áp dụng cho bên "nhiều" trong mối quan hệ One-to-Many
     private List<FoodImage> foodImages;
+
 }

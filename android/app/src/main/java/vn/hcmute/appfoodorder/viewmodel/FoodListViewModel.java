@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
+
+import vn.hcmute.appfoodorder.model.dto.response.FoodWithStarResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.repository.FoodListRepository;
 import vn.hcmute.appfoodorder.utils.Resource;
@@ -14,17 +16,12 @@ public class FoodListViewModel extends ViewModel {
     private final FoodListRepository foodRepository;
 
     // LiveData cho UI quan sát (bên ngoài chỉ được đọc)
-    private final MutableLiveData<List<Food>> _foodList = new MutableLiveData<>();
-    private LiveData<List<Food>> foodList = _foodList;
+    private final MutableLiveData<List<FoodWithStarResponse>> foodList = new MutableLiveData<>();
 
-    private final MutableLiveData<String> _messageError = new MutableLiveData<>();
-    private LiveData<String> messageError = _messageError;
+    private final MutableLiveData<String> messageError = new MutableLiveData<>();
 
-    private final MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
-    private LiveData<Boolean> isLoading = _isLoading;
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
-    // Dữ liệu gốc để lọc/tìm kiếm
-    private List<Food> originalFoodList = new ArrayList<>();
     private Long currentCategoryId;
 
     public FoodListViewModel() {
@@ -33,21 +30,20 @@ public class FoodListViewModel extends ViewModel {
 
     public void fetchListFood(Long categoryId) {
         currentCategoryId = categoryId;
-        _isLoading.setValue(true);
+        isLoading.setValue(true);
 
-        foodRepository.getFoodByCategory(categoryId).observeForever(new Observer<Resource<List<Food>>>() {
+        foodRepository.getFoodByCategory(categoryId).observeForever(new Observer<Resource<List<FoodWithStarResponse>>>() {
             @Override
-            public void onChanged(Resource<List<Food>> resource) {
-                _isLoading.setValue(resource.isLoading());
+            public void onChanged(Resource<List<FoodWithStarResponse>> listResource) {
 
-                if (resource.isSuccess() && resource.getData() != null) {
-                    originalFoodList = resource.getData();
-                    _foodList.setValue(originalFoodList);
-                }
+                if (listResource.isSuccess()){
+                    foodList.setValue(listResource.getData());
 
-                if (resource.isError()) {
-                    _messageError.setValue(resource.getMessage());
                 }
+                else if (listResource.isError()){
+                    messageError.setValue(listResource.getMessage());
+                }
+                isLoading.setValue(false);
             }
         });
     }
@@ -58,16 +54,15 @@ public class FoodListViewModel extends ViewModel {
         }
     }
 
-
-    public LiveData<List<Food>> getFoodList() {
+    public MutableLiveData<List<FoodWithStarResponse>> getFoodList() {
         return foodList;
     }
 
-    public LiveData<String> getMessageError() {
+    public MutableLiveData<String> getMessageError() {
         return messageError;
     }
 
-    public LiveData<Boolean> getIsLoading() {
+    public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
     }
 }

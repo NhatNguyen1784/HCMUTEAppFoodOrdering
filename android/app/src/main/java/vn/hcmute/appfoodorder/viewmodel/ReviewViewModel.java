@@ -1,6 +1,7 @@
 package vn.hcmute.appfoodorder.viewmodel;
 
-import androidx.lifecycle.LiveData;
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -21,6 +22,9 @@ public class ReviewViewModel extends ViewModel {
 
     private final MutableLiveData<ReviewListResponse> listReviewLiveData = new MutableLiveData<>();
 
+    private final MutableLiveData<String> messageError = new MutableLiveData<>();
+    private final MutableLiveData<String> messageSuccess = new MutableLiveData<>();
+
     public ReviewViewModel() {
         this.reviewRepository = ReviewRepository.getInstance();
     }
@@ -29,22 +33,44 @@ public class ReviewViewModel extends ViewModel {
         reviewRepository.submitReview(request, imageFiles).observeForever(new Observer<Resource<ReviewResponse>>() {
             @Override
             public void onChanged(Resource<ReviewResponse> result) {
-                reviewLiveData.setValue(result.getData());
+                if (result.isSuccess()){
+                    reviewLiveData.setValue(result.getData());
+                    messageSuccess.setValue(result.getMessage());
+                    //Log.d("Review", result.getMessage());
+                }
+                else if (result.isError()){
+                    messageError.setValue(result.getMessage());
+                    //Log.d("Review ERROR", result.getMessage());
+                }
+            }
+
+        });
+    }
+
+    public void getReviewByFoodId(Long foodId){
+        reviewRepository.getReviewByFoodName(foodId).observeForever(new Observer<Resource<ReviewListResponse>>() {
+            @Override
+            public void onChanged(Resource<ReviewListResponse> result) {
+                if(result.isSuccess()){
+                    listReviewLiveData.setValue(result.getData());
+                }
+                else {
+                    messageError.setValue(result.getMessage());
+                }
             }
         });
     }
 
-    public void getReviewByFoodName(String foodName){
-        reviewRepository.getReviewByFoodName(foodName).observeForever(new Observer<Resource<ReviewListResponse>>() {
-            @Override
-            public void onChanged(Resource<ReviewListResponse> result) {
-                listReviewLiveData.setValue(result.getData());
-            }
-        });
+    public MutableLiveData<String> getMessageError() {
+        return messageError;
     }
 
     public MutableLiveData<ReviewResponse> getReviewLiveData() {
         return reviewLiveData;
+    }
+
+    public MutableLiveData<String> getMessageSuccess() {
+        return messageSuccess;
     }
 
     public MutableLiveData<ReviewListResponse> getListReviewLiveData() {

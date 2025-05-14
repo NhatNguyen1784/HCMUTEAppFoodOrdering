@@ -14,6 +14,7 @@ import vn.hcmute.appfoodorder.data.api.FoodApi;
 import vn.hcmute.appfoodorder.data.network.RetrofitClient;
 import vn.hcmute.appfoodorder.model.dto.ApiErrorResponse;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
+import vn.hcmute.appfoodorder.model.dto.response.FoodWithStarResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.utils.Resource;
 
@@ -34,43 +35,43 @@ public class FoodListRepository {
         return instance;
     }
 
-    public LiveData<Resource<List<Food>>> getFoodByCategory(Long categoryId){
+    public LiveData<Resource<List<FoodWithStarResponse>>> getFoodByCategory(Long categoryId){
 
-        MutableLiveData<Resource<List<Food>>> resultLiveData = new MutableLiveData<>();
+        MutableLiveData<Resource<List<FoodWithStarResponse>>> resultLiveData = new MutableLiveData<>();
 
         // đánh dấu đang load dữ liệu
         resultLiveData.setValue(Resource.loading(null));
 
-        foodApi.getFoodByCategory(categoryId).enqueue(new Callback<ApiResponse<List<Food>>>() {
+        foodApi.getFoodByCategory(categoryId).enqueue(new Callback<ApiResponse<List<FoodWithStarResponse>>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<Food>>> call, Response<ApiResponse<List<Food>>> response) {
+            public void onResponse(Call<ApiResponse<List<FoodWithStarResponse>>> call, Response<ApiResponse<List<FoodWithStarResponse>>> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    ApiResponse<List<Food>> apiResult = response.body();
-                    if(apiResult.getCode() == 200){
-                        // tra ve du lieu thanh cong
-                        resultLiveData.setValue(Resource.success(apiResult.getResult()));
-                    } else {
-                        // tra ve loi tu API
-                        resultLiveData.setValue(Resource.error("Error code: " + apiResult.getCode(), null));
+                    ApiResponse<List<FoodWithStarResponse>> apiResult = response.body();
+
+                    if (apiResult.getCode() == 200){
+                        resultLiveData.postValue(Resource.success(apiResult.getResult()));
+                    }
+                    else {
+                        resultLiveData.postValue(Resource.error("Error: " + apiResult.getMessage(), apiResult.getResult()));
                     }
                 }
                 else {
                     // xu li loi tu response
                     String errorMessage =  "Unknown error occurred";
-                    if(response.body() != null){
+                    if (response.errorBody() != null){
                         ApiErrorResponse errorResponse = gson.fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
                         errorMessage = errorResponse.getMessage();
+                        resultLiveData.postValue(Resource.error(errorMessage, null));
                     }
-                    resultLiveData.setValue(Resource.error(errorMessage, null));
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<Food>>> call, Throwable throwable) {
-                Log.e("ListFoodRepository", "Error fetching food by category", throwable);
-                resultLiveData.setValue(Resource.error("Network error: " + throwable.getMessage(), null));
+            public void onFailure(Call<ApiResponse<List<FoodWithStarResponse>>> call, Throwable throwable) {
+                resultLiveData.postValue(Resource.error("Network error: " + throwable.getMessage(), null));
             }
         });
+
 
         return resultLiveData;
     }

@@ -7,11 +7,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
+import vn.hcmute.appfoodorder.model.dto.response.FoodWithStarResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 
 public interface FoodApi {
     @GET("foods/category/{categoryId}")
-    Call<ApiResponse<List<Food>>> getFoodByCategory(@Path("categoryId") Long categoryId);
+    Call<ApiResponse<List<FoodWithStarResponse>>> getFoodByCategory(@Path("categoryId") Long categoryId);
 
     @GET("foods/{foodId}")
     Call<ApiResponse<Food>> getFoodById(@Path("foodId") Long foodId);
