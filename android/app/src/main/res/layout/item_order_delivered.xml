@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -72,7 +73,30 @@
             android:id="@+id/delivered_linearBtn"
             android:gravity="end">
 
+            <TextView
+                android:id="@+id/cancelled_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Đã hủy"
+                android:textColor="@color/red"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/delivered_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Hoàn thành"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                tools:ignore="TextSizeCheck" />
+
             <Button
+                android:id="@+id/rating_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
@@ -80,19 +104,31 @@
                 android:textColor="#FF3A3A"
                 card_view:cornerRadius="3dp"
                 card_view:strokeColor="#FF3A3A"
-                card_view:strokeWidth="3dp" />
+                card_view:strokeWidth="2dp" />
 
             <Button
+                android:id="@+id/supportBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFFFFF"
+                android:text="Hổ trợ"
+                android:textColor="#FF3A3A"
+                android:visibility="gone"
+                card_view:cornerRadius="3dp"
+                card_view:strokeColor="#FF3A3A"
+                card_view:strokeWidth="2dp" />
+            <Button
+                android:id="@+id/rated_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
                 android:enabled="false"
-                android:text="Đánh giá"
+                android:text="Đã đánh giá"
                 android:visibility="gone"
                 android:textColor="#AFA0A0"
                 card_view:cornerRadius="3dp"
                 card_view:strokeColor="#B4A9A9"
-                card_view:strokeWidth="3dp" />
+                card_view:strokeWidth="2dp" />
 
             <Button
                 android:id="@+id/reorder_btn"
@@ -102,6 +138,7 @@
                 android:backgroundTint="@color/red"
                 android:text="Đặt lại"
                 card_view:cornerRadius="3dp" />
+
         </LinearLayout>
 
 

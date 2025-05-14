@@ -60,12 +60,17 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
         else if(order.getOrderStatus().equals("SHIPPING")){
             holder.status.setText("Trạng thái: Xác nhận");
             holder.pendingCancelBtn.setVisibility(View.GONE);
+            holder.pendingNotCancelBtn.setVisibility(View.VISIBLE);
         }
         else if(order.getOrderStatus().equals("CANCELLED")){
             holder.status.setText("Trạng thái: Đã hủy");
+            holder.cancelTv.setVisibility(View.VISIBLE);
+            holder.supportBtn.setVisibility(View.VISIBLE);
+            holder.ratingBtn.setVisibility(View.GONE);
         }
         else if(order.getOrderStatus().equals("DELIVERED")){
             holder.status.setText("Trạng thái: Thành công");
+            holder.deliveredTv.setVisibility(View.VISIBLE);
         }
         holder.createdDate.setText(order.getCreatedDate());
         holder.totalQuantity.setText("Số lượng: "+String.valueOf(order.getTotalQuantity()));
@@ -118,8 +123,9 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
     }
 
     public class TabViewHolder extends RecyclerView.ViewHolder {
-        private TextView orderId, totalBill, totalQuantity, status, createdDate;
-        private Button pendingCancelBtn, reOrderBtn, pendingNotCancelBtn;
+        private TextView orderId, totalBill, totalQuantity, status, createdDate, cancelTv, deliveredTv;
+        private Button pendingCancelBtn, pendingNotCancelBtn;
+        private Button reOrderBtn, ratingBtn, ratedBtn, supportBtn;
         public TabViewHolder(@NonNull View itemView) {
             super(itemView);
             orderId = itemView.findViewById(R.id.orderId_tv);
@@ -127,12 +133,17 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             totalQuantity = itemView.findViewById(R.id.totalQuantity_tv);
             status = itemView.findViewById(R.id.statusOrder_tv);
             createdDate = itemView.findViewById(R.id.createdDate_tv);
-            if(isView==0){
+            if(isView == 0){
                 pendingCancelBtn = itemView.findViewById(R.id.pendingCancel_btn);
                 pendingNotCancelBtn = itemView.findViewById(R.id.pendingNotCancel_btn);
             }
-            else if(isView==1){
+            else if(isView == 1){
+                cancelTv = itemView.findViewById(R.id.cancelled_tv);
                 reOrderBtn = itemView.findViewById(R.id.reorder_btn);
+                ratedBtn = itemView.findViewById(R.id.rated_btn);
+                ratingBtn = itemView.findViewById(R.id.rating_btn);
+                supportBtn = itemView.findViewById(R.id.supportBtn);
+                deliveredTv = itemView.findViewById(R.id.delivered_tv);
             }
         }
     }

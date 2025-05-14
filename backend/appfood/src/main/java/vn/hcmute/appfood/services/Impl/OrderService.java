@@ -115,7 +115,7 @@ public class OrderService implements IOrderService {
             response.setTotalPrice(list.getTotalPrice());
             response.setTotalQuantity(list.getTotalQuantity());
             response.setOrderStatus(list.getOrderStatus().toString());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
             response.setCreatedDate(list.getCreatedDate().format(formatter));
             return response;
         }).collect(Collectors.toList());
