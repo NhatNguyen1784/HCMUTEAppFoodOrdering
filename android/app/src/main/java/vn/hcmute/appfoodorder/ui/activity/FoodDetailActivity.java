@@ -89,7 +89,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                     request.setQuantity(quantity);
 
                     cartViewModel.addItemToCart(request);
-                    Toast.makeText(getApplicationContext(), "Add item to cart successfull", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -100,10 +100,12 @@ public class FoodDetailActivity extends AppCompatActivity {
                 int quantity = Integer.parseInt(tvQuantity.getText().toString());
                 if(quantity > 1){
                     quantity--;
-                    double unitPrice = Double.valueOf(tvPrice.getText().toString());
+                    String  unitPriceString = tvPrice.getText().toString();
+                    unitPriceString = unitPriceString.replace(",", "").replace("đ", "").trim();
+                    double unitPrice = Double.parseDouble(unitPriceString);
                     double totalPrice = totalPrice(quantity, unitPrice);
                     tvQuantity.setText(String.valueOf(quantity));
-                    tvTotalPrice.setText(String.valueOf(totalPrice));
+                    tvTotalPrice.setText(String.format("%,.0f đ", totalPrice));
                 }
             }
         });
@@ -115,10 +117,12 @@ public class FoodDetailActivity extends AppCompatActivity {
 
                 if(quantity >= 0 && quantity < 100){
                     quantity++;
-                    double unitPrice = Double.valueOf(tvPrice.getText().toString());
+                    String  unitPriceString = tvPrice.getText().toString();
+                    unitPriceString = unitPriceString.replace(",", "").replace("đ", "").trim();
+                    double unitPrice = Double.parseDouble(unitPriceString);
                     double totalPrice = totalPrice(quantity, unitPrice);
                     tvQuantity.setText(String.valueOf(quantity));
-                    tvTotalPrice.setText(String.valueOf(totalPrice));
+                    tvTotalPrice.setText(String.format("%,.0f đ", totalPrice));
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Your quantity is so much", Toast.LENGTH_SHORT).show();
@@ -171,8 +175,9 @@ public class FoodDetailActivity extends AppCompatActivity {
                     List<FoodImage> foodImages = food.getFoodImages();
                     foodSliderAdapter.setData(foodImages);
                     tvFoodName.setText(food.getFoodName());
-                    tvPrice.setText(food.getFoodPrice().toString());
+                    tvPrice.setText(String.format("%,.0f đ", food.getFoodPrice()));
                     tvDescription.setText(food.getFoodDescription());
+                    tvTotalPrice.setText(tvPrice.getText());
                     // con thieu thuoc tinh: rating number
                 }
             }

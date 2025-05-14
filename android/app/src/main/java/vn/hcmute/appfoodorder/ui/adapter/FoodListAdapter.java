@@ -50,7 +50,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
                 .transform(new CenterCrop(), new RoundedCorners(30))
                 .into(holder.imgFood);
         holder.tvFoodName.setText(food.getFoodName());
-        holder.tvPrice.setText(food.getFoodPrice().toString());
+        holder.tvPrice.setText(String.format("%,.0f đ", food.getFoodPrice()));
         holder.tvRate.setText(5 + ""); // fix set rate
         holder.tvSl.setText("Đã bán: " + 100); // fix só luong da ban
 

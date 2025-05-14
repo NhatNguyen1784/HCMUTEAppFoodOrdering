@@ -60,8 +60,6 @@ public class CartFragment extends Fragment {
             public void onIncreaseQuantity(CartItem item) {
                 item.setQuantity(item.getQuantity() + 1);
                 updateCartItem(item);
-                int position = cartItems.indexOf(item);
-                cartAdapter.notifyItemChanged(position);
             }
 
             @Override
@@ -69,8 +67,6 @@ public class CartFragment extends Fragment {
                 if(item.getQuantity() > 1){
                     item.setQuantity(item.getQuantity() - 1);
                     updateCartItem(item);
-                    int position = cartItems.indexOf(item);
-                    cartAdapter.notifyItemChanged(position);
                 }
             }
 
@@ -97,8 +93,10 @@ public class CartFragment extends Fragment {
             String email = user.getEmail();
             request.setEmail(email);
             request.setFoodId(item.getFoodId());
+
+            cartViewModel.deleteCartItem(request);
         });
-        cartViewModel.deleteCartItem(request);
+
     }
 
     private void updateCartItem(CartItem item){
@@ -108,8 +106,8 @@ public class CartFragment extends Fragment {
             request.setEmail(email);
             request.setFoodId(item.getFoodId());
             request.setQuantity(item.getQuantity());
+            cartViewModel.updateCartItem(request);
         });
-        cartViewModel.updateCartItem(request);
     }
 
     private void getMyCart() {
@@ -156,6 +154,16 @@ public class CartFragment extends Fragment {
                     });
 
                 } else {
+
+                    // Giỏ hàng rỗng - cập nhật lại giao diện
+                    cartItems.clear();
+                    cartAdapter.setData(cartItems); // Cập nhật adapter để xóa hết item
+
+                    tvSubTotal.setText("0 đ");
+                    tvDelivery.setText("0 đ");
+                    tvFeeTax.setText("0 đ");
+                    tvTotal.setText("0 đ");
+
                     btnOrder.setOnClickListener(v-> {
                         Toast.makeText(getContext(), "You must add food to cart", Toast.LENGTH_SHORT).show();
                     });
