@@ -70,6 +70,9 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
         }
         else if(order.getOrderStatus().equals("DELIVERED")){
             holder.status.setText("Trạng thái: Giao thành công");
+            holder.pendingCancelBtn.setVisibility(View.GONE);
+            holder.pendingNotCancelBtn.setVisibility(View.GONE);
+            holder.btnConfirmOrder.setVisibility(View.VISIBLE);
         }
         else if(order.getOrderStatus().equals("SUCCESSFUL")){
             holder.status.setText("Trạng thái: Hoàn tất");
@@ -89,6 +92,9 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
                     Intent intent = new Intent(context, OrderDetailActivity.class);
                     intent.putExtra("orderId", clickedOrder.getOrderId());
                     context.startActivity(intent);
+                    if (context instanceof Activity) {
+                        ((Activity) context).finish();
+                    }
                 }
             }
         });
@@ -117,6 +123,18 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
                             .show();
                 }
             });
+
+            holder.btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewModel.confirmOrderByOrderId(order.getOrderId());
+                    notifyDataSetChanged();
+                    if (context instanceof Activity) {
+                        ((Activity) context).finish();
+                        context.startActivity(new Intent(context, OrderStatusActivity.class));
+                    }
+                }
+            });
         }
     }
 
@@ -128,7 +146,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
     public class TabViewHolder extends RecyclerView.ViewHolder {
         private TextView orderId, totalBill, totalQuantity, status, createdDate, cancelTv, deliveredTv;
         private Button pendingCancelBtn, pendingNotCancelBtn;
-        private Button reOrderBtn, ratingBtn, ratedBtn, supportBtn;
+        private Button reOrderBtn, ratingBtn, ratedBtn, supportBtn, btnConfirmOrder;
         public TabViewHolder(@NonNull View itemView) {
             super(itemView);
             orderId = itemView.findViewById(R.id.orderId_tv);
@@ -139,6 +157,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             if(isView == 0){
                 pendingCancelBtn = itemView.findViewById(R.id.pendingCancel_btn);
                 pendingNotCancelBtn = itemView.findViewById(R.id.pendingNotCancel_btn);
+                btnConfirmOrder = itemView.findViewById(R.id.btnConfirmOrder);
             }
             else if(isView == 1){
                 cancelTv = itemView.findViewById(R.id.cancelled_tv);
