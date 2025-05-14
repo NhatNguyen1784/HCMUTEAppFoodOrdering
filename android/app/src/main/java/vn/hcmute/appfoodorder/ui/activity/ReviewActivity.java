@@ -99,7 +99,11 @@ public class ReviewActivity extends AppCompatActivity {
         reviewViewModel.getMessageSuccess().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                if (s != null && !s.trim().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Đánh giá thành công", Toast.LENGTH_SHORT).show(); // fallback message
+                }
                 finish();
             }
         });
