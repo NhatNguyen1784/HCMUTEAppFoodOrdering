@@ -49,6 +49,7 @@ public class OrderDetailService implements IOrderDetailService {
                 dto.setFoodName(o.getFoodName());
                 dto.setUnitPrice(o.getUnitPrice());
                 dto.setQuantity(o.getQuantity());
+                dto.setIsReview(o.getIsReview());
                 return dto;
             }).collect(Collectors.toSet());
 

@@ -6,16 +6,26 @@ public class OrderDetailDTO {
     private Double unitPrice;
     private Integer quantity;
     private String foodImage;
+    private Boolean isReview;
 
-    public OrderDetailDTO(Long id, String foodName, Double unitPrice, Integer quantity, String foodImage) {
+    public OrderDetailDTO(Long id, String foodName, Double unitPrice, Integer quantity, String foodImage, Boolean isReview) {
         this.id = id;
         this.foodName = foodName;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.foodImage = foodImage;
+        this.isReview = isReview;
     }
 
     public OrderDetailDTO() {
+    }
+
+    public Boolean getReview() {
+        return isReview;
+    }
+
+    public void setReview(Boolean review) {
+        isReview = review;
     }
 
     public Long getId() {

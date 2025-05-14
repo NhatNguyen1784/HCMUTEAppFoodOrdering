@@ -14,4 +14,5 @@ public class OrderDetailDTO {
     private Integer quantity;
     private String foodImage;
     private Long foodId;
+    private Boolean isReview;
 }

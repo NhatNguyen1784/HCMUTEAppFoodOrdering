@@ -30,6 +30,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private OrderDetailAdapter adapter;
     private ArrayList<Long> listId;
     private Long orderId;
+    private Boolean isSuccessful = false;
     // Polling
     private Handler handler = new Handler();
     private Runnable pollingRunnable;
@@ -58,28 +59,21 @@ public class OrderDetailActivity extends AppCompatActivity {
         backOnclick();
     }
 
+    //Image btn back
     private void backOnclick() {
         binding.backImgVOrderDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);//animation
                 finish();
             }
         });
     }
 
+    //Next review activity
     private void reviewOrder() {
-        binding.btnReviewOrderDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                Intent intent = new Intent(OrderDetailActivity.this, OrderStatusActivity.class); //Thay thanh Review Activity
-                intent.putExtra("o_detail_id_list", listId);
-                startActivity(intent);
-                 */
-                Toast.makeText(OrderDetailActivity.this, listId.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        //Toast.makeText(OrderDetailActivity.this, listId.toString(), Toast.LENGTH_SHORT).show();
     }
 
     private void loadOrderDetail(Long orderId) {
@@ -92,21 +86,20 @@ public class OrderDetailActivity extends AppCompatActivity {
             if(response.getCode() == 200 && response.getResult()!=null){
                 OrderDetail oDetail = response.getResult();
                 if(oDetail.getOrderDetails() != null && oDetail.getTotalPrice()!=null){
+                    //Lay list orderdetaildto
                     List<OrderDetailDTO> orderDetailList = new ArrayList<>(oDetail.getOrderDetails());
-                    adapter = new OrderDetailAdapter(this, orderDetailList);
+                    //Lay list id orderDetail
                     listId = new ArrayList<>();
                     for (OrderDetailDTO o: orderDetailList) {
                         listId.add(o.getId());
                     }
-                    //set data
-                    binding.orderDetailRcv.setAdapter(adapter);
-                    binding.orderDetailRcv.setLayoutManager(new LinearLayoutManager(this));
-                    binding.orderDetailRcv.setAdapter(adapter);
+
                     binding.orDetailAddressTv.setText(oDetail.getFullAddress());
-                    binding.orDetailInforTv.setText(oDetail.getUserName()+" "+ oDetail.getPhoneNumber());
+                    binding.orDetailInforTv.setText("Người nhận: "+oDetail.getUserName()+"  SĐT: "+ oDetail.getPhoneNumber());
                     binding.orderDetailTotalBillTv.setText(String.format("Tổng đơn hàng: %,.0f đ",oDetail.getTotalPrice()));
                     binding.payOptionTv.setText("Thanh toán: "+oDetail.getPaymentOption());
                     binding.createdDateTv.setText("Thời gian đặt hàng: "+oDetail.getCreatedDate());
+                    //Status Pending
                     if(oDetail.getOrderStatus().equals("PENDING")){
                         binding.btnCancelOrder.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -119,9 +112,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 statusViewModel.cancelOrderByOrderId(orderId); // orderId truyền vào Fragment
                                                 Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng " + orderId, Toast.LENGTH_SHORT).show();
-
-
                                                 startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                                                //Xu ly them viec polling do 10 s voi realtime tu pending sang shipping
                                                 finish();
                                             }
                                         })
@@ -130,6 +122,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    //Status shipping
                     else if(oDetail.getOrderStatus().equals("SHIPPING")){
                         binding.detailOrderDetailTv.setText("Đơn của bạn đã được xác nhận. Vui lòng đợi quán nấu và giao tới!");
                         binding.statusOrderDetailTv.setText("Đã xác nhận đơn hàng");
@@ -139,9 +132,9 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.btnROD.setVisibility(View.GONE);
                         binding.btnNotCancelOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.GONE);
-                        binding.btnReviewOrderDetail.setVisibility(View.GONE);
                         binding.btnConfirmOrder.setVisibility(View.GONE);
                     }
+                    //Status Delivered
                     else if(oDetail.getOrderStatus().equals("DELIVERED")){
                         binding.detailOrderDetailTv.setText("Đơn đã giao thành công, bạn vui lòng xác nhận và đánh giá nhé!");
                         binding.statusOrderDetailTv.setText("Giao hàng thành công");
@@ -150,7 +143,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.btnROD.setVisibility(View.GONE);
                         binding.btnNotCancelOrderDetail.setVisibility(View.GONE);
                         binding.btnReorder.setVisibility(View.GONE);
-                        binding.btnReviewOrderDetail.setVisibility(View.GONE);
                         binding.btnConfirmOrder.setVisibility(View.VISIBLE);
 
                         binding.btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
@@ -162,24 +154,21 @@ public class OrderDetailActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    //Status successful
                     else if(oDetail.getOrderStatus().equals("SUCCESSFUL")) {
                         binding.detailOrderDetailTv.setText("Nếu cần hổ trợ thêm, bạn vui lòng truy cập và nhắn tin cho quán nhé!");
                         binding.statusOrderDetailTv.setText("Hoàn thành");
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_received);
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnConfirmOrder.setVisibility(View.GONE);
-                        /*
-                         * Neu da danh gia hien
-                         * binding.btnROD.setVisibility(View.VISIBLE);
-                         * binding.btnReviewOrderDetail.setVisibility(View.GONE);
-                         * */
+                        isSuccessful = true;
                         //chua danh gia
                         binding.btnCancelOrder.setVisibility(View.GONE);
                         binding.btnNotCancelOrderDetail.setVisibility(View.GONE);
                         binding.btnReorder.setVisibility(View.VISIBLE);
                         binding.btnROD.setVisibility(View.GONE);
-                        binding.btnReviewOrderDetail.setVisibility(View.VISIBLE);
                     }
+                    //Status cancel
                     else if(oDetail.getOrderStatus().equals("CANCELLED")){
                         binding.detailOrderDetailTv.setText("Nếu cần hổ trợ thêm, bạn vui lòng truy cập và nhắn tin cho quán nhé!");
                         binding.statusOrderDetailTv.setText("Đã hủy");
@@ -188,9 +177,12 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.btnROD.setVisibility(View.GONE);
                         binding.btnNotCancelOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.VISIBLE);
-                        binding.btnReviewOrderDetail.setVisibility(View.GONE);
                     }
+                    adapter = new OrderDetailAdapter(this, orderDetailList, isSuccessful);
 
+                    //set data
+                    binding.orderDetailRcv.setAdapter(adapter);
+                    binding.orderDetailRcv.setLayoutManager(new LinearLayoutManager(this));
                 }
             }
             else{

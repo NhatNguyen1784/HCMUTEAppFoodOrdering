@@ -40,6 +40,9 @@ public class OrderDetail {
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
     private Double price; //= Quantity * unitPrice
 
+    @Column(nullable = false)
+    private Boolean isReview = false;
+
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
     @NotNull(message = "Order cannot be null")
