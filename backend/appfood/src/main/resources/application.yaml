@@ -40,4 +40,14 @@ spring:
 server:
   port: 8081
 
+payment:
+  vnPay:
+    url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    tmnCode: 58X4B4HP
+    secretKey: VRLDWNVWDNPCOEPBZUTWSEDQAGXJCNGZ
+    returnUrl: http://localhost:8081/api/order/payment/vn-pay-callback
+    version: 2.1.0
+    command: pay
+    orderType: other
+
 

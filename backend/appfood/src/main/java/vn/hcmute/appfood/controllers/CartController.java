@@ -5,9 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.CartDTO;
 import vn.hcmute.appfood.dto.CartRequest;
-import vn.hcmute.appfood.dto.ApiResponse;
+import vn.hcmute.appfood.dto.response.ApiResponse;
 import vn.hcmute.appfood.dto.DeleteCartRequest;
-import vn.hcmute.appfood.entity.Cart;
 import vn.hcmute.appfood.services.Impl.CartService;
 
 @RestController

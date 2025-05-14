@@ -62,10 +62,9 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
                         intent.putExtra("foodName", item.getFoodName().toString().trim());
                         intent.putExtra("unitPrice", item.getUnitPrice());
                         intent.putExtra("foodImage", item.getFoodImage().trim());
-                        ((Activity) context).finish();
                         context.startActivity(intent);
+                        ((Activity) context).finish();
                     }
-
 //                    Toast.makeText(context, "Orderdetail id "+item.getId(), Toast.LENGTH_SHORT).show();
                 }
             });

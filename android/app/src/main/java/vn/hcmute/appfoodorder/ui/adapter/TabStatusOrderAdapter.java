@@ -65,6 +65,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
         else if(order.getOrderStatus().equals("CANCELLED")){
             holder.status.setText("Trạng thái: Đã hủy");
             holder.cancelTv.setVisibility(View.VISIBLE);
+            holder.deliveredTv.setVisibility(View.GONE);
             holder.supportBtn.setVisibility(View.VISIBLE);
             holder.ratingBtn.setVisibility(View.GONE);
         }
@@ -90,7 +91,8 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
                 if (pos != RecyclerView.NO_POSITION) {
                     OrderResponse clickedOrder = orders.get(pos);
                     Intent intent = new Intent(context, OrderDetailActivity.class);
-                    intent.putExtra("orderId", clickedOrder.getOrderId());
+                    intent.putExtra("orderId", (Long) (clickedOrder.getOrderId()));
+                    //Toast.makeText(context, clickedOrder.getOrderId().toString(), Toast.LENGTH_SHORT).show();
                     context.startActivity(intent);
                     if (context instanceof Activity) {
                         ((Activity) context).finish();

@@ -6,11 +6,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.hcmute.appfood.entity.OrderDetail;
 
-import java.util.Set;
+import java.util.List;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-    Set<OrderDetail> findByOrderId(Long orderId);
+    List<OrderDetail> findByOrderId(Long orderId);
 
     /**
      * Đếm số lượng đánh giá dựa vào foodId và trạng thái đơn hàng là SUCCESSFUL

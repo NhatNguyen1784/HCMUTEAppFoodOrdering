@@ -20,6 +20,7 @@ import vn.hcmute.appfoodorder.databinding.ActivityOrderBinding;
 import vn.hcmute.appfoodorder.model.dto.request.OrderDetailRequest;
 import vn.hcmute.appfoodorder.model.dto.request.OrderRequest;
 import vn.hcmute.appfoodorder.model.entity.CartItem;
+import vn.hcmute.appfoodorder.ui.activity.payment.PaymentVNPayActivity;
 import vn.hcmute.appfoodorder.ui.adapter.OrderReviewAdapter;
 import vn.hcmute.appfoodorder.ui.fragment.address.AddressBottomSheetFragment;
 import vn.hcmute.appfoodorder.utils.SessionManager;
@@ -143,7 +144,7 @@ public class OrderActivity extends AppCompatActivity {
     private void setupPaymentMethodSpinner() {
         List<String> paymentMethods = new ArrayList<>();
         paymentMethods.add("COD");
-        paymentMethods.add("ZALOPAY");
+        paymentMethods.add("VNPAY");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -160,7 +161,7 @@ public class OrderActivity extends AppCompatActivity {
                         .setTitle("Xác nhận đặt hàng")
                         .setMessage("Bạn có chắc muốn đặt hàng không?")
                         .setPositiveButton("Đồng ý",(dialog, which) -> {
-                        createOrder();
+                        submitOrder();
                         })
                         .setNegativeButton("Hủy", null)
                         .show();
@@ -171,45 +172,75 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-    private void createOrder() {
+    private void submitOrder() {
         String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
-        OrderRequest request = new OrderRequest();
+        OrderRequest request = buildOrderRequest();
         if (selectedPayment.equals("COD")) {
             request.setPaymentOption("COD");
-            request.setOrderStatus("PENDING");
-        } else {
-            request.setPaymentOption("ZALOPAY");
-            Toast.makeText(this, "Tạm thời chỉ hỗ trợ COD. Vui lòng chọn lại!", Toast.LENGTH_SHORT).show();
-            return;
         }
-        for (CartItem caI: cartList) {
-            OrderDetailRequest o = new OrderDetailRequest(caI.getFoodId(), caI.getFoodName(), caI.getUnitPrice(), caI.getQuantity(), caI.getFirstImageUrl());
-            orderDetailRequests.add(o);
+        else if(selectedPayment.equals("VNPAY")){
+            request.setPaymentOption("VNPAY");
         }
-        request.setOrderDetails(orderDetailRequests);
-        request.setEmail(email);
-        request.setDeliveryMethod(deliveryMethod);
-        request.setFullAddress(binding.tvAddress.getText().toString());
-
         orderViewModel.createOrder(request).observe(this, response -> {
             if (response.getCode() == 200) {
                 if(response.getResult() != null){
                     Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, OrderDetailActivity.class);
                     Long orderId = response.getResult();
-                    intent.putExtra("orderId", orderId);
-                    startActivity(intent);
+                    if (request.getPaymentOption().equals("VNPAY")) {
+                        long roundedTotal = ((long) Math.ceil(totalPrice / 1000)) * 1000;
+                        orderViewModel.createVNPayPayment(String.valueOf(roundedTotal), "NCB")
+                                .observe(this, vnPayResponse -> {
+                                    if (vnPayResponse != null && vnPayResponse.getData().getPaymentUrl() != null) {
+                                        Intent intent = new Intent(this, PaymentVNPayActivity.class);
+                                        intent.putExtra("orderId", orderId);
+                                        intent.putExtra("paymentUrl", vnPayResponse.getData().getPaymentUrl());
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(this, "Lỗi khi tạo thanh toán VNPAY", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                    }
+                    else {
+                        Intent intent = new Intent(this, OrderDetailActivity.class);
+                        intent.putExtra("orderId", orderId);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
                 else{
                     Toast.makeText(this, "Bạn đang có 1 đơn hàng chờ xử lý, không thể đặt thêm đơn khác!!!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, OrderStatusActivity.class));
                 }
-                finish();
             } else {
                 Toast.makeText(this, "Đặt hàng thất bại: " + response.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+
+
+    private OrderRequest buildOrderRequest() {
+        OrderRequest request = new OrderRequest();
+        for (CartItem caI: cartList) {
+            orderDetailRequests.add(new OrderDetailRequest(
+                    caI.getFoodId(),
+                    caI.getFoodName(),
+                    caI.getUnitPrice(),
+                    caI.getQuantity(),
+                    caI.getFirstImageUrl()
+            ));
+        }
+        request.setOrderDetails(orderDetailRequests);
+        request.setEmail(email);
+        request.setDeliveryMethod(deliveryMethod);
+        request.setFullAddress(binding.tvAddress.getText().toString());
+        request.setOrderStatus("PENDING");
+        return request;
+    }
+
 
     private void handleEvents() {
         binding.imgVBackOrder.setOnClickListener(v -> finish());

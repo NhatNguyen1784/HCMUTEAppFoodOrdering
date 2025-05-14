@@ -14,6 +14,7 @@ import vn.hcmute.appfood.services.IOrderDetailService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class OrderDetailService implements IOrderDetailService {
                 return orders;
             }
             User user = order.get().getUser();
-            Set<OrderDetail> orderDetail = orderDetailRepository.findByOrderId(orderId);
+            List<OrderDetail> orderDetail = orderDetailRepository.findByOrderId(orderId);
             if(orderDetail.isEmpty()){
                 throw new ResourceNotFoundException("Order not found with id: " + orderId);
             }

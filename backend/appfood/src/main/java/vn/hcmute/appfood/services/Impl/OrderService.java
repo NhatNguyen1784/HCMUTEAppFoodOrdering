@@ -94,7 +94,15 @@ public class OrderService implements IOrderService {
             double itemsTotal = orderDetails.stream()
                     .mapToDouble(OrderDetail::getPrice)
                     .sum();
-            double taxFee = itemsTotal * 0.1; //Tax
+            double taxFee = itemsTotal * 0.1;//Thue
+            double remainder = taxFee % 1000;//Lam tron thue
+
+            if (remainder >= 500) {
+                taxFee = Math.ceil(taxFee / 1000) * 1000;
+            } else {
+                taxFee = Math.floor(taxFee / 1000) * 1000;
+            }
+
             order.setTotalPrice(itemsTotal + taxFee + deliveryFee);
 
             // Tính tổng số lượng đơn hàng

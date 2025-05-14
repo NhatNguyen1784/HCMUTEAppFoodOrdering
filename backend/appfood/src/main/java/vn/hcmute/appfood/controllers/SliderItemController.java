@@ -3,7 +3,7 @@ package vn.hcmute.appfood.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.hcmute.appfood.dto.ApiResponse;
+import vn.hcmute.appfood.dto.response.ApiResponse;
 import vn.hcmute.appfood.dto.SliderDTO;
 import vn.hcmute.appfood.entity.SliderItem;
 import vn.hcmute.appfood.services.Impl.SliderService;

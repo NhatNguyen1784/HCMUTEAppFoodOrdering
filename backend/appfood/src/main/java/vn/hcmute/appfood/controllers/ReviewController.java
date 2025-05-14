@@ -5,13 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import vn.hcmute.appfood.dto.ApiResponse;
+import vn.hcmute.appfood.dto.response.ApiResponse;
 import vn.hcmute.appfood.dto.ReviewListResponse;
 import vn.hcmute.appfood.dto.ReviewRequest;
 import vn.hcmute.appfood.dto.ReviewResponse;
 import vn.hcmute.appfood.services.Impl.ReviewService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews") // http://localhost:8081/api/reviews

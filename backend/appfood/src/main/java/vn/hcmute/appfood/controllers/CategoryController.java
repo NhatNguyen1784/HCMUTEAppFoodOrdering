@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.hcmute.appfood.dto.ApiResponse;
+import vn.hcmute.appfood.dto.response.ApiResponse;
 import vn.hcmute.appfood.dto.CategoryDTO;
 import vn.hcmute.appfood.entity.Category;
 import vn.hcmute.appfood.services.Impl.CategoryService;

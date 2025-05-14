@@ -131,6 +131,13 @@ public class CartFragment extends Fragment {
                     // Mặc định pickup
                     double deliveryFee = 0;
                     double taxFee = subtotal * 0.1; // thuế 10%
+                    double remainder = taxFee % 1000;//Làm tròn
+
+                    if (remainder >= 500) {
+                        taxFee = Math.ceil(taxFee / 1000) * 1000;
+                    } else {
+                        taxFee = Math.floor(taxFee / 1000) * 1000;
+                    }
 
                     // Demo tổng số tiền trả trước, không tính phần Intent vì sẽ phim phạm bảo mật
                     double total = subtotal + deliveryFee + taxFee;
@@ -141,11 +148,12 @@ public class CartFragment extends Fragment {
                     tvFeeTax.setText(String.format("%,.0f đ", taxFee));
                     tvTotal.setText(String.format("%,.0f đ", total));
 
+                    double finalTaxFee = taxFee;
                     btnOrder.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), OrderActivity.class);
                         Bundle bundle = new Bundle(); // Xài Bundle thay putExtra vì các kiểu dữ liệu phức tạp
                         bundle.putDouble("subtotal", subtotal);
-                        bundle.putDouble("taxFee", taxFee);
+                        bundle.putDouble("taxFee", finalTaxFee);
                         bundle.putDouble("total", total);
                         // Truyền danh sách cart
                         bundle.putSerializable("cartList", new ArrayList<>(cartItems));
