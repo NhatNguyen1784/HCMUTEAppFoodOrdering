@@ -107,28 +107,29 @@ public class OrderDetailActivity extends AppCompatActivity {
                     binding.orderDetailTotalBillTv.setText(String.format("Tổng đơn hàng: %,.0f đ",oDetail.getTotalPrice()));
                     binding.payOptionTv.setText("Thanh toán: "+oDetail.getPaymentOption());
                     binding.createdDateTv.setText("Thời gian đặt hàng: "+oDetail.getCreatedDate());
-                    binding.btnCancelOrder.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new AlertDialog.Builder(OrderDetailActivity.this)
-                                    .setTitle("Xác nhận hủy đơn hàng")
-                                    .setMessage("Bạn có chắc muốn hủy đơn hàng này không?")
-                                    .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            statusViewModel.cancelOrderByOrderId(orderId); // orderId truyền vào Fragment
-                                            Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng " + orderId, Toast.LENGTH_SHORT).show();
+                    if(oDetail.getOrderStatus().equals("PENDING")){
+                        binding.btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new AlertDialog.Builder(OrderDetailActivity.this)
+                                        .setTitle("Xác nhận hủy đơn hàng")
+                                        .setMessage("Bạn có chắc muốn hủy đơn hàng này không?")
+                                        .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                statusViewModel.cancelOrderByOrderId(orderId); // orderId truyền vào Fragment
+                                                Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng " + orderId, Toast.LENGTH_SHORT).show();
 
 
-                                            startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
-                                        }
-                                    })
-                                    .setNegativeButton("Không", null)
-                                    .show();
-                        }
-                    });
-
-                    if(oDetail.getOrderStatus().equals("SHIPPING")){
+                                                startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                                            }
+                                        })
+                                        .setNegativeButton("Không", null)
+                                        .show();
+                            }
+                        });
+                    }
+                    else if(oDetail.getOrderStatus().equals("SHIPPING")){
                         binding.detailOrderDetailTv.setText("Đơn của bạn đã được xác nhận. Vui lòng đợi quán nấu và giao tới!");
                         binding.statusOrderDetailTv.setText("Đã xác nhận đơn hàng");
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_delivery);
@@ -138,16 +139,38 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.btnSupportOrderDetail.setVisibility(View.VISIBLE);
                         binding.btnReorder.setVisibility(View.GONE);
                         binding.btnReviewOrderDetail.setVisibility(View.GONE);
+                        binding.btnConfirmOrder.setVisibility(View.GONE);
                     }
                     else if(oDetail.getOrderStatus().equals("DELIVERED")){
+                        binding.detailOrderDetailTv.setText("Đơn đã giao thành công, bạn vui lòng xác nhận và đánh giá nhé!");
+                        binding.statusOrderDetailTv.setText("Giao hàng thành công");
+                        binding.imgStatusOrder.setImageResource(R.drawable.ic_delivered);
+                        binding.btnCancelOrder.setVisibility(View.GONE);
+                        binding.btnROD.setVisibility(View.GONE);
+                        binding.btnSupportOrderDetail.setVisibility(View.GONE);
+                        binding.btnReorder.setVisibility(View.GONE);
+                        binding.btnReviewOrderDetail.setVisibility(View.GONE);
+                        binding.btnConfirmOrder.setVisibility(View.VISIBLE);
+
+                        binding.btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                statusViewModel.confirmOrderByOrderId(orderId);
+                                Toast.makeText(OrderDetailActivity.this, "Đã nhận hàng thành công " + orderId, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
+                            }
+                        });
+                    }
+                    else if(oDetail.getOrderStatus().equals("SUCCESSFUL")) {
                         binding.detailOrderDetailTv.setText("Nếu cần hổ trợ thêm, bạn vui lòng truy cập và nhắn tin cho quán nhé!");
                         binding.statusOrderDetailTv.setText("Hoàn thành");
                         binding.imgStatusOrder.setImageResource(R.drawable.ic_received);
                         binding.btnCancelOrder.setVisibility(View.GONE);
+                        binding.btnConfirmOrder.setVisibility(View.GONE);
                         /*
-                        * Neu da danh gia hien
-                        * binding.btnROD.setVisibility(View.VISIBLE);
-                        * binding.btnReviewOrderDetail.setVisibility(View.GONE);
+                         * Neu da danh gia hien
+                         * binding.btnROD.setVisibility(View.VISIBLE);
+                         * binding.btnReviewOrderDetail.setVisibility(View.GONE);
                          * */
                         //chua danh gia
                         binding.btnCancelOrder.setVisibility(View.GONE);
@@ -182,7 +205,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 loadOrderDetail(orderId);//Call API
-                handler.postDelayed(this, 30_000); // Call lai sau 30s
+                handler.postDelayed(this, 15_000); // Call lai sau 15s
             }
         };
         handler.post(pollingRunnable);

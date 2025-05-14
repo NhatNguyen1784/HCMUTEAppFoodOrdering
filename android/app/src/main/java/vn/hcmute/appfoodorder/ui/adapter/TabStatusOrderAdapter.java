@@ -41,7 +41,7 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_pending, parent, false);
             return new TabViewHolder(view);
         } else if(isView == 1) {//item_order_delivered
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_delivered, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_successful, parent, false);
             return new TabViewHolder(view);
         }
         else {
@@ -69,7 +69,10 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             holder.ratingBtn.setVisibility(View.GONE);
         }
         else if(order.getOrderStatus().equals("DELIVERED")){
-            holder.status.setText("Trạng thái: Thành công");
+            holder.status.setText("Trạng thái: Giao thành công");
+        }
+        else if(order.getOrderStatus().equals("SUCCESSFUL")){
+            holder.status.setText("Trạng thái: Hoàn tất");
             holder.deliveredTv.setVisibility(View.VISIBLE);
         }
         holder.createdDate.setText(order.getCreatedDate());

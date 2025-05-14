@@ -26,4 +26,7 @@ public interface OrderApi {
 
     @PUT("order/{orderId}/cancel")
     Call<ApiResponse> cancelOrder(@Path("orderId") Long orderId);
+
+    @PUT("order/{orderId}/confirm")
+    Call<ApiResponse> confirmOrder(@Path("orderId") Long orderid);
 }

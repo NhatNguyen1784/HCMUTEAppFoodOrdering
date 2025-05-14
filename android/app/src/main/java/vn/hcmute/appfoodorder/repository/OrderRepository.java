@@ -102,4 +102,23 @@ public class OrderRepository {
         });
         return cancel;
     }
+
+    public LiveData<ApiResponse> confirmOrder(Long orderId){
+        MutableLiveData<ApiResponse> cancel = new MutableLiveData<>();
+        api.confirmOrder(orderId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    cancel.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable throwable) {
+                Log.d("Orders", "Netword error "+ throwable.getMessage());
+                cancel.setValue(new ApiResponse<>(500, "Network error "+ throwable, null));
+            }
+        });
+        return cancel;
+    }
 }

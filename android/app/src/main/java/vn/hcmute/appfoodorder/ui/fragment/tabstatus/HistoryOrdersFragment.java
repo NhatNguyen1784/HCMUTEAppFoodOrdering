@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +89,7 @@ public class HistoryOrdersFragment extends Fragment {
                     filteredList = orders; // Hiện tất cả
                 } else if (selected.equals("Hoàn thành")) {
                     for (OrderResponse order : orders) {
-                        if (order.getOrderStatus().equals("DELIVERED")) {
+                        if (order.getOrderStatus().equals("SUCCESSFUL")) {
                             filteredList.add(order);
                         }
                     }

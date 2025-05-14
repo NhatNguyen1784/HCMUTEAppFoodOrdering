@@ -53,9 +53,10 @@ public class OrderStatusActivity extends AppCompatActivity {
                     switch (order.getOrderStatus()) {
                         case "PENDING":
                         case "SHIPPING":
+                        case "DELIVERED":
                             pendingList.add(order);
                             break;
-                        case "DELIVERED":
+                        case "SUCCESSFUL":
                         case "CANCELLED":
                             historyList.add(order);
                             break;

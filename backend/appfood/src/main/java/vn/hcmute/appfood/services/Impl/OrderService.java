@@ -143,10 +143,58 @@ public class OrderService implements IOrderService {
             return false; // Đơn hàng không tồn tại
         }
         Order order = orderOptional.get();
-        if(order.getOrderStatus().equals(OrderStatus.CANCELLED)){
+        if(order.getOrderStatus().equals(OrderStatus.CANCELLED) || !order.getOrderStatus().equals(OrderStatus.PENDING)){
             return false;//Da o trang thai Cancel roi
         }
         order.setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+        return true;
+    }
+
+    @Override
+    public boolean confirmOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(!order.getOrderStatus().equals(OrderStatus.DELIVERED)){
+            return false;
+        }
+        order.setOrderStatus(OrderStatus.SUCCESSFUL);
+        orderRepository.save(order);
+        return true;
+    }
+
+    @Override
+    public boolean deliveredOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(!order.getOrderStatus().equals(OrderStatus.SHIPPING)){
+            return false;
+        }
+        order.setOrderStatus(OrderStatus.DELIVERED);
+        orderRepository.save(order);
+        return true;
+    }
+
+    @Override
+    public boolean shippingOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (!orderOptional.isPresent()) {
+            return false; // Đơn hàng không tồn tại
+        }
+        Order order = orderOptional.get();
+        if(!order.getOrderStatus().equals(OrderStatus.PENDING)){
+            return false;
+        }
+        order.setOrderStatus(OrderStatus.SHIPPING);
         orderRepository.save(order);
         return true;
     }

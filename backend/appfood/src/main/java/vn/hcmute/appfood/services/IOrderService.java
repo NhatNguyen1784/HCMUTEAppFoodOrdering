@@ -16,4 +16,10 @@ public interface IOrderService {
     long countByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
 
     boolean cancelOrder(Long orderId);
+
+    boolean confirmOrder(Long orderId);
+
+    boolean deliveredOrder(Long orderId);
+
+    boolean shippingOrder(Long orderId);
 }
