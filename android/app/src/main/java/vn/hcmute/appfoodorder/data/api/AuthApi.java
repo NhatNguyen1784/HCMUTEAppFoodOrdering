@@ -2,10 +2,15 @@ package vn.hcmute.appfoodorder.data.api;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
 import vn.hcmute.appfoodorder.model.dto.request.EmailRequest;
@@ -45,4 +50,11 @@ public interface AuthApi {
     // resend otp reset password
     @POST("auth/reset-password/resend-otp")
     Call<ApiResponse<ResetPasswordResponse>> resendOtpResetPassword(@Query("email") String email);
+
+    // update profile
+    @Multipart
+    @PUT("auth/update")
+    Call<ApiResponse<Object>> updateProfile(
+            @Part("userUpdate") RequestBody requestJson, // JSON của request
+            @Part() MultipartBody.Part image); // anh kem theo neu co
 }

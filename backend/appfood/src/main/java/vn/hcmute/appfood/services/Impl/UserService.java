@@ -2,9 +2,13 @@ package vn.hcmute.appfood.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vn.hcmute.appfood.dto.UserDTO;
+import vn.hcmute.appfood.dto.UserUpdateDTO;
+import vn.hcmute.appfood.entity.ReviewImage;
 import vn.hcmute.appfood.entity.Role;
 import vn.hcmute.appfood.entity.User;
+import vn.hcmute.appfood.exception.ResourceNotFoundException;
 import vn.hcmute.appfood.repository.RoleRepository;
 import vn.hcmute.appfood.repository.UserRepository;
 import vn.hcmute.appfood.services.IUserService;
@@ -18,6 +22,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private CloudinaryService uploadService;
 
     //Check login
     public boolean login(String email, String password) {
@@ -66,6 +73,25 @@ public class UserService implements IUserService {
         user.setPhone(userDTO.getPhone());
         user.setRole(role);
         user.setUrlImage(userDTO.getUrlImage());
+        userRepository.save(user);
+    }
+
+    public void updateUser(UserUpdateDTO dto, MultipartFile image) {
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with Email: " + dto.getEmail()));
+
+        Role role = roleRepository.findById(1);
+
+        user.setFullName(dto.getFullName());
+        user.setPhone(dto.getPhone());
+        user.setRole(role);
+        user.setAddress(dto.getAddress());
+
+        // xu ly anh upload kem theo (neu co)
+        if(image != null && !image.isEmpty()){
+                String imageUrl = uploadService.uploadImage(image);
+                user.setUrlImage(imageUrl);
+        }
         userRepository.save(user);
     }
 

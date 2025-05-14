@@ -2,6 +2,7 @@
 
     import androidx.lifecycle.ViewModelProvider;
 
+    import android.annotation.SuppressLint;
     import android.content.Intent;
     import android.os.Bundle;
 
@@ -20,10 +21,11 @@
     import vn.hcmute.appfoodorder.R;
     import vn.hcmute.appfoodorder.ui.activity.order.OrderStatusActivity;
     import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
+    import vn.hcmute.appfoodorder.ui.activity.user.UpdateProfileActivity;
     import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
     public class ProfileFragment extends Fragment {
-        private LinearLayout layoutLogout, layoutOrder;
+        private LinearLayout layoutLogout, layoutOrder, layoutEditProfile;
         private ProfileViewModel mViewModel;
         private View rootView;
         private TextView tvUNamePro, tvEmailUPro;
@@ -53,6 +55,30 @@
             userInfor();
             orderStatus();
 
+            updateProfile();
+
+        }
+
+        private void updateProfile() {
+            layoutEditProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mViewModel.getUserInfor().observe(getViewLifecycleOwner(), user -> {
+                        if (user != null) {
+                            Intent intent = new Intent(requireContext(), UpdateProfileActivity.class);
+                            // Truyền dữ liệu người dùng qua Intent
+                            intent.putExtra("email", user.getEmail());
+                            intent.putExtra("fullName", user.getFullName());
+                            intent.putExtra("phone", user.getPhone());
+                            intent.putExtra("address", user.getAddress());
+                            intent.putExtra("urlImage", user.getUrlImage());
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(requireContext(), "Không thể tải thông tin người dùng", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
         }
 
         private void orderStatus() {
@@ -93,6 +119,7 @@
             });
         }
 
+        @SuppressLint("WrongViewCast")
         private void mapping() {
             layoutLogout = rootView.findViewById(R.id.layoutLogout);
             tvEmailUPro = rootView.findViewById(R.id.txtEmailUPro);
@@ -100,6 +127,7 @@
             imgAUser = rootView.findViewById(R.id.imgAUser);
             imageBtnCart = rootView.findViewById(R.id.imgBtnCart);
             layoutOrder = rootView.findViewById(R.id.layoutOrder);
+            layoutEditProfile = rootView.findViewById(R.id.btnEditProfile);
         }
 
     }

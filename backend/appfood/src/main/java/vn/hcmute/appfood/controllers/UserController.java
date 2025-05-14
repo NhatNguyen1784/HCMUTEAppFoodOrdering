@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.hcmute.appfood.dto.*;
 import vn.hcmute.appfood.services.Impl.AddressService;
 import vn.hcmute.appfood.services.Impl.OtpService;
@@ -106,6 +107,20 @@ public class UserController {
         return ResponseEntity.badRequest().body(ApiResponse.error("OTP is incorrect",null));
     }
 
+    // update profile
+    // http://localhost:8081/api/auth/update
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestPart("userUpdate") UserUpdateDTO userDTO,
+                                        @RequestPart(value = "image", required = false) MultipartFile image) {
+        try {
+            userService.updateUser(userDTO, image);
+            return ResponseEntity.ok(ApiResponse.success("Cập nhật thông tin thành công", null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Lỗi khi cập nhật thông tin: " + e.getMessage());
+        }
+    }
+
+    // yeu cau reset mat khau
     @PostMapping("/reset-password/request")
     public ResponseEntity<?> requestResetPassword(@RequestBody ResetPasswordDTO request) {
         try{

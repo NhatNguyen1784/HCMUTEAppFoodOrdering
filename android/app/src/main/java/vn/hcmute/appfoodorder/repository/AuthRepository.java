@@ -5,6 +5,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -16,8 +21,10 @@ import vn.hcmute.appfoodorder.model.dto.request.EmailRequest;
 import vn.hcmute.appfoodorder.model.dto.request.LoginRequest;
 import vn.hcmute.appfoodorder.model.dto.request.RegisterRequest;
 import vn.hcmute.appfoodorder.model.dto.request.ResetPasswordRequest;
+import vn.hcmute.appfoodorder.model.dto.request.UserUpdateDTO;
 import vn.hcmute.appfoodorder.model.dto.request.VerifyResetPasswordRequest;
 import vn.hcmute.appfoodorder.model.dto.response.ResetPasswordResponse;
+import vn.hcmute.appfoodorder.model.dto.response.ReviewResponse;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.utils.Resource;
 
@@ -218,6 +225,54 @@ public class AuthRepository {
         });
 
         return resultLiveData;
+    }
+
+    // Update Profile
+    public LiveData<Resource<Object>> updateProfile(UserUpdateDTO dto, File imgFile){
+        MutableLiveData<Resource<Object>> resultLiveData = new MutableLiveData<>();
+
+        // Convert JSON reviewRequest thành RequestBody
+        String requestJson = gson.toJson(dto);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), requestJson);
+
+        // Xử lý hình ảnh (nếu có)
+        MultipartBody.Part imagePart = null;
+        if (imgFile != null) {
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), imgFile);
+            imagePart = MultipartBody.Part.createFormData("image", imgFile.getName(), fileBody);
+        }
+
+        authApi.updateProfile(requestBody, imagePart).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    ApiResponse<Object> apiResult = response.body();
+                    if (apiResult.getCode() == 200){
+                        resultLiveData.postValue(Resource.success(apiResult.getResult()));
+                    }
+                    else {
+                        resultLiveData.postValue(Resource.error("ERROR code: " + apiResult.getCode(), apiResult.getResult()));
+                    }
+                }
+                else {
+                    // xu li loi tu response
+                    String errorMessage =  "Unknown error occurred";
+                    if(response.errorBody() != null){
+                        ApiErrorResponse errorResponse = gson.fromJson(response.errorBody().charStream(), ApiErrorResponse.class);
+                        errorMessage = errorResponse.getMessage();
+                    }
+                    resultLiveData.postValue(Resource.error(errorMessage, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable throwable) {
+                resultLiveData.postValue(Resource.error("Network error: " + throwable.getMessage(), null));
+            }
+        });
+
+        return resultLiveData;
+
     }
 
 }
