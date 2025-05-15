@@ -1,6 +1,9 @@
 package vn.hcmute.appfoodorder.ui.activity;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,8 +32,10 @@ import vn.hcmute.appfoodorder.model.dto.response.ReviewResponse;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.model.entity.Food;
 import vn.hcmute.appfoodorder.model.entity.FoodImage;
+import vn.hcmute.appfoodorder.ui.activity.user.LoginActivity;
 import vn.hcmute.appfoodorder.ui.adapter.ImageFoodSliderAdapter;
 import vn.hcmute.appfoodorder.ui.adapter.ReviewAdapter;
+import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.FoodDetailViewModel;
 import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
@@ -50,6 +55,8 @@ public class FoodDetailActivity extends AppCompatActivity {
     private ReviewViewModel reviewViewModel;
     private RecyclerView rcvReview;
     private ReviewAdapter reviewAdapter;
+
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,23 +81,31 @@ public class FoodDetailActivity extends AppCompatActivity {
         btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // lay thong tin mon an
-                Food food = foodDetailViewModel.getFood().getValue();
 
-                if (food != null){
-                    CartRequest request = new CartRequest();
-                    getCurrentUser(user -> {
-                        String email = user.getEmail();
-                        request.setEmail(email);
-                    });
-                    // JWT thi fix
-                    request.setFoodId(food.getId());
-                    int quantity = Integer.parseInt(tvQuantity.getText().toString());
-                    request.setQuantity(quantity);
-
-                    cartViewModel.addItemToCart(request);
-                    Toast.makeText(getApplicationContext(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                // kiem tra nguoi dung co dang nhap chua
+                if(!session.isLogin()){
+                    showLoginDialog();
                 }
+                else{
+                    // lay thong tin mon an
+                    Food food = foodDetailViewModel.getFood().getValue();
+
+                    if (food != null){
+                        CartRequest request = new CartRequest();
+                        getCurrentUser(user -> {
+                            String email = user.getEmail();
+                            request.setEmail(email);
+                        });
+                        // JWT thi fix
+                        request.setFoodId(food.getId());
+                        int quantity = Integer.parseInt(tvQuantity.getText().toString());
+                        request.setQuantity(quantity);
+
+                        cartViewModel.addItemToCart(request);
+                        Toast.makeText(getApplicationContext(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
         });
 
@@ -131,6 +146,20 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void showLoginDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Login Required")
+                .setMessage("You need to log in to view your profile.")
+                .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(FoodDetailActivity.this, LoginActivity.class));
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
     private double totalPrice(int quantity, double unitPrice){
         double totalPrice = quantity * unitPrice;
         return totalPrice;
@@ -153,6 +182,8 @@ public class FoodDetailActivity extends AppCompatActivity {
     }
 
     private void setupViewModel() {
+
+        session = new SessionManager(this);
 
         // khoi tao viewmodel
         foodDetailViewModel = new ViewModelProvider(this).get(FoodDetailViewModel.class);

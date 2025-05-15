@@ -116,7 +116,6 @@ public class OrderService implements IOrderService {
 
             // xoa cac item trong cart
             cartRepository.delete(cart);
-            cartRepository.save(cart);
 
             return savedOrder.getId();
         }
