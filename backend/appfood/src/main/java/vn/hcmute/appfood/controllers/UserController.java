@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.hcmute.appfood.dto.*;
 import vn.hcmute.appfood.dto.response.ApiResponse;
+import vn.hcmute.appfood.security.JwtTokenUtil;
 import vn.hcmute.appfood.services.Impl.AddressService;
 import vn.hcmute.appfood.services.Impl.OtpService;
 import vn.hcmute.appfood.services.Impl.UserService;
@@ -38,6 +39,9 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
 
     //API đăng nhập
     @PostMapping("/login")
@@ -45,7 +49,7 @@ public class UserController {
         try{
             String email = loginDTO.getEmail();
             String password = loginDTO.getPassword();
-/*
+            /*
             boolean isLoginSuccessful = userService.login(email, password);
             if (isLoginSuccessful) {
                 UserDTO userDTO = userService.findByEmail(email);
@@ -54,13 +58,16 @@ public class UserController {
             } else {
                 return ResponseEntity.badRequest().body(ApiResponse.error("Login failed", null));
             }*/
-
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            // Ở đây có thể tạo JWT token gửi về nếu bạn dùng JWT
+
+            // Tạo token JWT
+            String token = jwtTokenUtil.generateToken(loginDTO.getEmail());
+
             UserDTO userDTO = userService.findByEmail(loginDTO.getEmail());
+            userDTO.setToken(token);
             userDTO.setPassword("");
             return ResponseEntity.ok(ApiResponse.success("Login Successful", userDTO));
         }
@@ -119,7 +126,7 @@ public class UserController {
             String phone = otpRequest.getInfUser().getPhone();
             String address = otpRequest.getInfUser().getAddress();
             String fullName = otpRequest.getInfUser().getFullName();
-            UserDTO userDTO = new UserDTO(email, password, fullName, phone, address, "https://res.cloudinary.com/demec8nev/image/upload/v1745039879/default_avatar_r7xkiv.png");
+            UserDTO userDTO = new UserDTO(email, password, fullName, phone, address, "https://res.cloudinary.com/demec8nev/image/upload/v1745039879/default_avatar_r7xkiv.png", null);
             userService.saveUser(userDTO);
             return ResponseEntity.ok(ApiResponse.success("OTP verified", null));
         }

@@ -21,7 +21,7 @@ public class AppFoodApplication {
 		return args -> {
 			System.out.println("Checking for existing roles...");
 			if(roleRepository.count() == 0) {
-				roleRepository.save(new Role(null, "RESTAURANT_OWNER", null));
+				roleRepository.save(new Role(null, "ADMIN", null));
 				roleRepository.save(new Role(null, "USER",null));
 			}
 			else {

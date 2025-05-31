@@ -17,6 +17,8 @@ public class UserResponse {
     @SerializedName("urlImage")
     private String urlImage;
 
+    private String token;
+
     public String getEmail() {
         return email;
     }
@@ -39,5 +41,9 @@ public class UserResponse {
 
     public String getUrlImage() {
         return urlImage;
+    }
+
+    public String getToken() {
+        return token;
     }
 }
