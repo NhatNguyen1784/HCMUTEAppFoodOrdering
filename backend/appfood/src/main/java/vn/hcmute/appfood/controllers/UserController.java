@@ -3,6 +3,10 @@ package vn.hcmute.appfood.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.hcmute.appfood.dto.*;
@@ -31,13 +35,17 @@ public class UserController {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
     //API đăng nhập
     @PostMapping("/login")
     public ResponseEntity<?> loginAccount(@RequestBody LoginDTO loginDTO) {
         try{
             String email = loginDTO.getEmail();
             String password = loginDTO.getPassword();
-
+/*
             boolean isLoginSuccessful = userService.login(email, password);
             if (isLoginSuccessful) {
                 UserDTO userDTO = userService.findByEmail(email);
@@ -45,10 +53,20 @@ public class UserController {
                 return ResponseEntity.ok(ApiResponse.success("Login Successful", userDTO));
             } else {
                 return ResponseEntity.badRequest().body(ApiResponse.error("Login failed", null));
-            }
+            }*/
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Ở đây có thể tạo JWT token gửi về nếu bạn dùng JWT
+            UserDTO userDTO = userService.findByEmail(loginDTO.getEmail());
+            userDTO.setPassword("");
+            return ResponseEntity.ok(ApiResponse.success("Login Successful", userDTO));
         }
         catch(Exception e){
             e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return ResponseEntity.badRequest().body(ApiResponse.error("Login failed",null));
     }

@@ -23,7 +23,7 @@ spring:
     port: 587
     username: nd2004lk13@gmail.com
 
-    password: yxqb kgdi zrpp mpmn
+    password: ztcd vzll hrhv gmbe
     default-encoding: UTF-8
     properties:
       mail.smtp.auth: true
