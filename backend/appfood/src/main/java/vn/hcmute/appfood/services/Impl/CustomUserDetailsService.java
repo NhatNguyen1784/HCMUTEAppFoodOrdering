@@ -1,5 +1,6 @@
 package vn.hcmute.appfood.services.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import vn.hcmute.appfood.repository.UserRepository;
 import java.util.List;
 
 @Service
+@Transactional //để đảm bảo session còn hoạt động khi truy cập lazy field
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;

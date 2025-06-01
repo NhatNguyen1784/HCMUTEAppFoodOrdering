@@ -1,7 +1,6 @@
 package vn.hcmute.appfoodorder.repository;
 
 import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;

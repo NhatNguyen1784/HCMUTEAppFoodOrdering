@@ -30,6 +30,7 @@ import vn.hcmute.appfoodorder.model.entity.Cart;
 import vn.hcmute.appfoodorder.model.entity.CartItem;
 import vn.hcmute.appfoodorder.ui.activity.order.OrderActivity;
 import vn.hcmute.appfoodorder.ui.adapter.CartAdapter;
+import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.CartViewModel;
 import vn.hcmute.appfoodorder.viewmodel.ProfileViewModel;
 
@@ -89,25 +90,18 @@ public class CartFragment extends Fragment {
 
     private void deleteCartItem(CartItem item){
         DeleteCartRequest request = new DeleteCartRequest();
-        getCurrentUser(user -> {
-            String email = user.getEmail();
-            request.setEmail(email);
-            request.setFoodId(item.getFoodId());
-
-            cartViewModel.deleteCartItem(request);
-        });
+        request.setFoodId(item.getFoodId());
+        String token = new SessionManager(getContext()).getAuthHeader();
+        cartViewModel.deleteCartItem(token, request);
 
     }
 
     private void updateCartItem(CartItem item){
         CartRequest request = new CartRequest();
-        getCurrentUser(user -> {
-            String email = user.getEmail();
-            request.setEmail(email);
-            request.setFoodId(item.getFoodId());
-            request.setQuantity(item.getQuantity());
-            cartViewModel.updateCartItem(request);
-        });
+        String token = new SessionManager(getContext()).getAuthHeader();
+        request.setFoodId(item.getFoodId());
+        request.setQuantity(item.getQuantity());
+        cartViewModel.updateCartItem(token, request);
     }
 
     private void getMyCart() {
@@ -115,7 +109,8 @@ public class CartFragment extends Fragment {
 
         getCurrentUser(user -> {
             String email = user.getEmail();
-            cartViewModel.getMyCart(email);
+            String authHeader = new SessionManager(getContext()).getAuthHeader();
+            cartViewModel.getMyCart(authHeader);
         });
 
         cartViewModel.getCartLiveData().observe(getViewLifecycleOwner(), new Observer<Cart>() {

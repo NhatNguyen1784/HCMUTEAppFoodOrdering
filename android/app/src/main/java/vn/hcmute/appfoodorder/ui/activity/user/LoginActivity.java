@@ -74,10 +74,13 @@ public class LoginActivity extends AppCompatActivity {
             if (response != null) {
                 if (response.getCode() == 200) {
                     SessionManager session = new SessionManager(LoginActivity.this);
+                    String token = response.getResult().getToken();
                     String email = loginViewModel.email.getValue();
                     UserResponse user = response.getResult();
                     session.saveLoginSession(email);
                     session.saveUserInfor(user);
+                    session.saveToken(token);
+                    Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);

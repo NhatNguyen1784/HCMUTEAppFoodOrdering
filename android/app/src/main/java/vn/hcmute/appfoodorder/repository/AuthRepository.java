@@ -51,7 +51,7 @@ public class AuthRepository {
             @Override
             public void onResponse(Call<ApiResponse<UserResponse>> call, Response<ApiResponse<UserResponse>> response) {
                 if(response.isSuccessful() && response.body()!=null){
-                    data.postValue(response.body());
+                    data.setValue(response.body());
                 }
                 else
                     data.postValue(new ApiResponse<>(500,"Login fail",null));

@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private void getNumberCartItem() {
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         if(session.isLogin()){
-            String email = session.getUserInfor().getEmail();
-            cartViewModel.getMyCart(email);
+            //String email = session.getUserInfor().getEmail();
+            String authHeader = new SessionManager(MainActivity.this).getAuthHeader();
+            cartViewModel.getMyCart(authHeader);
         }
 
         cartViewModel.getCartLiveData().observe(this, cart -> {

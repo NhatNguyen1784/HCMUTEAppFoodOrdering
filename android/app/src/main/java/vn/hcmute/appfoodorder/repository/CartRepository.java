@@ -36,10 +36,10 @@ public class CartRepository {
         return instance;
     }
 
-    public LiveData<Resource<Cart>> addItemToCart(CartRequest request){
+    public LiveData<Resource<Cart>> addItemToCart(String token, CartRequest request){
         MutableLiveData<Resource<Cart>> resultLiveData = new MutableLiveData<>();
 
-        cartApi.addItemToCart(request).enqueue(new Callback<ApiResponse<Cart>>() {
+        cartApi.addItemToCart(token, request).enqueue(new Callback<ApiResponse<Cart>>() {
             @Override
             public void onResponse(Call<ApiResponse<Cart>> call, Response<ApiResponse<Cart>> response) {
                 if (response.isSuccessful() && response.body() != null){
@@ -71,10 +71,10 @@ public class CartRepository {
         return resultLiveData;
     }
 
-    public LiveData<Resource<Cart>> updateCartItem(CartRequest request){
+    public LiveData<Resource<Cart>> updateCartItem(String token, CartRequest request){
         MutableLiveData<Resource<Cart>> resultLiveData = new MutableLiveData<>();
 
-        cartApi.updateCartItem(request).enqueue(new Callback<ApiResponse<Cart>>() {
+        cartApi.updateCartItem(token, request).enqueue(new Callback<ApiResponse<Cart>>() {
             @Override
             public void onResponse(Call<ApiResponse<Cart>> call, Response<ApiResponse<Cart>> response) {
                 if (response.isSuccessful() && response.body() != null){
@@ -106,10 +106,10 @@ public class CartRepository {
         return resultLiveData;
     }
 
-    public LiveData<Resource<Cart>> deleteCartItem(DeleteCartRequest request){
+    public LiveData<Resource<Cart>> deleteCartItem(String token, DeleteCartRequest request){
         MutableLiveData<Resource<Cart>> resultLiveData = new MutableLiveData<>();
 
-        cartApi.deleteCartItem(request).enqueue(new Callback<ApiResponse<Cart>>() {
+        cartApi.deleteCartItem(token, request).enqueue(new Callback<ApiResponse<Cart>>() {
             @Override
             public void onResponse(Call<ApiResponse<Cart>> call, Response<ApiResponse<Cart>> response) {
                 if (response.isSuccessful() && response.body() != null){
@@ -141,10 +141,10 @@ public class CartRepository {
         return resultLiveData;
     }
 
-    public LiveData<Resource<Cart>> getMyCart(String request){
+    public LiveData<Resource<Cart>> getMyCart(String authHeader){
         MutableLiveData<Resource<Cart>> resultLiveData = new MutableLiveData<>();
 
-        cartApi.getMyCart(request).enqueue(new Callback<ApiResponse<Cart>>() {
+        cartApi.getMyCart(authHeader).enqueue(new Callback<ApiResponse<Cart>>() {
             @Override
             public void onResponse(Call<ApiResponse<Cart>> call, Response<ApiResponse<Cart>> response) {
                 if (response.isSuccessful() && response.body() != null){

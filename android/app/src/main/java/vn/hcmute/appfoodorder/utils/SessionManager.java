@@ -26,6 +26,25 @@ public class SessionManager {
         editor.apply();
     }
 
+    //Save token
+    public void saveToken(String token) {
+        editor.putString(KEY_TOKEN, token);
+        editor.apply();
+    }
+
+    //Get token
+    private String getToken() {
+        return sharedPreferences.getString(KEY_TOKEN, null);
+    }
+    public String getAuthHeader() {
+        String token = getToken();
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
+        return "Bearer " + token;
+    }
+
+
     //Clear
     public void cleanSesion(){
         editor.clear();

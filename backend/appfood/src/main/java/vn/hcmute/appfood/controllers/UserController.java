@@ -15,7 +15,6 @@ import vn.hcmute.appfood.security.JwtTokenUtil;
 import vn.hcmute.appfood.services.Impl.AddressService;
 import vn.hcmute.appfood.services.Impl.OtpService;
 import vn.hcmute.appfood.services.Impl.UserService;
-
 import java.util.List;
 import java.time.Duration;
 import java.util.regex.Pattern;
@@ -58,6 +57,10 @@ public class UserController {
             } else {
                 return ResponseEntity.badRequest().body(ApiResponse.error("Login failed", null));
             }*/
+
+            if(!userService.existsByEmail(email)) {
+                return ResponseEntity.badRequest().body(ApiResponse.error("Email not exist",null));
+            }
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
@@ -69,7 +72,7 @@ public class UserController {
             UserDTO userDTO = userService.findByEmail(loginDTO.getEmail());
             userDTO.setToken(token);
             userDTO.setPassword("");
-            return ResponseEntity.ok(ApiResponse.success("Login Successful", userDTO));
+            return ResponseEntity.ok(ApiResponse.success("Login successful", userDTO));
         }
         catch(Exception e){
             e.printStackTrace();

@@ -92,16 +92,11 @@ public class FoodDetailActivity extends AppCompatActivity {
 
                     if (food != null){
                         CartRequest request = new CartRequest();
-                        getCurrentUser(user -> {
-                            String email = user.getEmail();
-                            request.setEmail(email);
-                        });
-                        // JWT thi fix
                         request.setFoodId(food.getId());
                         int quantity = Integer.parseInt(tvQuantity.getText().toString());
                         request.setQuantity(quantity);
-
-                        cartViewModel.addItemToCart(request);
+                        String token = new SessionManager(FoodDetailActivity.this).getAuthHeader();
+                        cartViewModel.addItemToCart(token, request);
                         Toast.makeText(getApplicationContext(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -170,7 +165,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         viewpager2.setAdapter(foodSliderAdapter);
         dotsIndicator.setViewPager2(viewpager2);
     }
-
+/*
     private void getCurrentUser(Consumer<UserResponse> callback) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         profileViewModel.init(getApplicationContext());
@@ -180,6 +175,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             }
         });
     }
+ */
 
     private void setupViewModel() {
 

@@ -20,8 +20,8 @@ public class CartViewModel extends ViewModel {
         cartRepository = CartRepository.getInstance();
     }
 
-    public void addItemToCart(CartRequest request){
-        cartRepository.addItemToCart(request).observeForever(new Observer<Resource<Cart>>() {
+    public void addItemToCart(String token, CartRequest request){
+        cartRepository.addItemToCart(token, request).observeForever(new Observer<Resource<Cart>>() {
             @Override
             public void onChanged(Resource<Cart> cartResource) {
                 cartLiveData.setValue(cartResource.getData());
@@ -29,8 +29,8 @@ public class CartViewModel extends ViewModel {
         });
     }
 
-    public void updateCartItem(CartRequest request){
-        cartRepository.updateCartItem(request).observeForever(new Observer<Resource<Cart>>() {
+    public void updateCartItem(String token, CartRequest request){
+        cartRepository.updateCartItem(token, request).observeForever(new Observer<Resource<Cart>>() {
             @Override
             public void onChanged(Resource<Cart> cartResource) {
                 cartLiveData.setValue(cartResource.getData());
@@ -38,8 +38,8 @@ public class CartViewModel extends ViewModel {
         });
     }
 
-    public void deleteCartItem(DeleteCartRequest request){
-        cartRepository.deleteCartItem(request).observeForever(new Observer<Resource<Cart>>() {
+    public void deleteCartItem(String token, DeleteCartRequest request){
+        cartRepository.deleteCartItem(token, request).observeForever(new Observer<Resource<Cart>>() {
             @Override
             public void onChanged(Resource<Cart> cartResource) {
                 cartLiveData.setValue(cartResource.getData());
@@ -47,8 +47,8 @@ public class CartViewModel extends ViewModel {
         });
     }
 
-    public void getMyCart(String request){
-        cartRepository.getMyCart(request).observeForever(new Observer<Resource<Cart>>() {
+    public void getMyCart(String authHeader){
+        cartRepository.getMyCart(authHeader).observeForever(new Observer<Resource<Cart>>() {
             @Override
             public void onChanged(Resource<Cart> cartResource) {
                 cartLiveData.setValue(cartResource.getData());

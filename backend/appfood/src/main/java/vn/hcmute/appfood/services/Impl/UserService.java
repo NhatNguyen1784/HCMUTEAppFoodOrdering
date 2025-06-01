@@ -1,9 +1,6 @@
 package vn.hcmute.appfood.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +12,6 @@ import vn.hcmute.appfood.exception.ResourceNotFoundException;
 import vn.hcmute.appfood.repository.RoleRepository;
 import vn.hcmute.appfood.repository.UserRepository;
 import vn.hcmute.appfood.services.IUserService;
-import java.util.Collections;
 import java.util.Optional;
 
 
@@ -46,6 +42,10 @@ public class UserService implements IUserService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     //Find user by email
