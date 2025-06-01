@@ -15,8 +15,8 @@ public class OrderViewModel extends ViewModel {
     public OrderViewModel() {
         orderRepository = new OrderRepository();
     }
-    public LiveData<ApiResponse<Long>> createOrder(OrderRequest request) {
-        return orderRepository.createOrder(request);
+    public LiveData<ApiResponse<Long>> createOrder(String token, OrderRequest request) {
+        return orderRepository.createOrder(token, request);
     }
 
     public LiveData<ResponseObject<VNPayResponse>> createVNPayPayment(String amount, String bankCode) {

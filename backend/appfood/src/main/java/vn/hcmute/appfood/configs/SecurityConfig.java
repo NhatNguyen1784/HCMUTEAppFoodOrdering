@@ -24,7 +24,10 @@
         private JwtAuthenticationFilter jwtAuthenticationFilter;
 
         private static final List<String> PUBLIC_ENDPOINT = List.of("/api/auth/**", "/api/reviews/product", "/api/order/payment/vn-pay-callback",
-                "/api/foods/**", "/api/categories/**", "/api/cart/**");
+                "/api/foods/**", "/api/categories/**", "/api/cart/**",
+                "/api/order/*/shipping", "/api/order/*/delivered"//Này để test nên để public chứ admin
+                , "/api/auth/user/shipping-address", "/api/order/payment/vn-pay" //Này tính sau
+                );
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,8 +35,8 @@
                     .authorizeHttpRequests(auth -> auth
                             //Phân quyền
                             .requestMatchers("/api/slider/**", "/api/foods/add", "/api/foods/update/*", "/api/categories/add", "/api/categories/update/*").hasRole("ADMIN")
-                            .requestMatchers("/api/reviews/submit", "/api/order/create-order", "/api/order/*/details", "/api/order", "/api/order/*/shipping", "/api/order/*/delivered", "/api/order/*/confirm",
-                                    "/api/order/*/cancel", "/api/order/payment/vn-pay", "/api/cart/get", "/api/cart/add", "/api/cart/update", "/api/cart/delete", "/api/auth/user/shipping-address").hasAnyRole("ADMIN", "USER")
+                            .requestMatchers("/api/reviews/submit", "/api/order/create-order", "/api/order/*/details", "/api/order",  "/api/order/*/confirm",
+                                    "/api/order/*/cancel",  "/api/cart/get", "/api/cart/add", "/api/cart/update", "/api/cart/delete").hasAnyRole("ADMIN", "USER")
                             // Cho phép truy cập công khai các endpoint
                             .requestMatchers(PUBLIC_ENDPOINT.toArray(new String[0])).permitAll()
                             //Còn lại cần xac thuc

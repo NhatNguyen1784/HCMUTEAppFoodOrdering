@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import vn.hcmute.appfood.dto.*;
 import vn.hcmute.appfood.dto.response.ApiResponse;
@@ -11,6 +13,7 @@ import vn.hcmute.appfood.dto.response.ResponseObject;
 import vn.hcmute.appfood.services.Impl.OrderDetailService;
 import vn.hcmute.appfood.services.Impl.OrderService;
 import vn.hcmute.appfood.services.Impl.PaymentService;
+import vn.hcmute.appfood.services.Impl.UserService;
 
 import java.util.List;
 
@@ -27,11 +30,15 @@ public class OrderController {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private UserService userService;
+
     //Create order (1 user max 2 order Pending + Shipping)
     //http://localhost:8081/api/order/create-order
     @PostMapping("/create-order")
     public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
         try{
+            orderDTO.setEmail(SecurityContextHolder.getContext().getAuthentication().getName());
             Long orderId = orderService.createOrder(orderDTO);
             if(orderId != null) {
                 return ResponseEntity.ok(ApiResponse.success("Order created successfully", orderId));
@@ -50,12 +57,23 @@ public class OrderController {
     @GetMapping("/{orderId}/details")
     public ResponseEntity<?> getOrderDetails(@PathVariable Long orderId) {
         try{
+            // Lấy email người dùng đang đăng nhập từ JWT (SecurityContext)
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+            String userEmail = orderService.findEmailByOrderId(orderId);
             OrderDetailResponseDTO o = orderDetailService.findByOrderId(orderId);
+
+            if(!userEmail.equals(currentEmail)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("Order not found", null));
+            }
+
             if(o.getTotalPrice() != null && o.getOrderDetails() != null) {
                 return ResponseEntity.ok(ApiResponse.success("Order details retrieved successfully", o));
             }
             else{
-                return ResponseEntity.ok(ApiResponse.error("Order details retrieved fail", null));
+                return ResponseEntity.badRequest()
+                        .body(ApiResponse.error("Order details retrieval failed", null));
             }
         }
         catch (Exception ex){
@@ -67,7 +85,8 @@ public class OrderController {
     //Get all order by email
     //http://localhost:8081/api/order?email=nd2004lk13@gmail.com
     @GetMapping
-    public ResponseEntity<?> getOrdersByUserEmail(@RequestParam String email) {
+    public ResponseEntity<?> getOrdersByUserEmail() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         List<OrderResponse> order = orderService.getOrdersByUserEmail(email);
         if(order != null) {
             return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", order));
@@ -105,6 +124,15 @@ public class OrderController {
     //http://localhost:8081/api/order/1/confirm
     @PutMapping("/{orderId}/confirm")
     public ResponseEntity<?> confirmOrder(@PathVariable Long orderId) {
+        // Lấy email người dùng đang đăng nhập từ JWT (SecurityContext)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = authentication.getName();
+        String userEmail = orderService.findEmailByOrderId(orderId);
+
+        if(!userEmail.equals(currentEmail)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error("Order not found", null));
+        }
         boolean check = orderService.confirmOrder(orderId);
         if(check) {
             return ResponseEntity.ok(ApiResponse.success("Order confirm successfully"));
@@ -117,6 +145,15 @@ public class OrderController {
     //http://localhost:8081/api/order/1/cancel
     @PutMapping("/{orderId}/cancel")
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
+        // Lấy email người dùng đang đăng nhập từ JWT (SecurityContext)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = authentication.getName();
+        String userEmail = orderService.findEmailByOrderId(orderId);
+
+        if(!userEmail.equals(currentEmail)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error("Order not found", null));
+        }
         boolean check = orderService.cancelOrder(orderId);
         if(check) {
             return ResponseEntity.ok(ApiResponse.success("Order cancelled successfully"));

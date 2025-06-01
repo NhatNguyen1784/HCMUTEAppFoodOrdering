@@ -22,9 +22,9 @@ public class AddressRepository {
         api = RetrofitClient.getRetrofit().create(AuthApi.class);
     }
 
-    public LiveData<ApiResponse<List<String>>> getAddressShipping(String email){
+    public LiveData<ApiResponse<List<String>>> getAddressShipping(String token){
         MutableLiveData<ApiResponse<List<String>>> addresses = new MutableLiveData<>();
-        api.getAllAddresses(email).enqueue(new Callback<ApiResponse<List<String>>>() {
+        api.getAllAddresses(token).enqueue(new Callback<ApiResponse<List<String>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<String>>> call, Response<ApiResponse<List<String>>> response) {
                 if(response.isSuccessful() && response.body() != null){

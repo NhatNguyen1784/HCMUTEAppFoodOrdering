@@ -43,7 +43,7 @@ public class ReviewRepository {
         return instance;
     }
 
-    public LiveData<Resource<ReviewResponse>> submitReview(ReviewRequest request, List<File> imageFiles){
+    public LiveData<Resource<ReviewResponse>> submitReview(String token, ReviewRequest request, List<File> imageFiles){
         MutableLiveData<Resource<ReviewResponse>> resultLiveData = new MutableLiveData<>();
 
         // Convert JSON reviewRequest thành RequestBody
@@ -59,7 +59,7 @@ public class ReviewRepository {
             imageParts.add(part);
         }
 
-        reviewApi.submitReview(reviewBody, imageParts).enqueue(new Callback<ApiResponse<ReviewResponse>>() {
+        reviewApi.submitReview(token, reviewBody, imageParts).enqueue(new Callback<ApiResponse<ReviewResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<ReviewResponse>> call, Response<ApiResponse<ReviewResponse>> response) {
                 if (response.isSuccessful() && response.body() != null){

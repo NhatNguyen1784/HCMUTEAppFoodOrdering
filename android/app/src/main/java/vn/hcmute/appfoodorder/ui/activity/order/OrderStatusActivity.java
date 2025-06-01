@@ -42,8 +42,8 @@ public class OrderStatusActivity extends AppCompatActivity {
     }
 
     private void listDataByStatus() {
-        String email = sessionManager.getUserInfor().getEmail();
-        viewModel.fetchOrdersByEmail(email);
+        String token = sessionManager.getAuthHeader();
+        viewModel.fetchOrdersByEmail(token);
         viewModel.getAllOrders().observe(this, orders -> {
             if (orders != null) {
                 Log.d("OrderStatusActivity", "Fetched orders: " + orders.size());

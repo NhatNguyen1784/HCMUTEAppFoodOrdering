@@ -146,14 +146,13 @@ public class ReviewActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = sessionManager.getUserInfor().getEmail();
+                String token = sessionManager.getAuthHeader();
                 int star = (int) ratingBarReview.getRating();
 
                 request.setRating(star);
                 request.setComment(reviewComment.getText().toString().trim());
-                request.setUserEmail(email);
 
-                reviewViewModel.submitReview(request, uploadedImageFiles);
+                reviewViewModel.submitReview(token, request, uploadedImageFiles);
             }
         });
 

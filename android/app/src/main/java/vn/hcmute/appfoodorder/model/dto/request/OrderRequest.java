@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 public class OrderRequest implements Serializable {
-    private String email;
     private String fullAddress;
     private String paymentOption;
     private String orderStatus;
@@ -14,8 +13,7 @@ public class OrderRequest implements Serializable {
     public OrderRequest() {
     }
 
-    public OrderRequest(String email, String fullAddress, String paymentOption, String orderStatus, String deliveryMethod, Set<OrderDetailRequest> orderDetails) {
-        this.email = email;
+    public OrderRequest(String fullAddress, String paymentOption, String orderStatus, String deliveryMethod, Set<OrderDetailRequest> orderDetails) {
         this.fullAddress = fullAddress;
         this.paymentOption = paymentOption;
         this.orderStatus = orderStatus;
@@ -39,20 +37,12 @@ public class OrderRequest implements Serializable {
         this.orderDetails = orderDetails;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setDeliveryMethod(String deliveryMethod) {
         if (deliveryMethod == null) {
             this.deliveryMethod = "PICKUP";
         } else {
             this.deliveryMethod = deliveryMethod;
         }
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getFullAddress() {

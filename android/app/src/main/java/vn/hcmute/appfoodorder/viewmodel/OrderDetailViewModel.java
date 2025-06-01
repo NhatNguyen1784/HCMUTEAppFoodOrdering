@@ -18,7 +18,7 @@ public class OrderDetailViewModel extends ViewModel {
         return orderDetail;
     }
 
-    public void fetchOrderDetail(Long orderId) {
-        orderDetail = repository.getOrderDetailByOrderId(orderId);
+    public void fetchOrderDetail(String token, Long orderId) {
+        orderDetail = repository.getOrderDetailByOrderId(token, orderId);
     }
 }

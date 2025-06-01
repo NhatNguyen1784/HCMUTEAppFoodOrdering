@@ -123,8 +123,8 @@ public class OrderActivity extends AppCompatActivity {
                 binding.tvEditAddress.setVisibility(View.GONE);
             }
         });
-
-        addressViewModel.getAddressShipping(email);
+        String token = new SessionManager(OrderActivity.this).getAuthHeader();
+        addressViewModel.getAddressShipping(token);
 
         binding.btnAddAddress.setOnClickListener(v -> openAddressBottomSheetFragment());
         binding.tvEditAddress.setOnClickListener(v -> openAddressBottomSheetFragment());
@@ -175,13 +175,14 @@ public class OrderActivity extends AppCompatActivity {
     private void submitOrder() {
         String selectedPayment = binding.spPaymentMethod.getSelectedItem().toString();
         OrderRequest request = buildOrderRequest();
+        String token = new SessionManager(OrderActivity.this).getAuthHeader();
         if (selectedPayment.equals("COD")) {
             request.setPaymentOption("COD");
         }
         else if(selectedPayment.equals("VNPAY")){
             request.setPaymentOption("VNPAY");
         }
-        orderViewModel.createOrder(request).observe(this, response -> {
+        orderViewModel.createOrder(token, request).observe(this, response -> {
             if (response.getCode() == 200) {
                 if(response.getResult() != null){
                     Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
@@ -234,7 +235,6 @@ public class OrderActivity extends AppCompatActivity {
             ));
         }
         request.setOrderDetails(orderDetailRequests);
-        request.setEmail(email);
         request.setDeliveryMethod(deliveryMethod);
         request.setFullAddress(binding.tvAddress.getText().toString());
         request.setOrderStatus("PENDING");
@@ -249,6 +249,6 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        addressViewModel.getAddressShipping(email);
+        addressViewModel.getAddressShipping(new SessionManager(OrderActivity.this).getAuthHeader());
     }
 }

@@ -7,6 +7,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -34,7 +35,7 @@ public interface AuthApi {
     Call<ApiResponse<String>> verifyOtp(@Body RegisterRequest request);
 
     @GET("auth/user/shipping-address")
-    Call<ApiResponse<List<String>>> getAllAddresses(@Query("email") String email);
+    Call<ApiResponse<List<String>>> getAllAddresses(@Header("Authorization") String token);
 
     @POST("auth/user/add-address")
     Call<ApiResponse<String>> addShippingAddress(@Body Address address);

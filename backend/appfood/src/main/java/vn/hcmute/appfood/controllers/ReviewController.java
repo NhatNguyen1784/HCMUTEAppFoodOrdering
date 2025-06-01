@@ -2,6 +2,7 @@ package vn.hcmute.appfood.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ public class ReviewController {
     @PostMapping("/submit")
     public ResponseEntity<?> submitReview(@RequestPart("review") ReviewRequest dto,
                                           @RequestPart(value = "images", required = false) MultipartFile[] images ) {
+        dto.setUserEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         ReviewResponse dtoReview = reviewService.submitReview(dto, images);
         return ResponseEntity.ok(ApiResponse.success("Submit review successfully", dtoReview));
     }

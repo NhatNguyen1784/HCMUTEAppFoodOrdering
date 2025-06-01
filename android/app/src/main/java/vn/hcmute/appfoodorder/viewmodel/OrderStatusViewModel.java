@@ -38,8 +38,8 @@ public class OrderStatusViewModel extends ViewModel {
     }
 
     //Get all order by user email
-    public void fetchOrdersByEmail(String email){
-        orderRepository.getOrdersByUserEmail(email).observeForever( listApiResponse -> {
+    public void fetchOrdersByEmail(String token){
+        orderRepository.getOrdersByUserEmail(token).observeForever( listApiResponse -> {
             if(listApiResponse.getCode() == 200 && listApiResponse.getResult() != null){
                 allOrders.setValue(listApiResponse.getResult());
             }
@@ -48,8 +48,8 @@ public class OrderStatusViewModel extends ViewModel {
     }
 
     //Cancel order
-    public void cancelOrderByOrderId(Long orderId){
-        orderRepository.cancelOrder(orderId).observeForever(apiResponse -> {
+    public void cancelOrderByOrderId(String token, Long orderId){
+        orderRepository.cancelOrder(token, orderId).observeForever(apiResponse -> {
             if(apiResponse.getCode() == 200){
                 cancelOrder.setValue(apiResponse);
             }
@@ -60,8 +60,8 @@ public class OrderStatusViewModel extends ViewModel {
     }
 
     //Confirm order
-    public void confirmOrderByOrderId(Long orderId){
-        orderRepository.confirmOrder(orderId).observeForever(apiResponse -> {
+    public void confirmOrderByOrderId(String token, Long orderId){
+        orderRepository.confirmOrder(token, orderId).observeForever(apiResponse -> {
             if(apiResponse.getCode() == 200){
                 confirmOrder.setValue(apiResponse);
             }

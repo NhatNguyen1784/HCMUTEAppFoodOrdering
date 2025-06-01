@@ -6,7 +6,6 @@ public class ReviewRequest implements Serializable {
     private Long orderDetailId;
     private int rating;
     private String comment;
-    private String userEmail;
 
     public Long getOrderDetailId() {
         return orderDetailId;
@@ -30,14 +29,6 @@ public class ReviewRequest implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
     public ReviewRequest() {

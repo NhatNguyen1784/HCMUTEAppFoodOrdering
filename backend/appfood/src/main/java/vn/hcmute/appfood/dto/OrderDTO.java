@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
-    private String email;
+    private String email = "";
     private String fullAddress;
     private String paymentOption;
     private String orderStatus;

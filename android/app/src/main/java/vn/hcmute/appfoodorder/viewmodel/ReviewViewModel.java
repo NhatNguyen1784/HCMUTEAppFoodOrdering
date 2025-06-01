@@ -29,8 +29,8 @@ public class ReviewViewModel extends ViewModel {
         this.reviewRepository = ReviewRepository.getInstance();
     }
 
-    public void submitReview(ReviewRequest request, List<File> imageFiles){
-        reviewRepository.submitReview(request, imageFiles).observeForever(new Observer<Resource<ReviewResponse>>() {
+    public void submitReview(String token, ReviewRequest request, List<File> imageFiles){
+        reviewRepository.submitReview(token, request, imageFiles).observeForever(new Observer<Resource<ReviewResponse>>() {
             @Override
             public void onChanged(Resource<ReviewResponse> result) {
                 if (result.isSuccess()){

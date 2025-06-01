@@ -19,6 +19,7 @@ import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.response.OrderResponse;
 import vn.hcmute.appfoodorder.ui.activity.order.OrderDetailActivity;
 import vn.hcmute.appfoodorder.ui.activity.order.OrderStatusActivity;
+import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 
 public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAdapter.TabViewHolder> {
@@ -111,7 +112,8 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
                             .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    viewModel.cancelOrderByOrderId(order.getOrderId());
+                                    String token = new SessionManager(v.getContext()).getAuthHeader();
+                                    viewModel.cancelOrderByOrderId(token, order.getOrderId());
                                     Toast.makeText(context, "Bạn đã hủy đơn hàng " + order.getOrderId() + " thành công", Toast.LENGTH_SHORT).show();
                                     notifyDataSetChanged();
 
@@ -129,7 +131,8 @@ public class TabStatusOrderAdapter extends RecyclerView.Adapter<TabStatusOrderAd
             holder.btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    viewModel.confirmOrderByOrderId(order.getOrderId());
+                    String token = new SessionManager(v.getContext()).getAuthHeader();
+                    viewModel.confirmOrderByOrderId(token, order.getOrderId());
                     notifyDataSetChanged();
                     if (context instanceof Activity) {
                         ((Activity) context).finish();

@@ -244,8 +244,9 @@ public class UserController {
 
     //Api get all Address shipping
     @GetMapping("/user/shipping-address")
-    public ResponseEntity<?> getAllShippingAddresses(@RequestParam String email) {
+    public ResponseEntity<?> getAllShippingAddresses() {
         try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
             List<String> addresses = addressService.findAllByUserId(email);
             if (addresses.isEmpty()) {
                 return ResponseEntity.ok(ApiResponse.success("No addresses found", null));

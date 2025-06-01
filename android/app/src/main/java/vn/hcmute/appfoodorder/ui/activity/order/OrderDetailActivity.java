@@ -19,6 +19,7 @@ import vn.hcmute.appfoodorder.databinding.ActivityOrderDetailBinding;
 import vn.hcmute.appfoodorder.model.dto.response.OrderDetailDTO;
 import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 import vn.hcmute.appfoodorder.ui.adapter.OrderDetailAdapter;
+import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.OrderDetailViewModel;
 import vn.hcmute.appfoodorder.viewmodel.OrderStatusViewModel;
 
@@ -49,7 +50,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderId = getIntent().getLongExtra("orderId", -1L);
         //Toast.makeText(this, orderId.toString(), Toast.LENGTH_SHORT).show();
         if (orderId != -1L) {
-            loadOrderDetail(orderId);
+            String token = new SessionManager(this).getAuthHeader();
+            loadOrderDetail(token, orderId);
         } else {
             Toast.makeText(this, "Không tìm thấy ID đơn hàng", Toast.LENGTH_SHORT).show();
             finish();
@@ -70,12 +72,12 @@ public class OrderDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void loadOrderDetail(Long orderId) {
-        viewModel.fetchOrderDetail(orderId);
-        setupObserver(orderId);
+    private void loadOrderDetail(String token, Long orderId) {
+        viewModel.fetchOrderDetail(token, orderId);
+        setupObserver(token, orderId);
     }
 
-    private void setupObserver(Long orderId) {
+    private void setupObserver(String token, Long orderId) {
         viewModel.getOrderDetail().observe(this, response -> {
             if(response.getCode() == 200 && response.getResult()!=null){
                 OrderDetail oDetail = response.getResult();
@@ -104,7 +106,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                                         .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                statusViewModel.cancelOrderByOrderId(orderId); // orderId truyền vào Fragment
+                                                statusViewModel.cancelOrderByOrderId(token, orderId); // orderId truyền vào Fragment
                                                 Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng " + orderId, Toast.LENGTH_SHORT).show();
                                                 startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
                                                 //Xu ly them viec polling do 10 s voi realtime tu pending sang shipping
@@ -142,7 +144,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                         binding.btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                statusViewModel.confirmOrderByOrderId(orderId);
+                                String token = new SessionManager(OrderDetailActivity.this).getAuthHeader();
+                                statusViewModel.confirmOrderByOrderId(token, orderId);
                                 Toast.makeText(OrderDetailActivity.this, "Đã nhận hàng thành công " + orderId, Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(OrderDetailActivity.this, OrderStatusActivity.class));
                             }
@@ -191,7 +194,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         pollingRunnable = new Runnable() {
             @Override
             public void run() {
-                loadOrderDetail(orderId);//Call API
+                String token = new SessionManager(OrderDetailActivity.this).getAuthHeader();
+                loadOrderDetail(token, orderId);//Call API
                 handler.postDelayed(this, 10_000); // Call lai sau 15s
             }
         };

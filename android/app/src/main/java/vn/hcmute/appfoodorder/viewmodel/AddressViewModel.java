@@ -20,8 +20,8 @@ public class AddressViewModel extends ViewModel {
     }
 
     // Phương thức để lấy địa chỉ giao hàng từ repository và cập nhật LiveData
-    public void getAddressShipping(String email) {
-        LiveData<ApiResponse<List<String>>> addresses = addressRepository.getAddressShipping(email);
+    public void getAddressShipping(String token) {
+        LiveData<ApiResponse<List<String>>> addresses = addressRepository.getAddressShipping(token);
 
         // Cập nhật LiveData cho ViewModel
         addresses.observeForever(response -> {

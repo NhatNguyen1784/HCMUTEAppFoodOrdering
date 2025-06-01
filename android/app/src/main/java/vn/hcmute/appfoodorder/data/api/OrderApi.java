@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -22,22 +23,22 @@ import vn.hcmute.appfoodorder.model.entity.OrderDetail;
 
 public interface OrderApi {
     @POST("order/create-order")
-    Call<ApiResponse<Long>> createOrder(@Body OrderRequest orderRequest);
+    Call<ApiResponse<Long>> createOrder(@Header("Authorization") String token, @Body OrderRequest orderRequest);
 
     @GET("order/{orderId}/details")
-    Call<ApiResponse<OrderDetail>> findOrderDetailByOrderId(@Path("orderId") Long orderid);
+    Call<ApiResponse<OrderDetail>> findOrderDetailByOrderId(@Header("Authorization") String token, @Path("orderId") Long orderid);
 
     @GET("order")
-    Call<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(@Query("email") String email);
+    Call<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(@Header("Authorization") String token);
 
     @PUT("order/{orderId}/shipping")
     Call<ApiResponse> shippingOrder(@Path("orderId") Long orderId);
 
     @PUT("order/{orderId}/cancel")
-    Call<ApiResponse> cancelOrder(@Path("orderId") Long orderId);
+    Call<ApiResponse> cancelOrder(@Header("Authorization") String token, @Path("orderId") Long orderId);
 
     @PUT("order/{orderId}/confirm")
-    Call<ApiResponse> confirmOrder(@Path("orderId") Long orderid);
+    Call<ApiResponse> confirmOrder(@Header("Authorization") String token, @Path("orderId") Long orderid);
 
     @GET("order/payment/vn-pay")
     Call<ResponseObject<VNPayResponse>> createVNPayPayment(@Query("amount") String amount, @Query("backCode") String bankCode);

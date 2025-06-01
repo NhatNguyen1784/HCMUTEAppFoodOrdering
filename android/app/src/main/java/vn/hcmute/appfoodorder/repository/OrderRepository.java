@@ -27,9 +27,9 @@ public class OrderRepository {
         api = RetrofitClient.getRetrofit().create(OrderApi.class);
     }
 
-    public LiveData<ApiResponse<Long>> createOrder(OrderRequest request){
+    public LiveData<ApiResponse<Long>> createOrder(String token, OrderRequest request){
         MutableLiveData<ApiResponse<Long>> order = new MutableLiveData<>();
-        api.createOrder(request).enqueue(new Callback<ApiResponse<Long>>() {
+        api.createOrder(token, request).enqueue(new Callback<ApiResponse<Long>>() {
             @Override
             public void onResponse(Call<ApiResponse<Long>> call, Response<ApiResponse<Long>> response) {
                 if(response.isSuccessful() && response.body() != null){
@@ -47,9 +47,9 @@ public class OrderRepository {
         return order;
     }
 
-    public LiveData<ApiResponse<OrderDetail>> getOrderDetailByOrderId(Long orderId){
+    public LiveData<ApiResponse<OrderDetail>> getOrderDetailByOrderId(String token, Long orderId){
         MutableLiveData<ApiResponse<OrderDetail>> orderDetail = new MutableLiveData<>();
-        api.findOrderDetailByOrderId(orderId).enqueue(new Callback<ApiResponse<OrderDetail>>() {
+        api.findOrderDetailByOrderId(token, orderId).enqueue(new Callback<ApiResponse<OrderDetail>>() {
             @Override
             public void onResponse(Call<ApiResponse<OrderDetail>> call, Response<ApiResponse<OrderDetail>> response) {
                 if(response.isSuccessful() && response.body() != null){
@@ -67,9 +67,9 @@ public class OrderRepository {
         return orderDetail;
     }
 
-    public LiveData<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(String email){
+    public LiveData<ApiResponse<List<OrderResponse>>> getOrdersByUserEmail(String token){
         MutableLiveData<ApiResponse<List<OrderResponse>>> orders = new MutableLiveData<>();
-        api.getOrdersByUserEmail(email).enqueue(new Callback<ApiResponse<List<OrderResponse>>>() {
+        api.getOrdersByUserEmail(token).enqueue(new Callback<ApiResponse<List<OrderResponse>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<OrderResponse>>> call, Response<ApiResponse<List<OrderResponse>>> response) {
                 if(response.isSuccessful() && response.body() != null){
@@ -87,9 +87,9 @@ public class OrderRepository {
         return orders;
     }
 
-    public LiveData<ApiResponse> cancelOrder(Long orderId){
+    public LiveData<ApiResponse> cancelOrder(String token, Long orderId){
         MutableLiveData<ApiResponse> cancel = new MutableLiveData<>();
-        api.cancelOrder(orderId).enqueue(new Callback<ApiResponse>() {
+        api.cancelOrder(token, orderId).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful() && response.body() != null){
@@ -106,9 +106,9 @@ public class OrderRepository {
         return cancel;
     }
 
-    public LiveData<ApiResponse> confirmOrder(Long orderId){
+    public LiveData<ApiResponse> confirmOrder(String token, Long orderId){
         MutableLiveData<ApiResponse> confirm = new MutableLiveData<>();
-        api.confirmOrder(orderId).enqueue(new Callback<ApiResponse>() {
+        api.confirmOrder(token, orderId).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful() && response.body() != null){

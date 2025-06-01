@@ -159,7 +159,7 @@ public class OrderService implements IOrderService {
     public boolean cancelOrder(Long orderId) {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
 
-        if (!orderOptional.isPresent()) {
+        if (orderOptional.isEmpty()) {
             return false; // Đơn hàng không tồn tại
         }
         Order order = orderOptional.get();
@@ -217,5 +217,9 @@ public class OrderService implements IOrderService {
         order.setOrderStatus(OrderStatus.SHIPPING);
         orderRepository.save(order);
         return true;
+    }
+
+    public String findEmailByOrderId(Long orderId) {
+        return orderRepository.findEmailByOrderId(orderId);
     }
 }
