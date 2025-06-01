@@ -10,6 +10,7 @@ import java.io.File;
 import vn.hcmute.appfoodorder.model.dto.request.UserUpdateDTO;
 import vn.hcmute.appfoodorder.repository.AuthRepository;
 import vn.hcmute.appfoodorder.utils.Resource;
+import vn.hcmute.appfoodorder.utils.SessionManager;
 
 public class UpdateProfileViewModel extends ViewModel {
     private final AuthRepository authRepository;
@@ -19,8 +20,8 @@ public class UpdateProfileViewModel extends ViewModel {
         this.authRepository = AuthRepository.getInstance();
     }
 
-    public void updateProfile(UserUpdateDTO dto, File image){
-        authRepository.updateProfile(dto, image).observeForever(new Observer<Resource<Object>>() {
+    public void updateProfile(String token, UserUpdateDTO dto, File image){
+        authRepository.updateProfile(token, dto, image).observeForever(new Observer<Resource<Object>>() {
             @Override
             public void onChanged(Resource<Object> objectResource) {
                 if (objectResource.isSuccess()){

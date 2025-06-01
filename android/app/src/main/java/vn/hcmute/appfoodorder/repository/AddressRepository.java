@@ -13,7 +13,6 @@ import retrofit2.Response;
 import vn.hcmute.appfoodorder.data.api.AuthApi;
 import vn.hcmute.appfoodorder.data.network.RetrofitClient;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
-import vn.hcmute.appfoodorder.model.entity.Address;
 
 public class AddressRepository {
     private AuthApi api;
@@ -46,9 +45,9 @@ public class AddressRepository {
         return addresses;
     }
 
-    public LiveData<ApiResponse<String>> addShippingAddress(Address address){
+    public LiveData<ApiResponse<String>> addShippingAddress(String token, String fullAddress){
         MutableLiveData<ApiResponse<String>> addAddress = new MutableLiveData<>();
-        api.addShippingAddress(address).enqueue(new Callback<ApiResponse<String>>() {
+        api.addShippingAddress(token, fullAddress).enqueue(new Callback<ApiResponse<String>>() {
             @Override
             public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {

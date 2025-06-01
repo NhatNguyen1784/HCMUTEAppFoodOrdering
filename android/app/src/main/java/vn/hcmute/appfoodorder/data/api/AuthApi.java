@@ -21,8 +21,6 @@ import vn.hcmute.appfoodorder.model.dto.request.ResetPasswordRequest;
 import vn.hcmute.appfoodorder.model.dto.request.VerifyResetPasswordRequest;
 import vn.hcmute.appfoodorder.model.dto.response.ResetPasswordResponse;
 import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
-import vn.hcmute.appfoodorder.model.entity.Address;
-import vn.hcmute.appfoodorder.utils.Resource;
 
 public interface AuthApi {
     @POST("auth/login")
@@ -38,7 +36,7 @@ public interface AuthApi {
     Call<ApiResponse<List<String>>> getAllAddresses(@Header("Authorization") String token);
 
     @POST("auth/user/add-address")
-    Call<ApiResponse<String>> addShippingAddress(@Body Address address);
+    Call<ApiResponse<String>> addShippingAddress(@Header("Authorization") String token, @Body String fullAddress);
 
     // gui yeu cau email, new password
     @POST("auth/reset-password/request")
@@ -56,6 +54,7 @@ public interface AuthApi {
     @Multipart
     @PUT("auth/update")
     Call<ApiResponse<Object>> updateProfile(
+            @Header("Authorization") String token,
             @Part("userUpdate") RequestBody requestJson, // JSON của request
             @Part() MultipartBody.Part image); // anh kem theo neu co
 }

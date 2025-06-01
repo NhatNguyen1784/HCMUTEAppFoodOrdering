@@ -36,7 +36,8 @@
                             //Phân quyền
                             .requestMatchers("/api/slider/**", "/api/foods/add", "/api/foods/update/*", "/api/categories/add", "/api/categories/update/*").hasRole("ADMIN")
                             .requestMatchers("/api/reviews/submit", "/api/order/create-order", "/api/order/*/details", "/api/order",  "/api/order/*/confirm",
-                                    "/api/order/*/cancel",  "/api/cart/get", "/api/cart/add", "/api/cart/update", "/api/cart/delete").hasAnyRole("ADMIN", "USER")
+                                    "/api/order/*/cancel",  "/api/cart/get", "/api/cart/add", "/api/cart/update", "/api/auth/cart/delete", "/api//user/add-address", "/api/auth/user/shipping-address",
+                                    "/api/auth/update").hasAnyRole("ADMIN", "USER")
                             // Cho phép truy cập công khai các endpoint
                             .requestMatchers(PUBLIC_ENDPOINT.toArray(new String[0])).permitAll()
                             //Còn lại cần xac thuc

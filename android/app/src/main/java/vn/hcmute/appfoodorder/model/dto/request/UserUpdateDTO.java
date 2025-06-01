@@ -3,18 +3,9 @@ package vn.hcmute.appfoodorder.model.dto.request;
 import java.io.Serializable;
 
 public class UserUpdateDTO implements Serializable {
-    private String email;
     private String fullName;
     private String phone;
     private String address;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getFullName() {
         return fullName;

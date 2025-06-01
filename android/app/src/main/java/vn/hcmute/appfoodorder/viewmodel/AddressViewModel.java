@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import java.util.List;
 import vn.hcmute.appfoodorder.model.dto.ApiResponse;
-import vn.hcmute.appfoodorder.model.entity.Address;
 import vn.hcmute.appfoodorder.repository.AddressRepository;
 
 public class AddressViewModel extends ViewModel {
@@ -34,8 +33,8 @@ public class AddressViewModel extends ViewModel {
         return addressLiveData;
     }
 
-    public LiveData<ApiResponse<String>> addShippingAddress(Address address) {
-        addAddressResponse = (MutableLiveData<ApiResponse<String>>) addressRepository.addShippingAddress(address);
+    public LiveData<ApiResponse<String>> addShippingAddress(String token, String fullAddress) {
+        addAddressResponse = (MutableLiveData<ApiResponse<String>>) addressRepository.addShippingAddress(token, fullAddress);
         return addAddressResponse;
     }
 }

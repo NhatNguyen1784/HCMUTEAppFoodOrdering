@@ -228,13 +228,12 @@ public class AuthRepository {
     }
 
     // Update Profile
-    public LiveData<Resource<Object>> updateProfile(UserUpdateDTO dto, File imgFile){
+    public LiveData<Resource<Object>> updateProfile(String token, UserUpdateDTO dto, File imgFile){
         MutableLiveData<Resource<Object>> resultLiveData = new MutableLiveData<>();
 
         // Convert JSON reviewRequest thành RequestBody
         String requestJson = gson.toJson(dto);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), requestJson);
-
         // Xử lý hình ảnh (nếu có)
         MultipartBody.Part imagePart = null;
         if (imgFile != null) {
@@ -242,7 +241,7 @@ public class AuthRepository {
             imagePart = MultipartBody.Part.createFormData("image", imgFile.getName(), fileBody);
         }
 
-        authApi.updateProfile(requestBody, imagePart).enqueue(new Callback<ApiResponse<Object>>() {
+        authApi.updateProfile(token, requestBody, imagePart).enqueue(new Callback<ApiResponse<Object>>() {
             @Override
             public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
                 if (response.isSuccessful() && response.body() != null){

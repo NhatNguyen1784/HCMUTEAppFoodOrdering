@@ -45,6 +45,7 @@ import java.io.InputStream;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.hcmute.appfoodorder.R;
 import vn.hcmute.appfoodorder.model.dto.request.UserUpdateDTO;
+import vn.hcmute.appfoodorder.model.dto.response.UserResponse;
 import vn.hcmute.appfoodorder.ui.activity.ReviewActivity;
 import vn.hcmute.appfoodorder.utils.Constants;
 import vn.hcmute.appfoodorder.utils.ImagePickerUtils;
@@ -69,11 +70,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_update_profile);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         anhxa();
         setupRealTimeValidation();
         setupUpdateProfile();
@@ -141,8 +137,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 dto.setFullName(edtFullname.getText().toString().trim());
                 dto.setPhone(edtphone.getText().toString().trim());
                 dto.setAddress(edtaddress.getText().toString().trim());
-
-                updateProfileViewModel.updateProfile(dto, imgFile);
+                sessionManager = new SessionManager(UpdateProfileActivity.this);
+                String token = sessionManager.getAuthHeader();
+                updateProfileViewModel.updateProfile(token, dto, imgFile);
             }
         });
 
@@ -221,7 +218,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         // lay du lieu tu man hinh truoc
         Intent intent = getIntent();
 
-        String email2 = intent.getStringExtra("email");
         String fullName = intent.getStringExtra("fullName");
         String phone = intent.getStringExtra("phone");
         String address = intent.getStringExtra("address");
@@ -247,14 +243,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         dto = new UserUpdateDTO();
 
-            email.setText(sessionManager.getUserInfor().getEmail());
-            dto.setEmail(email.getText().toString().trim());
 
         updateProfileViewModel.getUpdateResult().observe(this, new Observer<Resource<String>>() {
             @Override
             public void onChanged(Resource<String> stringResource) {
                 if (stringResource.isSuccess()){
                     Toast.makeText(getApplicationContext(), "Update Thanh công", Toast.LENGTH_SHORT).show();
+                    //Thanh công lưu lại User trong shared reference xử lý tiếp ở đay
                     finish();
                 }
 

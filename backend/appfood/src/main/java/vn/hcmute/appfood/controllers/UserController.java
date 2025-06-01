@@ -142,6 +142,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestPart("userUpdate") UserUpdateDTO userDTO,
                                         @RequestPart(value = "image", required = false) MultipartFile image) {
         try {
+            userDTO.setEmail(SecurityContextHolder.getContext().getAuthentication().getName());
             userService.updateUser(userDTO, image);
             return ResponseEntity.ok(ApiResponse.success("Cập nhật thông tin thành công", null));
         } catch (Exception e) {
@@ -260,12 +261,12 @@ public class UserController {
 
     //Api add new address
     @PostMapping("/user/add-address")
-    public ResponseEntity<?> addNewAddress(@RequestBody AddressDTO addAddressDTO) {
+    public ResponseEntity<?> addNewAddress(@RequestBody String fullAddress) {
         try {
-            String fullAddress = addAddressDTO.getFullAddress().trim();
-            String email = addAddressDTO.getEmail().trim();
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
             if(email == null || email.isEmpty()) return ResponseEntity.badRequest().body(ApiResponse.error("Email is required", null));
             if(fullAddress == null || fullAddress.isEmpty()) return ResponseEntity.badRequest().body(ApiResponse.error("Full address is required", null));
+            fullAddress = fullAddress.replace("\"", ""); // Xử lý bỏ dấu ngoặc kép do xài @Body String mặc định thêm ""
             addressService.addAddress(email, fullAddress);
             return ResponseEntity.ok(ApiResponse.success("Address added successfully"));
         } catch (Exception e) {

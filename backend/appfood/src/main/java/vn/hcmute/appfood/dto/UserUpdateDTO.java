@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateDTO {
-    private String email;
+    private String email = "";
     private String fullName;
     private String phone;
     private String address;

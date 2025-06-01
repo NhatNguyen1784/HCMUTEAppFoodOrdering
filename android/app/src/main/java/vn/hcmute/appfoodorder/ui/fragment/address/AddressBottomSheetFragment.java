@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import vn.hcmute.appfoodorder.R;
-import vn.hcmute.appfoodorder.model.entity.Address;
 import vn.hcmute.appfoodorder.ui.activity.order.OrderActivity;
 import vn.hcmute.appfoodorder.utils.SessionManager;
 import vn.hcmute.appfoodorder.viewmodel.AddressViewModel;
@@ -38,14 +37,12 @@ public class AddressBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void addShippingAddr() {
         btnConfirm.setOnClickListener(v -> {
-            String email = sessionManager.getUserInfor().getEmail();
-            String address = edtFullAddress.getText().toString();
+            String token = sessionManager.getAuthHeader();
+            String address = edtFullAddress.getText().toString().trim();
 
-            if (!address.isEmpty() && !email.isEmpty()) {
-                Address newAddress = new Address(email, address);
-
+            if (!address.isEmpty() && !token.isEmpty()) {
                 // Gọi ViewModel và observe kết quả
-                addressViewModel.addShippingAddress(newAddress)
+                addressViewModel.addShippingAddress(token, address)
                         .observe(getViewLifecycleOwner(), apiResponse -> {
                             if (apiResponse != null) {
                                 if (apiResponse.getCode() == 200) {
