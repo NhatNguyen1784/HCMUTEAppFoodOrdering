@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#FFFFFF">
+
+    <RelativeLayout
+        android:id="@+id/headerOrderDetail"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp">
+
+        <ImageView
+            android:id="@+id/backImgV_OrderDetail"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/arrow" />
+
+        <TextView
+            android:id="@+id/orderDetailsTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Chi tiết đơn hàng"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerOrderDetail"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/statusOrderDetail_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chờ xác nhận"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/detailOrderDetail_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn của bạn đã được gửi đi. Vui lòng chờ đợi"
+                        android:textSize="14sp"
+                        android:textColor="#666666" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imgStatusOrder"
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_pending" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#33000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="● Giao đến"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/orDetailAddress_tv"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Địa chỉ giao hàng"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="8dp"
+                android:id="@+id/orDetailInfor_tv"
+                android:text="Thông tin"
+                android:textSize="14sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#33000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Chi tiết đơn hàng"
+                android:textSize="15sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:id="@+id/orderDetail_rcv"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#33000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Thuế: 10%"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Vận chuyển: 0đ"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Giảm giá: 0đ"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/orderDetailTotalBill_tv"
+                android:paddingTop="8dp"
+                android:text="Tổng: 0đ"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Ghi chú:"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/createdDate_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Thời gian đặt hàng:"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/payOption_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="8dp"
+                android:text="Thanh toán:"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="16dp"
+                android:background="#FFFFFF">
+
+                <Button
+                    android:id="@+id/btnCancelOrder"
+                    android:layout_width="183dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="Hủy đơn hàng"
+                    android:textColor="#EF2E2E"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#EF2E2E"
+                    app:strokeWidth="3dp" />
+
+                <Button
+                    android:id="@+id/btnConfirmOrder"
+                    android:layout_width="183dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#437FE4"
+                    android:text="Đã nhận hàng"
+                    android:textColor="#FFFFFF"
+                    android:visibility="gone"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#A2A1A1"
+                    app:strokeWidth="2dp" />
+
+                <Button
+                    android:id="@+id/btnNotCancelOrderDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:enabled="false"
+                    android:visibility="gone"
+                    android:text="Hủy đơn hàng"
+                    android:textColor="#ADA7A7"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#ADA7A7"
+                    app:strokeWidth="3dp" />
+
+                <Button
+                    android:id="@+id/btnROD"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:visibility="gone"
+                    android:text="Đã đánh giá"
+                    android:textColor="#A49595"
+                    app:cornerRadius="3dp"
+                    app:strokeColor="#AFA5A5"
+                    app:strokeWidth="3dp"
+                    android:backgroundTint="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnReorder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F44848"
+                    android:visibility="gone"
+                    android:text="Đặt lại"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="3dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

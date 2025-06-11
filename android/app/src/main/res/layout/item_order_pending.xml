@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="4dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/orderId_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Mã đơn hàng:"
+            android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/statusOrder_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Trạng thái:"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/createdDate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thời gian đặt:"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/totalQuantity_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Số lượng:" />
+
+        <TextView
+            android:id="@+id/totalBill_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Tổng đơn hàng:" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginVertical="8dp"
+            android:background="#33000000" />
+
+        <Button
+            android:id="@+id/pendingCancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#FFFFFF"
+            android:text="Hủy đơn hàng"
+            android:textColor="#F25656"
+            card_view:cornerRadius="3dp"
+            card_view:strokeColor="#F25656"
+            card_view:strokeWidth="3dp" />
+
+        <Button
+            android:id="@+id/btnConfirmOrder"
+            android:layout_width="183dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#437FE4"
+            android:text="Đã nhận hàng"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+            card_view:cornerRadius="3dp"
+            card_view:strokeColor="#B8B4B4"
+            card_view:strokeWidth="2dp" />
+        <Button
+            android:id="@+id/pendingNotCancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Hủy đơn hàng"
+            android:visibility="gone"
+            android:textColor="#A49595"
+            android:backgroundTint="#FFFFFF"
+            card_view:cornerRadius="3dp"
+            card_view:strokeColor="#AFA5A5"
+            card_view:strokeWidth="3dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
